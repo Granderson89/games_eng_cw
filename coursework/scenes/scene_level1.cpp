@@ -1,6 +1,7 @@
 #include "scene_level1.h"
 #include "../components/cmp_player_physics.h"
 #include "../components/cmp_sprite.h"
+#include "../components/cmp_weapon_component.h"
 #include "../game.h"
 #include <LevelSystem.h>
 #include <iostream>
@@ -20,16 +21,29 @@ void Level1Scene::Load() {
 
   // Create player
   {
-    player = makeEntity();
-    //player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
-	player->setPosition(Vector2f(0.0f, 0.0f));
-    auto s = player->addComponent<ShapeComponent>();
-    s->setShape<sf::RectangleShape>(Vector2f(20.f, 30.f));
-    s->getShape().setFillColor(Color::Magenta);
-    s->getShape().setOrigin(10.f, 15.f);
+	float width = 50.0f;
+	float length = 200.0f;
+	Vector2f start_position(100.0f, 250.0f);
 
-    player->addComponent<PlayerPhysicsComponent>(Vector2f(20.f, 30.f));
+	player = makeEntity();
+    //player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
+	player->setPosition(start_position);
+    auto s = player->addComponent<ShapeComponent>();
+    s->setShape<sf::RectangleShape>(Vector2f(width, length));
+    s->getShape().setFillColor(Color::Magenta);
+    s->getShape().setOrigin(width / 2.0f, length / 2.0f);
+
+    player->addComponent<PlayerPhysicsComponent>(Vector2f(width, length));
+
+	// Add weapons
+	float projectile_width = 4.0f;
+	float projectile_height = 4.0f;
+	for (int i = 0; i < 8; i++) {
+		player->addComponent<WeaponComponent>(Vector2f(width / 2.0f + projectile_width, - length / 2.0f + projectile_height + i * 25.0f + 5.0f));
+	}
   }
+
+
 
   // Add physics colliders to level tiles.
   //{
