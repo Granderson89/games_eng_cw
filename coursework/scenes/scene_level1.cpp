@@ -39,7 +39,8 @@ void Level1Scene::Load() {
 	float projectile_width = 4.0f;
 	float projectile_height = 4.0f;
 	for (int i = 0; i < 8; i++) {
-		player->addComponent<WeaponComponent>(Vector2f(width / 2.0f + projectile_width, - length / 2.0f + projectile_height + i * 25.0f + 5.0f));
+		Vector2f mount_position = Vector2f(width / 2.0f + projectile_width, -length / 2.0f + projectile_height + i * 25.0f + 5.0f);
+		player->addComponent<WeaponComponent>(mount_position, i);
 	}
   }
 
