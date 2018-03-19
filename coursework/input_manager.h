@@ -27,28 +27,28 @@ private:
 		// 0 to 7 for respective joystick, <0 for keyboard
 		int source;
 		// Assigned buttons
-		unsigned int moveForward;
-		unsigned int moveBackwards;
-		unsigned int turnLeft;
-		unsigned int turnRight;
-		unsigned int fire;
-		unsigned int changeWeapon;
-		unsigned int turretClockwise;
-		unsigned int turretCounterClockwise;
-		unsigned int fireTurret;
-		unsigned int jumpCharging;
+		char moveForward;
+		int moveBackwards;
+		int turnLeft;
+		int turnRight;
+		int fire;
+		int changeWeapon;
+		int turretClockwise;
+		int turretCounterClockwise;
+		int fireTurret;
+		int jumpCharging;
 		//unsigned int jumpExecute;
-		unsigned int thrusterWheelUp;
-		unsigned int selectorAxis[8];	// For selecting thruster using keys, starts North goes clockwise
+		int thrusterWheelUp;
+		int selectorAxis[8];	// For selecting thruster using keys, starts North goes clockwise
 		//unsigned int thrusterOn[6];
-		unsigned int boostMovement;
+		int boostMovement;
 	};
 
-	static inputs player1Input;
-	static inputs player2Input;
+	static inputs playerInput[2];
+	//static inputs player2Input;
 public:
-	static actions Player1;
-	static actions Player2;
+	static actions Player[2];
+	//static actions Player2;
 
 	static void initialize();
 	static void update();
