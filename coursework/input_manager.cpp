@@ -2,6 +2,9 @@
 
 using namespace sf;
 
+InputManager::inputs InputManager::playerInput[2];
+
+InputManager::actions InputManager::Player[2];
 
 // Sets default controls //////////////////////////////(or loads from file later)
 void InputManager::initialize()

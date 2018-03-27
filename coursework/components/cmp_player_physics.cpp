@@ -1,5 +1,6 @@
 #include "cmp_player_physics.h"
 #include "system_physics.h"
+#include "../game.h"
 #include <LevelSystem.h>
 #include <SFML/Window/Keyboard.hpp>
 
@@ -30,7 +31,6 @@ bool PlayerPhysicsComponent::isGrounded() const {
 }
 
 void PlayerPhysicsComponent::update(double dt) {
-
   const auto pos = _parent->getPosition();
 
   //Teleport to start if we fall off map.
@@ -38,24 +38,28 @@ void PlayerPhysicsComponent::update(double dt) {
   //  teleport(ls::getTilePosition(ls::findTiles(ls::START)[0]));
   //}
 
-  if (Keyboard::isKeyPressed(Keyboard::Left) ||
-      Keyboard::isKeyPressed(Keyboard::Right) ||
-	  Keyboard::isKeyPressed(Keyboard::Up) ||
-	  Keyboard::isKeyPressed(Keyboard::Down)) {
+  if (im.Player[0].moveForward ||
+	  im.Player[0].moveBackwards ||
+	  im.Player[0].turnLeft ||
+	  im.Player[0].turnRight) {
     // Moving Either Left or Right
-    if (Keyboard::isKeyPressed(Keyboard::Right)) {
+    if (im.Player[0].turnRight) {
+	  im.Player[0].turnRight = false;
       if (getVelocity().x < _maxVelocity.x)
         impulse({(float)(dt * _groundspeed), 0});
 	}
-	else if (Keyboard::isKeyPressed(Keyboard::Left)) {
+	else if (im.Player[0].turnLeft) {
+		im.Player[0].turnLeft = false;
 		if (getVelocity().x > -_maxVelocity.x)
 			impulse({-(float)(dt * _groundspeed), 0 });
 	}
-	else if (Keyboard::isKeyPressed(Keyboard::Down)) {
+	else if (im.Player[0].moveBackwards) {
+		im.Player[0].moveBackwards = false;
 		if (getVelocity().y > -_maxVelocity.y)
 			impulse({ 0, (float)(dt * _groundspeed)});
 	}
 	else {
+		im.Player[0].moveForward = false;
       if (getVelocity().y < _maxVelocity.y)
         impulse({0, -(float)(dt * _groundspeed)});
     }
