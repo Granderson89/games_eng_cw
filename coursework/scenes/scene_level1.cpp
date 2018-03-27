@@ -41,17 +41,17 @@ void Level1Scene::Load() {
 	float projectile_height = 4.0f;
 	// CANNONS
 	for (int i = 0; i < 8; i++) {
-		Vector2f mount_position = Vector2f(width / 2.0f + projectile_width, -length / 2.0f + projectile_height + i * 25.0f + 5.0f);
+		Vector2f mount_position = Vector2f(-length / 2.0f + projectile_height + i * 25.0f + 5.0f, width / 2.0f + projectile_width);
 		player->addComponent<WeaponComponent>(mount_position, i, CANNONS);
 	}
 	// TORPEDOS
 	for (int i = 1; i < 6; i++) {
-		Vector2f mount_position = Vector2f(width / 2.0f + projectile_width, -length / 2.0f + projectile_height + i * 25.0f + 5.0f);
+		Vector2f mount_position = Vector2f(-length / 2.0f + projectile_height + i * 25.0f + 5.0f, width / 2.0f + projectile_width);
 		player->addComponent<WeaponComponent>(mount_position, i, TORPEDOS);
 	}
 	// MISSILES
 	for (int i = 3; i < 5; i++) {
-		Vector2f mount_position = Vector2f(width / 2.0f + projectile_width, -length / 2.0f + projectile_height + i * 25.0f + 5.0f);
+		Vector2f mount_position = Vector2f(-length / 2.0f + projectile_height + i * 25.0f + 5.0f, width / 2.0f + projectile_width);
 		player->addComponent<WeaponComponent>(mount_position, i, MISSILES);
 	}
   }

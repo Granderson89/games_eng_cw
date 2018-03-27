@@ -73,7 +73,7 @@ void WeaponComponent::fire() const {
 		auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(8.0f, 8.0f));
 		p->setRestitution(0.4f);
 		p->setFriction(0.005f);
-		p->impulse(Vector2f(15.0f, 0.0f));
+		p->impulse(Vector2f(0.0f, 15.0f));
 	}
 	if (_type == TORPEDOS) {
 		s->setShape<sf::CircleShape>(4.0f);
@@ -82,7 +82,7 @@ void WeaponComponent::fire() const {
 		auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(4.0f, 4.0f));
 		p->setRestitution(0.4f);
 		p->setFriction(0.005f);
-		p->impulse(Vector2f(15.0f, 0.0f));
+		p->impulse(Vector2f(0.0f, 15.0f));
 	}
 	if (_type == MISSILES) {
 		s->setShape<sf::CircleShape>(2.0f);
@@ -91,7 +91,7 @@ void WeaponComponent::fire() const {
 		auto p = bullet->addComponent<PhysicsComponent>(true, Vector2f(2.0f, 2.0f));
 		p->setRestitution(0.4f);
 		p->setFriction(0.005f);
-		p->impulse(Vector2f(15.0f, 0.0f));
+		p->impulse(Vector2f(0.0f, 15.0f));
 	}
 }
 
