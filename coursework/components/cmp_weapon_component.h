@@ -26,6 +26,8 @@ protected:
 public:
 	WeaponComponent() = delete;
 	explicit WeaponComponent(Entity* p, Vector2f offset, const int weapon_num);
+	
+	static void switchWeapon();
 
 	void update(double dt) override;
 	void render() override {};

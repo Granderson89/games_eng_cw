@@ -50,31 +50,6 @@ void WeaponComponent::update(double dt) {
 			break;
 		}
 	}
-	// If W is pressed, switch weapon type
-	if (Keyboard::isKeyPressed(Keyboard::W)) {
-		switch (type) {
-		case CANNONS:
-			type = TORPEDOS;
-			base_cooldown = 2.0f;
-			next_weapon = 1;
-			break;
-		case TORPEDOS:
-			type = MISSILES;
-			base_cooldown = 3.0f;
-			next_weapon = 3;
-			break;
-		case MISSILES:
-			type = CANNONS;
-			base_cooldown = 1.0f;
-			next_weapon = 0;
-			break;
-		default:
-			type = CANNONS;
-			base_cooldown = 1.0f;
-			next_weapon = 0;
-			break;
-		}
-	}
 }
 
 void WeaponComponent::fire() const {
@@ -110,6 +85,31 @@ void WeaponComponent::fire() const {
 		p->setRestitution(0.4f);
 		p->setFriction(0.005f);
 		p->impulse(Vector2f(15.0f, 0.0f));
+	}
+}
+
+void WeaponComponent::switchWeapon() {
+	switch (type) {
+	case CANNONS:
+		type = TORPEDOS;
+		base_cooldown = 2.0f;
+		next_weapon = 1;
+		break;
+	case TORPEDOS:
+		type = MISSILES;
+		base_cooldown = 3.0f;
+		next_weapon = 3;
+		break;
+	case MISSILES:
+		type = CANNONS;
+		base_cooldown = 1.0f;
+		next_weapon = 0;
+		break;
+	default:
+		type = CANNONS;
+		base_cooldown = 1.0f;
+		next_weapon = 0;
+		break;
 	}
 }
 

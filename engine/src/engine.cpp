@@ -7,6 +7,8 @@
 #include <future>
 #include <iostream>
 #include <stdexcept>
+#include "../coursework/game.h"
+#include "../coursework/components/cmp_weapon_component.h"
 
 using namespace sf;
 using namespace std;
@@ -93,6 +95,13 @@ void Engine::Start(unsigned int width, unsigned int height,
       if (event.type == Event::Closed) {
         window.close();
       }
+
+	  if (event.type == Event::KeyPressed) {
+		  if (event.key.code == Keyboard::W) {
+			  WeaponComponent::switchWeapon();
+		  }
+	  }
+
     }
     if (Keyboard::isKeyPressed(Keyboard::Escape)) {
       window.close();
