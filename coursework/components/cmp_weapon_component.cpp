@@ -61,7 +61,7 @@ void WeaponComponent::update(double dt) {
 
 void WeaponComponent::fire() const {
 	auto bullet = _parent->scene->makeEntity();
-	bullet->setPosition(_parent->getPosition() + _offset);
+	bullet->setPosition(_parent->getPosition() + rotate(Vector2f(_offset), _parent->getRotation()));
 	//bullet->addComponent<HurtComponent>();
 	bullet->addComponent<BulletComponent>();
 	auto s = bullet->addComponent<ShapeComponent>();

@@ -45,23 +45,27 @@ void PlayerPhysicsComponent::update(double dt) {
     // Moving Either Left or Right
     if (im.Player[0].turnRight) {
 	  im.Player[0].turnRight = false;
-      if (getVelocity().x < _maxVelocity.x)
-        impulse({(float)(dt * _groundspeed), 0});
+	  if (_body->GetAngularVelocity() > -_maxVelocity.x)
+		  _body->SetAngularVelocity(_body->GetAngularVelocity() + 2.0f * dt);
 	}
 	else if (im.Player[0].turnLeft) {
 		im.Player[0].turnLeft = false;
-		if (getVelocity().x > -_maxVelocity.x)
-			impulse({-(float)(dt * _groundspeed), 0 });
+		if (_body->GetAngularVelocity() < _maxVelocity.x)
+			_body->SetAngularVelocity(_body->GetAngularVelocity() - 2.0f * dt);
 	}
 	else if (im.Player[0].moveBackwards) {
 		im.Player[0].moveBackwards = false;
-		if (getVelocity().y > -_maxVelocity.y)
-			impulse({ 0, (float)(dt * _groundspeed)});
+		if (getVelocity().y > -_maxVelocity.y) {
+			Vector2f heading = Vector2f(cosf(_body->GetAngle()), sinf(_body->GetAngle()));
+			impulse(heading * (float)(dt * _groundspeed));
+		}
 	}
 	else {
 		im.Player[0].moveForward = false;
-      if (getVelocity().y < _maxVelocity.y)
-        impulse({0, -(float)(dt * _groundspeed)});
+		if (getVelocity().y > -_maxVelocity.y) {
+			Vector2f heading = Vector2f(cosf(_body->GetAngle()), sinf(_body->GetAngle()));
+			impulse(heading * -(float)(dt * _groundspeed));
+		}
     }
   } else {
     // Dampen X axis movement
