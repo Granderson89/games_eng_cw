@@ -15,17 +15,19 @@ protected:
 	static int next_weapon;
 	static float firetime;
 	static float base_cooldown;
-	static type type;
+	static type active_type;
+
+	void fire() const;
 
 	float _cooldown;
 	Vector2f _offset;
-	void fire() const;
 	int _weapon_num;
+	type _type;
 
 
 public:
 	WeaponComponent() = delete;
-	explicit WeaponComponent(Entity* p, Vector2f offset, const int weapon_num);
+	explicit WeaponComponent(Entity* p, Vector2f offset, const int weapon_num, type weapon_type);
 	
 	static void changeWeapon();
 
