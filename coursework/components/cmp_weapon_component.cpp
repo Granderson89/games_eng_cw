@@ -2,6 +2,7 @@
 #include "cmp_bullet.h"
 #include "cmp_hurt_player.h"
 #include "engine.h"
+#include "../game.h"
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
@@ -24,9 +25,10 @@ void WeaponComponent::update(double dt) {
 	// If fire button is pushed, this weapon is next,
 	// weapon has cooled down and firetime delay has run down
 	// fire, reset timers and increment next_weapon
-	if (Keyboard::isKeyPressed(Keyboard::Space) &&
+	if (im.Player[0].fire &&
 		next_weapon == _weapon_num &&
 		_cooldown <= 0.0f && firetime <= 0.0f) {
+		im.Player[0].fire = false;
 		fire();
 		_cooldown = base_cooldown;
 		firetime = 0.7f;
@@ -49,6 +51,10 @@ void WeaponComponent::update(double dt) {
 				next_weapon = 0;
 			break;
 		}
+	}
+	if (im.Player[0].changeWeapon) {
+		im.Player[0].changeWeapon = false;
+		changeWeapon();
 	}
 }
 
@@ -88,7 +94,7 @@ void WeaponComponent::fire() const {
 	}
 }
 
-void WeaponComponent::switchWeapon() {
+void WeaponComponent::changeWeapon() {
 	switch (type) {
 	case CANNONS:
 		type = TORPEDOS;

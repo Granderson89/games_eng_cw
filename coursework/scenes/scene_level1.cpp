@@ -11,6 +11,7 @@ using namespace std;
 using namespace sf;
 
 static shared_ptr<Entity> player;
+static InputManager im;
 
 void Level1Scene::Load() {
   cout << " Scene 1 Load" << endl;
@@ -44,6 +45,7 @@ void Level1Scene::Load() {
 	}
   }
 
+  im.initialize();
 
 
   // Add physics colliders to level tiles.
