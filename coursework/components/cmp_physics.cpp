@@ -95,8 +95,16 @@ PhysicsComponent::~PhysicsComponent() {
 void PhysicsComponent::render() {}
 
 void PhysicsComponent::impulse(const sf::Vector2f& i) {
-  auto a = b2Vec2(i.x, i.y * -1.0f);
-  _body->ApplyLinearImpulseToCenter(a, true);
+	auto a = b2Vec2(i.x, i.y * -1.0f);
+	_body->ApplyLinearImpulseToCenter(a, true);
+}
+
+void PhysicsComponent::impulse(const sf::Vector2f& i, const sf::Vector2f& here)
+{
+	auto a = b2Vec2(i.x, i.y * -1.0f);
+	auto b = b2Vec2(here.x, here.y * -1.0f);
+	_body->ApplyLinearImpulse(a, b, true);
+	//_body->ApplyLinearImpulseToCenter(a, true);
 }
 
 void PhysicsComponent::dampen(const sf::Vector2f& i) {
@@ -108,6 +116,7 @@ void PhysicsComponent::dampen(const sf::Vector2f& i) {
 
 bool PhysicsComponent::isTouching(const PhysicsComponent& pc) const {
   b2Contact* bc;
+  bc = nullptr;
   return isTouching(pc, bc);
 }
 

@@ -2,6 +2,7 @@
 #include "../components/cmp_player_physics.h"
 #include "../components/cmp_sprite.h"
 #include "../components/cmp_weapon_component.h"
+#include "../components/cmp_thrusters.h"
 #include "../game.h"
 #include <LevelSystem.h>
 #include <iostream>
@@ -35,6 +36,8 @@ void Level1Scene::Load() {
     s->getShape().setOrigin(length / 2.0f, width / 2.0f);
 
     player->addComponent<PlayerPhysicsComponent>(Vector2f(width, length));
+
+	player->addComponent<ThrustersComponent>(Vector2f(width, length), 0.01f);
 
 	// Add weapons
 	float projectile_width = 4.0f;
