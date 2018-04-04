@@ -109,44 +109,38 @@ void WeaponComponent::update(double dt) {
 
 void WeaponComponent::fire(int target) const {
 	auto projectile = _parent->scene->makeEntity();
-	if (_parent->getPosition().x > 700.0f) {
-		cout << "WRONG" << std::endl;
-	}
 	projectile->setPosition(_parent->getPosition() + rotate(Vector2f(_offset), _parent->getRotation()));
-	//projectile->addComponent<HurtComponent>();
 	auto s = projectile->addComponent<ShapeComponent>();
 	if (_type == CANNONS) {
 		s->setShape<sf::CircleShape>(8.0f);
 		s->getShape().setFillColor(Color::Red);
 		s->getShape().setOrigin(4.0f, 4.0f);
-		auto p = projectile->addComponent<PhysicsComponent>(true, Vector2f(8.0f, 8.0f));
-		p->setRestitution(0.4f);
-		p->setFriction(0.005f);
-		p->impulse(Vector2f(0.0f, 15.0f));
-		auto l = projectile->addComponent<PlasmaComponent>();
+		if (target == 0) {
+			auto l = projectile->addComponent<PlasmaComponent>(player1, _parent->getRotation());
+		}
+		if (target == 1) {
+			auto l = projectile->addComponent<PlasmaComponent>(player2, _parent->getRotation());
+		}
 	}
 	if (_type == TORPEDOS) {
 		s->setShape<sf::CircleShape>(4.0f);
 		s->getShape().setFillColor(Color::Yellow);
 		s->getShape().setOrigin(2.0f, 2.0f);
-		auto p = projectile->addComponent<PhysicsComponent>(true, Vector2f(4.0f, 4.0f));
-		p->setRestitution(0.4f);
-		p->setFriction(0.005f);
-		p->impulse(Vector2f(0.0f, 15.0f));
-		auto l = projectile->addComponent<TorpedoComponent>();
+		if (target == 0) {
+			auto l = projectile->addComponent<TorpedoComponent>(player1, _parent->getRotation());
+		}
+		if (target == 1) {
+			auto l = projectile->addComponent<TorpedoComponent>(player2, _parent->getRotation());
+		}
 	}
 	if (_type == MISSILES) {
 		s->setShape<sf::CircleShape>(2.0f);
 		s->getShape().setFillColor(Color::Cyan);
 		s->getShape().setOrigin(1.0f, 1.0f);
-		auto p = projectile->addComponent<PhysicsComponent>(true, Vector2f(2.0f, 2.0f));
-		p->setRestitution(0.4f);
-		p->setFriction(0.005f);
 		if (target == 0)
-			auto l = projectile->addComponent<MissileComponent>(player1);
+			projectile->addComponent<MissileComponent>(player1);
 		if (target == 1)
-			auto l = projectile->addComponent<MissileComponent>(player2);
-
+			projectile->addComponent<MissileComponent>(player2);
 	}
 }
 

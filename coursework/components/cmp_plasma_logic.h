@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ecm.h"
+#include "../game.h"
+
 
 class PlasmaComponent : public Component {
 protected:
@@ -8,12 +10,13 @@ protected:
 	static float max_strength;
 	static float speed;
 
+	shared_ptr<Entity> _target;
 	float _current_strength;
 	float _current_lifespan;
 
 public:
 	PlasmaComponent() = delete;
-	explicit PlasmaComponent(Entity* p);
+	explicit PlasmaComponent(Entity* p, shared_ptr<Entity> target, float ship_rotation);
 
 	void reduceStrength();
 

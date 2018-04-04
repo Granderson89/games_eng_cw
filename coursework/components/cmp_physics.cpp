@@ -38,6 +38,7 @@ PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
     _fixture = _body->CreateFixture(&FixtureDef);
     //_fixture->SetRestitution(.9)
     FixtureDef.restitution = .2;
+	FixtureDef.density = 1.0f;
   }
 
   // An ideal Pod/capusle shape should be used for hte player,
@@ -108,6 +109,7 @@ void PhysicsComponent::dampen(const sf::Vector2f& i) {
 
 bool PhysicsComponent::isTouching(const PhysicsComponent& pc) const {
   b2Contact* bc;
+  bc = nullptr;
   return isTouching(pc, bc);
 }
 
@@ -120,9 +122,9 @@ bool PhysicsComponent::isTouching(const PhysicsComponent& pc,
   for (int32 i = 0; i < clc; i++) {
     const auto& contact = (contactList[i]);
     if (contact.IsTouching() && ((contact.GetFixtureA() == _fixture &&
-                                  contact.GetFixtureA() == _otherFixture) ||
+                                  contact.GetFixtureB() == _otherFixture) ||
                                  (contact.GetFixtureA() == _otherFixture &&
-                                  contact.GetFixtureA() == _fixture))) {
+                                  contact.GetFixtureB() == _fixture))) {
       bc = &contact;
       return true;
     }

@@ -37,7 +37,8 @@ void Level1Scene::Load() {
     s->getShape().setFillColor(Color::Magenta);
     s->getShape().setOrigin(length / 2.0f, width / 2.0f);
 
-    player1->addComponent<PlayerPhysicsComponent>(Vector2f(width, length));
+    auto p = player1->addComponent<PlayerPhysicsComponent>(Vector2f(length, width));
+	p->setMass(5.0f);
 
 	// Add weapons
 	float projectile_width = 4.0f;
@@ -78,7 +79,8 @@ void Level1Scene::Load() {
 	  s->getShape().setFillColor(Color::White);
 	  s->getShape().setOrigin(length / 2.0f, width / 2.0f);
 
-	  player2->addComponent<PlayerPhysicsComponent>(Vector2f(width, length));
+	  auto p = player2->addComponent<PlayerPhysicsComponent>(Vector2f(length, width));
+	  p->setMass(5.0f);
 
 	  // Add weapons
 	  float projectile_width = 4.0f;
