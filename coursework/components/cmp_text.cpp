@@ -6,9 +6,10 @@ void TextComponent::update(double dt) {}
 
 void TextComponent::render() { Renderer::queue(&_text); }
 
-TextComponent::TextComponent(Entity* const p, const std::string& str)
+TextComponent::TextComponent(Entity* p, const std::string& str)
     : Component(p), _string(str) {
   _text.setString(_string);
+  _text.setPosition(_parent->getPosition());
   _font = Resources::get<sf::Font>("RobotoMono-Regular.ttf");
   _text.setFont(*_font);
 }
@@ -16,4 +17,12 @@ TextComponent::TextComponent(Entity* const p, const std::string& str)
 void TextComponent::SetText(const std::string& str) {
   _string = str;
   _text.setString(_string);
+}
+
+void TextComponent::Highlight() {
+	_text.setColor(sf::Color::Red);
+}
+
+void TextComponent::NoHighlight() {
+	_text.setColor(sf::Color::White);
 }
