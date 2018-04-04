@@ -1,6 +1,8 @@
 #include "cmp_missile_logic.h"
 #include "cmp_player_physics.h"
 #include "cmp_physics.h"
+#include "cmp_ai_steering.h"
+
 
 using namespace std;
 using namespace sf;
@@ -24,6 +26,10 @@ void MissileComponent::render() {
 
 void MissileComponent::explode() {
 	_parent->setForDelete();
+}
+
+float MissileComponent::getSpeed() {
+	return speed;
 }
 
 MissileComponent::MissileComponent(Entity* p, shared_ptr<Entity> target) 

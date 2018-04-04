@@ -16,6 +16,7 @@ public:
 	explicit MissileComponent(Entity* p, shared_ptr<Entity> target);
 
 	void explode();
+	float getSpeed();
 
 	void update(double dt) override;
 	void render() override;

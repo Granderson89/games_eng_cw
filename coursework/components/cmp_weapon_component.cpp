@@ -2,6 +2,7 @@
 #include "cmp_plasma_logic.h"
 #include "cmp_torpedo_logic.h"
 #include "cmp_missile_logic.h"
+#include "cmp_ai_steering.h"
 #include "cmp_hurt_player.h"
 #include "engine.h"
 #include "../game.h"
@@ -137,10 +138,16 @@ void WeaponComponent::fire(int target) const {
 		s->setShape<sf::CircleShape>(2.0f);
 		s->getShape().setFillColor(Color::Cyan);
 		s->getShape().setOrigin(1.0f, 1.0f);
-		if (target == 0)
-			projectile->addComponent<MissileComponent>(player1);
-		if (target == 1)
-			projectile->addComponent<MissileComponent>(player2);
+		if (target == 0) {
+			auto m = projectile->addComponent<MissileComponent>(player1);
+			// Attach a steering component
+			projectile->addComponent<SteeringComponent>(player1, m->getSpeed());
+		}
+		if (target == 1) {
+			auto m = projectile->addComponent<MissileComponent>(player2);
+			// Attach a steering component
+			projectile->addComponent<SteeringComponent>(player2, m->getSpeed());
+		}
 	}
 }
 
