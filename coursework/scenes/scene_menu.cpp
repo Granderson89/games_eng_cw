@@ -8,6 +8,8 @@
 using namespace std;
 using namespace sf;
 
+static InputManager im;
+
 Texture spritesheet;
 // List of UI buttons
 vector<shared_ptr<Entity>> buttons;
@@ -17,6 +19,7 @@ int highlighted = 0;
 float timer = 0;
 
 void MenuScene::Load() {
+  im.initialize();
   cout << "Menu Load \n";
 
   if (!spritesheet.loadFromFile("res/img/futureui1.png")) {
@@ -26,7 +29,7 @@ void MenuScene::Load() {
   // Title
   {
 	  auto title = makeEntity();
-	  auto t = title->addComponent<TextComponent>("Some Spaceship Game");
+	  auto t = title->addComponent<TextComponent>("Some Spaceship Game\nSpacebar to select");
   }
 
   // Rectangle for button in spritesheet
@@ -69,7 +72,7 @@ void MenuScene::Load() {
 void MenuScene::Update(const double& dt) {
   // Countdown timer
   timer -= dt;
-  if (sf::Keyboard::isKeyPressed(Keyboard::Space)) {
+  if (im.Player[0].confirm) {
 	  if (highlighted == 0) {
 		  Engine::ChangeScene(&level1);
 	  }
@@ -77,7 +80,7 @@ void MenuScene::Update(const double& dt) {
   // Only change selected if timer has run out
   if (timer <= 0.0f) {
 	  timer = 0.0f;
-	  if (sf::Keyboard::isKeyPressed(Keyboard::Up)) {
+	  if (im.Player[0].menuUp) {
 		  timer += 0.5f;
 		  highlighted--;
 		  if (highlighted < 0) {
@@ -85,7 +88,7 @@ void MenuScene::Update(const double& dt) {
 		  }
 		  HighlightSelected();
 	  }
-	  else if (sf::Keyboard::isKeyPressed(Keyboard::Down)) {
+	  else if (im.Player[0].menuDown) {
 		  timer += 0.5f;
 		  highlighted++;
 		  if (highlighted > 2) {
