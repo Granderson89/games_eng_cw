@@ -36,6 +36,7 @@ void InputManager::initialize()
 	playerInput[1].source = -2;
 	playerInput[1].fire = Keyboard::J;
 	playerInput[1].changeWeapon = Keyboard::I;
+	playerInput[1].fireTurret = Keyboard::M;
 
 }
 

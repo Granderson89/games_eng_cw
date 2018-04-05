@@ -21,7 +21,7 @@ void PlasmaComponent::update(double dt) {
 	_current_lifespan += dt;
 	reduceStrength();
 	if (_current_lifespan >= max_lifespan) {
-		_parent->setForDelete();
+		//_parent->setForDelete();
 	}
 	auto enemy = _target->GetCompatibleComponent<PlayerPhysicsComponent>().at(0);
 	if (_parent->GetCompatibleComponent<PhysicsComponent>().at(0)->isTouching(*enemy)) {
@@ -48,12 +48,17 @@ void PlasmaComponent::reduceStrength() {
 PlasmaComponent::PlasmaComponent(Entity* p, shared_ptr<Entity> target, float ship_rotation)
 	: Component(p), _target(target), _current_lifespan(0.0f) {
 	// Attach a physics component and apply impulse
+	vector<unsigned int> mask;
 	shared_ptr<PhysicsComponent> physics;
 	if (target == player1) {
-		physics = _parent->addComponent<PhysicsComponent>(true, Vector2f(8.0f, 8.0f), P2_PROJECTILE_BIT, P1_BIT);
+		mask.push_back(P1_BIT);
+		mask.push_back(P1_TURRET_PROJ_BIT);
+		physics = _parent->addComponent<PhysicsComponent>(true, Vector2f(8.0f, 8.0f), P2_PROJECTILE_BIT, mask);
 	}
 	else {
-		physics = _parent->addComponent<PhysicsComponent>(true, Vector2f(8.0f, 8.0f), P1_PROJECTILE_BIT, P2_BIT);
+		mask.push_back(P2_BIT);
+		mask.push_back(P2_TURRET_PROJ_BIT);
+		physics = _parent->addComponent<PhysicsComponent>(true, Vector2f(8.0f, 8.0f), P1_PROJECTILE_BIT, mask);
 	}
 	physics->setRestitution(0.4f);
 	physics->setFriction(0.005f);

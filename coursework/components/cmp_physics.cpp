@@ -42,7 +42,7 @@ PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
   }
 }
 
-PhysicsComponent::PhysicsComponent(Entity * p, bool dyn, const sf::Vector2f & size, int filter, int mask) : PhysicsComponent::PhysicsComponent(p, dyn, size) {
+PhysicsComponent::PhysicsComponent(Entity * p, bool dyn, const sf::Vector2f & size, int filter, vector<unsigned int> mask) : PhysicsComponent::PhysicsComponent(p, dyn, size) {
 	b2BodyDef BodyDef;
 	// Is Dynamic(moving), or static(Stationary)
 	BodyDef.type = _dynamic ? b2_dynamicBody : b2_staticBody;
@@ -63,7 +63,13 @@ PhysicsComponent::PhysicsComponent(Entity * p, bool dyn, const sf::Vector2f & si
 		FixtureDef.restitution = .2;
 		FixtureDef.shape = &Shape;
 		FixtureDef.filter.categoryBits = filter;
-		FixtureDef.filter.maskBits = mask;
+		if (mask.size() == 1) {
+			FixtureDef.filter.maskBits = mask.at(0);
+		}
+		else if (mask.size() == 2) {
+			FixtureDef.filter.maskBits = mask.at(0) | mask.at(1);
+		}
+		
 		// Add to body
 		_fixture = _body->CreateFixture(&FixtureDef);
 		//_fixture->SetRestitution(.9)

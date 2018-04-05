@@ -38,12 +38,17 @@ float MissileComponent::getSpeed() {
 MissileComponent::MissileComponent(Entity* p, shared_ptr<Entity> target) 
 	: Component(p), _target(target) {
 	// Attach a physics component
+	vector<unsigned int> mask;
 	shared_ptr<PhysicsComponent> physics;
 	if (target == player1) {
-		physics = _parent->addComponent<PhysicsComponent>(true, Vector2f(2.0f, 2.0f), P2_PROJECTILE_BIT, P1_BIT);
+		mask.push_back(P1_BIT);
+		mask.push_back(P1_TURRET_PROJ_BIT);
+		physics = _parent->addComponent<PhysicsComponent>(true, Vector2f(2.0f, 2.0f), P2_PROJECTILE_BIT, mask);
 	}
 	else {
-		physics = _parent->addComponent<PhysicsComponent>(true, Vector2f(2.0f, 2.0f), P1_PROJECTILE_BIT, P2_BIT);
+		mask.push_back(P2_BIT);
+		mask.push_back(P2_TURRET_PROJ_BIT);
+		physics = _parent->addComponent<PhysicsComponent>(true, Vector2f(2.0f, 2.0f), P1_PROJECTILE_BIT, mask);
 	}
 	physics->setRestitution(0.4f);
 	physics->setFriction(0.005f);

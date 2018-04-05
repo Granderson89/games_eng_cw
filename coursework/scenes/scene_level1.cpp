@@ -2,6 +2,7 @@
 #include "../components/cmp_player_physics.h"
 #include "../components/cmp_sprite.h"
 #include "../components/cmp_weapon_component.h"
+#include "../components/cmp_defensive_turret.h"
 #include "../components/cmp_player_state.h"
 #include "../game.h"
 #include <LevelSystem.h>
@@ -18,8 +19,11 @@ shared_ptr<Entity> player2;
 // Box2d collision bits
 unsigned int P1_BIT = 1;
 unsigned int P1_PROJECTILE_BIT = 2;
-unsigned int P2_BIT = 4;
-unsigned int P2_PROJECTILE_BIT = 8;
+unsigned int P1_TURRET_PROJ_BIT = 4;
+unsigned int P2_BIT = 8;
+unsigned int P2_PROJECTILE_BIT = 16;
+unsigned int P2_TURRET_PROJ_BIT = 32;
+
 
 // Input Manager
 static InputManager im;
@@ -62,7 +66,9 @@ void Level1Scene::Load() {
     s->getShape().setFillColor(Color::Magenta);
     s->getShape().setOrigin(length / 2.0f, width / 2.0f);
 	// Add Player Physics Component and set mass
-    auto p = player1->addComponent<PlayerPhysicsComponent>(Vector2f(length, width), P1_BIT, P2_PROJECTILE_BIT);
+	vector<unsigned int> mask;
+	mask.push_back(P2_PROJECTILE_BIT);
+    auto p = player1->addComponent<PlayerPhysicsComponent>(Vector2f(length, width), P1_BIT, mask);
 	p->setMass(5.0f);
 	// Add weapons
 	int weapon_num = 0;
@@ -81,6 +87,7 @@ void Level1Scene::Load() {
 		player1->addComponent<WeaponComponent>(missile_offsets.at(i), weapon_num, MISSILES);
 		weapon_num++;
 	}
+	player1->addComponent<TurretComponent>(0);
 	player1->addComponent<PlayerStateComponent>();
   }
   // Create player 2
@@ -95,7 +102,9 @@ void Level1Scene::Load() {
 	  s->getShape().setFillColor(Color::White);
 	  s->getShape().setOrigin(length / 2.0f, width / 2.0f);
 	  // Add Player Physics Component and set mass
-	  auto p = player2->addComponent<PlayerPhysicsComponent>(Vector2f(length, width), P2_BIT, P1_PROJECTILE_BIT);
+	  vector<unsigned int> mask;
+	  mask.push_back(P1_PROJECTILE_BIT);
+	  auto p = player2->addComponent<PlayerPhysicsComponent>(Vector2f(length, width), P2_BIT, mask);
 	  p->setMass(5.0f);
 	  // Add weapons
 	  int weapon_num = 15;
@@ -114,6 +123,7 @@ void Level1Scene::Load() {
 		  player2->addComponent<WeaponComponent>(missile_offsets.at(i), weapon_num, MISSILES);
 		  weapon_num++;
 	  }
+	  player2->addComponent<TurretComponent>(1);
 	  player2->addComponent<PlayerStateComponent>();
 
   }

@@ -102,7 +102,7 @@ void PlayerPhysicsComponent::update(double dt) {
 }
 
 PlayerPhysicsComponent::PlayerPhysicsComponent(Entity* p,
-                                               const Vector2f& size, int categoryBits, int mask)
+                                               const Vector2f& size, int categoryBits, vector<unsigned int> mask)
     : PhysicsComponent(p, true, size, categoryBits, mask) {
   _size = sv2_to_bv2(size, true);
   _maxVelocity = Vector2f(200.f, 400.f);
