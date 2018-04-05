@@ -34,6 +34,7 @@ PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
     FixtureDef.friction = _dynamic ? 0.1f : 0.8f;
     FixtureDef.restitution = .2;
     FixtureDef.shape = &Shape;
+	FixtureDef.density = 1.0f;
     // Add to body
     _fixture = _body->CreateFixture(&FixtureDef);
     //_fixture->SetRestitution(.9)
@@ -95,8 +96,15 @@ PhysicsComponent::~PhysicsComponent() {
 void PhysicsComponent::render() {}
 
 void PhysicsComponent::impulse(const sf::Vector2f& i) {
-  auto a = b2Vec2(i.x, i.y * -1.0f);
-  _body->ApplyLinearImpulseToCenter(a, true);
+	auto a = b2Vec2(i.x, i.y * -1.0f);
+	_body->ApplyLinearImpulseToCenter(a, true);
+}
+
+void PhysicsComponent::impulse(const sf::Vector2f& i, const sf::Vector2f& here)
+{
+	auto a = b2Vec2(i.x, i.y * -1.0f);
+	auto b = sv2_to_bv2(invert_height(here));
+	_body->ApplyLinearImpulse(a, b, true);
 }
 
 void PhysicsComponent::dampen(const sf::Vector2f& i) {
@@ -108,6 +116,7 @@ void PhysicsComponent::dampen(const sf::Vector2f& i) {
 
 bool PhysicsComponent::isTouching(const PhysicsComponent& pc) const {
   b2Contact* bc;
+  bc = nullptr;
   return isTouching(pc, bc);
 }
 

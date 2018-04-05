@@ -24,6 +24,8 @@ public:
   void update(double dt) override;
   void render() override;
   void impulse(const sf::Vector2f& i);
+  // Applies impulse to an object at a world position
+  void impulse(const sf::Vector2f& i, const sf::Vector2f& here);
   void dampen(const sf::Vector2f& s);
   void setVelocity(const sf::Vector2f& v);
   void teleport(const sf::Vector2f& v);
