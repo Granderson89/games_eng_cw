@@ -12,6 +12,8 @@ protected:
 
 public:
   PhysicsComponent(Entity* p, bool dyn, const sf::Vector2f& size);
+  PhysicsComponent(Entity* p, bool dyn, const sf::Vector2f& size, int filter, int mask);
+
 
   b2Fixture* const getFixture() const;
   bool isTouching(const PhysicsComponent& pc) const;

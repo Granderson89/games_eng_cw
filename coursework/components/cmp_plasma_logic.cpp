@@ -45,7 +45,13 @@ void PlasmaComponent::reduceStrength() {
 PlasmaComponent::PlasmaComponent(Entity* p, shared_ptr<Entity> target, float ship_rotation)
 	: Component(p), _target(target), _current_lifespan(0.0f) {
 	// Attach a physics component and apply impulse
-	auto physics = _parent->addComponent<PhysicsComponent>(true, Vector2f(8.0f, 8.0f));
+	shared_ptr<PhysicsComponent> physics;
+	if (target == player1) {
+		physics = _parent->addComponent<PhysicsComponent>(true, Vector2f(8.0f, 8.0f), P2_PROJECTILE_BIT, P1_BIT);
+	}
+	else {
+		physics = _parent->addComponent<PhysicsComponent>(true, Vector2f(8.0f, 8.0f), P1_PROJECTILE_BIT, P2_BIT);
+	}
 	physics->setRestitution(0.4f);
 	physics->setFriction(0.005f);
 	ship_rotation = deg2rad(ship_rotation);

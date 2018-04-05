@@ -40,32 +40,36 @@ PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
     FixtureDef.restitution = .2;
 	FixtureDef.density = 1.0f;
   }
+}
 
-  // An ideal Pod/capusle shape should be used for hte player,
-  // this isn't built into B2d, but we can combine two shapes to do so.
-  // This would allwo the player to go up steps
-  /*
-    BodyDef.bullet = true;
-    b2PolygonShape shape1;
-    shape1.SetAsBox(sv2_to_bv2(size).x * 0.5f, sv2_to_bv2(size).y * 0.5f);
-    {
-      b2PolygonShape poly ;
-      poly.SetAsBox(0.45f, 1.4f);
-      b2FixtureDef FixtureDefPoly;
+PhysicsComponent::PhysicsComponent(Entity * p, bool dyn, const sf::Vector2f & size, int filter, int mask) : PhysicsComponent::PhysicsComponent(p, dyn, size) {
+	b2BodyDef BodyDef;
+	// Is Dynamic(moving), or static(Stationary)
+	BodyDef.type = _dynamic ? b2_dynamicBody : b2_staticBody;
+	BodyDef.position = sv2_to_bv2(invert_height(p->getPosition()));
 
-      FixtureDefPoly.shape = &poly;
-      _body->CreateFixture(&FixtureDefPoly);
-
-    }
-    {
-      b2CircleShape circle;
-      circle.m_radius = 0.45f;
-      circle.m_p.Set(0, -1.4f);
-      b2FixtureDef FixtureDefCircle;
-      FixtureDefCircle.shape = &circle;
-      _body->CreateFixture(&FixtureDefCircle);
-    }
-  */
+	// Create the body
+	_body = Physics::GetWorld()->CreateBody(&BodyDef);
+	_body->SetActive(true);
+	{
+		// Create the fixture shape
+		b2PolygonShape Shape;
+		// SetAsBox box takes HALF-Widths!
+		Shape.SetAsBox(sv2_to_bv2(size).x * 0.5f, sv2_to_bv2(size).y * 0.5f);
+		b2FixtureDef FixtureDef;
+		// Fixture properties
+		// FixtureDef.density = _dynamic ? 10.f : 0.f;
+		FixtureDef.friction = _dynamic ? 0.1f : 0.8f;
+		FixtureDef.restitution = .2;
+		FixtureDef.shape = &Shape;
+		FixtureDef.filter.categoryBits = filter;
+		FixtureDef.filter.maskBits = mask;
+		// Add to body
+		_fixture = _body->CreateFixture(&FixtureDef);
+		//_fixture->SetRestitution(.9)
+		FixtureDef.restitution = .2;
+		FixtureDef.density = 1.0f;
+	}
 }
 
 void PhysicsComponent::setFriction(float r) { _fixture->SetFriction(r); }
