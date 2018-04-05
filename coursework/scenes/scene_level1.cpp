@@ -2,112 +2,150 @@
 #include "../components/cmp_player_physics.h"
 #include "../components/cmp_sprite.h"
 #include "../components/cmp_weapon_component.h"
-#include "../components/cmp_thrusters.h"
+#include "../components/cmp_defensive_turret.h"
+#include "../components/cmp_player_state.h"
 #include "../game.h"
 #include <LevelSystem.h>
 #include <iostream>
 #include <thread>
-#include "../components/cmp_camera.h"
 
 using namespace std;
 using namespace sf;
 
-static shared_ptr<Entity> player;
+// Pointers to players
+shared_ptr<Entity> player1;
+shared_ptr<Entity> player2;
+
+// Box2d collision bits
+unsigned int P1_BIT = 1;
+unsigned int P1_PROJECTILE_BIT = 2;
+unsigned int P1_TURRET_PROJ_BIT = 4;
+unsigned int P2_BIT = 8;
+unsigned int P2_PROJECTILE_BIT = 16;
+unsigned int P2_TURRET_PROJ_BIT = 32;
+
+
+// Input Manager
 static InputManager im;
 
 void Level1Scene::Load() {
-
   cout << " Scene 1 Load" << endl;
-  //ls::loadLevelFile("res/level_1.txt", 40.0f);
 
-  //auto ho = Engine::getWindowSize().y - (ls::getHeight() * 40.f);
-  //ls::setOffset(Vector2f(0, ho));
-
-  // Create player
-  {
-	float width = 50.0f;
-	float length = 200.0f;
-	Vector2f start_position(300.0f, 250.0f);
-
-	player = makeEntity();
-    //player->setPosition(ls::getTilePosition(ls::findTiles(ls::START)[0]));
-	player->setPosition(start_position);
-    auto s = player->addComponent<ShapeComponent>();
-    s->setShape<sf::RectangleShape>(Vector2f(width, length));
-    s->getShape().setFillColor(Color::Magenta);
-    s->getShape().setOrigin(width / 2.0f, length / 2.0f);
-	player->addTag("player");
-
-    auto pc = player->addComponent<PlayerPhysicsComponent>(Vector2f(width, length));
-
-	player->addComponent<ThrustersComponent>(Vector2f(width, length), 3.0f);
-
-	// Add weapons
-	float projectile_width = 4.0f;
-	float projectile_height = 4.0f;
-	// CANNONS
-	for (int i = 0; i < 8; i++) {
-		Vector2f mount_position = Vector2f(-length / 2.0f + projectile_height + i * 25.0f + 5.0f, width / 2.0f + projectile_width);
-		player->addComponent<WeaponComponent>(mount_position, i, CANNONS);
-	}
-	// TORPEDOS
-	for (int i = 1; i < 6; i++) {
-		Vector2f mount_position = Vector2f(-length / 2.0f + projectile_height + i * 25.0f + 5.0f, width / 2.0f + projectile_width);
-		player->addComponent<WeaponComponent>(mount_position, i, TORPEDOS);
-	}
-	// MISSILES
-	for (int i = 3; i < 5; i++) {
-		Vector2f mount_position = Vector2f(-length / 2.0f + projectile_height + i * 25.0f + 5.0f, width / 2.0f + projectile_width);
-		player->addComponent<WeaponComponent>(mount_position, i, MISSILES);
-	}
+  // Ship dimensions
+  float width = 50.0f;
+  float length = 200.0f;
+  // Weapon mount dimensions
+  float mount_width = 4.0f;
+  float mount_height = 4.0f;
+  // Weapon mount positions relative to centre of ship
+  vector<Vector2f> cannon_offsets;
+  for (int i = 0; i < 8; i++) {
+	  auto mount_pos = Vector2f(-length / 2.0f + mount_height + i * 25.0f + 5.0f, width / 2.0f + mount_width);
+	  cannon_offsets.push_back(mount_pos);
+  }
+  vector<Vector2f> torpedo_offsets;
+  for (int i = 1; i < 6; i++) {
+	  auto mount_pos = Vector2f(-length / 2.0f + mount_height + i * 25.0f + 5.0f, width / 2.0f + mount_width);
+	  torpedo_offsets.push_back(mount_pos);
+  }
+  vector<Vector2f> missile_offsets;
+  for (int i = 3; i < 5; i++) {
+	  auto mount_pos = Vector2f(-length / 2.0f + mount_height + i * 25.0f + 5.0f, width / 2.0f + mount_width);
+	  missile_offsets.push_back(mount_pos);
   }
 
+  // Create player 1
+  {
+	Vector2f p1_start_position(100.0f, 250.0f);
+	player1 = makeEntity();
+	player1->addTag("p1");
+	player1->setPosition(p1_start_position);
+	// Add Shape Component
+    auto s = player1->addComponent<ShapeComponent>();
+    s->setShape<sf::RectangleShape>(Vector2f(length, width));
+    s->getShape().setFillColor(Color::Magenta);
+    s->getShape().setOrigin(length / 2.0f, width / 2.0f);
+	// Add Player Physics Component and set mass
+	vector<unsigned int> mask;
+	mask.push_back(P2_PROJECTILE_BIT);
+    auto p = player1->addComponent<PlayerPhysicsComponent>(Vector2f(length, width), P1_BIT, mask);
+	p->setMass(5.0f);
+	// Add weapons
+	int weapon_num = 0;
+	// CANNONS
+	for (int i = 0; i < 8; i++) {
+		player1->addComponent<WeaponComponent>(cannon_offsets.at(i), weapon_num, CANNONS);
+		weapon_num++;
+	}
+	// TORPEDOS
+	for (int i = 0; i < 5; i++) {
+		player1->addComponent<WeaponComponent>(torpedo_offsets.at(i), weapon_num, TORPEDOS);
+		weapon_num++;
+	}
+	// MISSILES
+	for (int i = 0; i < 2; i++) {
+		player1->addComponent<WeaponComponent>(missile_offsets.at(i), weapon_num, MISSILES);
+		weapon_num++;
+	}
+	player1->addComponent<TurretComponent>(0);
+	player1->addComponent<PlayerStateComponent>();
+  }
+  // Create player 2
+  {
+	  Vector2f p2_start_position(800.0f, 250.0f);
+	  player2 = makeEntity();
+	  player2->addTag("p2");
+	  player2->setPosition(p2_start_position);
+	  // Add Shape Component
+	  auto s = player2->addComponent<ShapeComponent>();
+	  s->setShape<sf::RectangleShape>(Vector2f(length, width));
+	  s->getShape().setFillColor(Color::White);
+	  s->getShape().setOrigin(length / 2.0f, width / 2.0f);
+	  // Add Player Physics Component and set mass
+	  vector<unsigned int> mask;
+	  mask.push_back(P1_PROJECTILE_BIT);
+	  auto p = player2->addComponent<PlayerPhysicsComponent>(Vector2f(length, width), P2_BIT, mask);
+	  p->setMass(5.0f);
+	  // Add weapons
+	  int weapon_num = 15;
+	  // CANNONS
+	  for (int i = 0; i < 8; i++) {
+		  player2->addComponent<WeaponComponent>(cannon_offsets.at(i), weapon_num, CANNONS);
+		  weapon_num++;
+	  }
+	  // TORPEDOS
+	  for (int i = 0; i < 5; i++) {
+		  player2->addComponent<WeaponComponent>(torpedo_offsets.at(i), weapon_num, TORPEDOS);
+		  weapon_num++;
+	  }
+	  // MISSILES
+	  for (int i = 0; i < 2; i++) {
+		  player2->addComponent<WeaponComponent>(missile_offsets.at(i), weapon_num, MISSILES);
+		  weapon_num++;
+	  }
+	  player2->addComponent<TurretComponent>(1);
+	  player2->addComponent<PlayerStateComponent>();
 
-	// Create a container entity for the camera script (ce - camera entity, cc - camera component)
-	shared_ptr<Entity> ce;
-	ce = makeEntity();
-	auto cc = ce->addComponent<CameraControllerComponent>();
-	ce->addTag("camera");
-	cc->addTarget(player);
+  }
 
-	im.initialize();
-
-
-	// Add physics colliders to level tiles.
-	//{
-	//  auto walls = ls::findTiles(ls::WALL);
-	//  for (auto w : walls) {
-	//    auto pos = ls::getTilePosition(w);
-	//    pos += Vector2f(20.f, 20.f); //offset to center
-	//    auto e = makeEntity();
-	//    e->setPosition(pos);
-	//    e->addComponent<PhysicsComponent>(false, Vector2f(40.f, 40.f));
-	//  }
-	//}
-
-	//Simulate long loading times
-	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-	cout << " Scene 1 Load Done" << endl;
-
-	setLoaded(true);
+  // Initialise input manager
+  im.initialize();
+  //Simulate long loading times
+  std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+  cout << " Scene 1 Load Done" << endl;
+  setLoaded(true);
 }
 
 void Level1Scene::UnLoad() {
-	cout << "Scene 1 Unload" << endl;
-	player.reset();
-	//ls::unload();
-	Scene::UnLoad();
+  cout << "Scene 1 Unload" << endl;
+  player1.reset();
+  Scene::UnLoad();
 }
 
 void Level1Scene::Update(const double& dt) {
-
-	//if (ls::getTileAt(player->getPosition()) == ls::END) {
-	//  //Engine::ChangeScene((Scene*)&level2);
-	//}
-	Scene::Update(dt);
+  Scene::Update(dt);
 }
 
 void Level1Scene::Render() {
-	//ls::render(Engine::GetWindow());
-	Scene::Render();
+  Scene::Render();
 }

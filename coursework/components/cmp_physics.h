@@ -4,6 +4,8 @@
 #include "ecm.h"
 #include <Box2D/Dynamics/b2Body.h>
 
+using namespace std;
+
 class PhysicsComponent : public Component {
 protected:
   b2Body* _body;
@@ -12,6 +14,8 @@ protected:
 
 public:
   PhysicsComponent(Entity* p, bool dyn, const sf::Vector2f& size);
+  PhysicsComponent(Entity* p, bool dyn, const sf::Vector2f& size, int filter, vector<unsigned int> mask);
+
 
   b2Fixture* const getFixture() const;
   bool isTouching(const PhysicsComponent& pc) const;

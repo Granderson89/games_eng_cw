@@ -95,7 +95,7 @@ void Engine::Start(unsigned int width, unsigned int height,
         window.close();
       }
 
-	  if (event.type == Event::KeyPressed || 
+	  if (event.type == Event::KeyPressed ||
 		  event.type == Event::KeyReleased) {
 		  im.update();
 	  }

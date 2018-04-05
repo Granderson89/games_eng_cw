@@ -39,33 +39,44 @@ PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
     _fixture = _body->CreateFixture(&FixtureDef);
     //_fixture->SetRestitution(.9)
     FixtureDef.restitution = .2;
+	FixtureDef.density = 1.0f;
   }
+}
 
-  // An ideal Pod/capusle shape should be used for hte player,
-  // this isn't built into B2d, but we can combine two shapes to do so.
-  // This would allwo the player to go up steps
-  /*
-    BodyDef.bullet = true;
-    b2PolygonShape shape1;
-    shape1.SetAsBox(sv2_to_bv2(size).x * 0.5f, sv2_to_bv2(size).y * 0.5f);
-    {
-      b2PolygonShape poly ;
-      poly.SetAsBox(0.45f, 1.4f);
-      b2FixtureDef FixtureDefPoly;
+PhysicsComponent::PhysicsComponent(Entity * p, bool dyn, const sf::Vector2f & size, int filter, vector<unsigned int> mask) : PhysicsComponent::PhysicsComponent(p, dyn, size) {
+	b2BodyDef BodyDef;
+	// Is Dynamic(moving), or static(Stationary)
+	BodyDef.type = _dynamic ? b2_dynamicBody : b2_staticBody;
+	BodyDef.position = sv2_to_bv2(invert_height(p->getPosition()));
 
-      FixtureDefPoly.shape = &poly;
-      _body->CreateFixture(&FixtureDefPoly);
-
-    }
-    {
-      b2CircleShape circle;
-      circle.m_radius = 0.45f;
-      circle.m_p.Set(0, -1.4f);
-      b2FixtureDef FixtureDefCircle;
-      FixtureDefCircle.shape = &circle;
-      _body->CreateFixture(&FixtureDefCircle);
-    }
-  */
+	// Create the body
+	_body = Physics::GetWorld()->CreateBody(&BodyDef);
+	_body->SetActive(true);
+	{
+		// Create the fixture shape
+		b2PolygonShape Shape;
+		// SetAsBox box takes HALF-Widths!
+		Shape.SetAsBox(sv2_to_bv2(size).x * 0.5f, sv2_to_bv2(size).y * 0.5f);
+		b2FixtureDef FixtureDef;
+		// Fixture properties
+		// FixtureDef.density = _dynamic ? 10.f : 0.f;
+		FixtureDef.friction = _dynamic ? 0.1f : 0.8f;
+		FixtureDef.restitution = .2;
+		FixtureDef.shape = &Shape;
+		FixtureDef.filter.categoryBits = filter;
+		if (mask.size() == 1) {
+			FixtureDef.filter.maskBits = mask.at(0);
+		}
+		else if (mask.size() == 2) {
+			FixtureDef.filter.maskBits = mask.at(0) | mask.at(1);
+		}
+		
+		// Add to body
+		_fixture = _body->CreateFixture(&FixtureDef);
+		//_fixture->SetRestitution(.9)
+		FixtureDef.restitution = .2;
+		FixtureDef.density = 1.0f;
+	}
 }
 
 void PhysicsComponent::setFriction(float r) { _fixture->SetFriction(r); }
@@ -129,9 +140,9 @@ bool PhysicsComponent::isTouching(const PhysicsComponent& pc,
   for (int32 i = 0; i < clc; i++) {
     const auto& contact = (contactList[i]);
     if (contact.IsTouching() && ((contact.GetFixtureA() == _fixture &&
-                                  contact.GetFixtureA() == _otherFixture) ||
+                                  contact.GetFixtureB() == _otherFixture) ||
                                  (contact.GetFixtureA() == _otherFixture &&
-                                  contact.GetFixtureA() == _fixture))) {
+                                  contact.GetFixtureB() == _fixture))) {
       bc = &contact;
       return true;
     }
