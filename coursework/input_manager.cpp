@@ -32,6 +32,11 @@ void InputManager::initialize()
 	playerInput[0].selectorAxis[0] = Keyboard::Num7;
 
 	playerInput[0].boostMovement = Keyboard::Num5;
+	
+	playerInput[1].source = -2;
+	playerInput[1].fire = Keyboard::J;
+	playerInput[1].changeWeapon = Keyboard::I;
+
 }
 
 void InputManager::update()
