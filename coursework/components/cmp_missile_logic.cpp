@@ -2,13 +2,14 @@
 #include "cmp_player_physics.h"
 #include "cmp_physics.h"
 #include "cmp_ai_steering.h"
+#include "cmp_player_state.h"
 
 
 using namespace std;
 using namespace sf;
 
 // Full strength of projectile
-float MissileComponent::strength = 300.0f;
+float MissileComponent::strength = 30.0f;
 // Speed of projectile
 float MissileComponent::speed = 100.0f;
 
@@ -17,6 +18,8 @@ void MissileComponent::update(double dt) {
 	auto enemy = _target->GetCompatibleComponent<PlayerPhysicsComponent>().at(0);
 	if (_parent->GetCompatibleComponent<PhysicsComponent>().at(0)->isTouching(*enemy)) {
 		explode();
+		auto enemyState = _target->GetCompatibleComponent<PlayerStateComponent>().at(0);
+		enemyState->takeDamage(strength);
 	}
 }
 

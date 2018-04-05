@@ -1,6 +1,7 @@
 #include "cmp_torpedo_logic.h"
 #include "cmp_physics.h"
 #include "cmp_player_physics.h"
+#include "cmp_player_state.h"
 
 using namespace std;
 using namespace sf;
@@ -8,7 +9,7 @@ using namespace sf;
 // Lifespan of projectile
 float TorpedoComponent::max_lifespan = 5.0f;
 // Full strength of projectile
-float TorpedoComponent::strength = 200.0f;
+float TorpedoComponent::strength = 20.0f;
 // Speed of projectile
 float TorpedoComponent::speed = 7.0f;
 // Range of explosion
@@ -24,6 +25,8 @@ void TorpedoComponent::update(double dt) {
 	auto enemy = _target->GetCompatibleComponent<PlayerPhysicsComponent>().at(0);
 	if (_parent->GetCompatibleComponent<PhysicsComponent>().at(0)->isTouching(*enemy)) {
 		explode();
+		auto enemyState = _target->GetCompatibleComponent<PlayerStateComponent>().at(0);
+		enemyState->takeDamage(strength);
 	}
 	
 }
@@ -34,6 +37,7 @@ void TorpedoComponent::render() {
 
 void TorpedoComponent::explode() {
 	_parent->setForDelete();
+
 }
 
 TorpedoComponent::TorpedoComponent(Entity* p, shared_ptr<Entity> target, float ship_rotation)

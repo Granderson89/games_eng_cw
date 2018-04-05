@@ -2,6 +2,7 @@
 #include "../components/cmp_player_physics.h"
 #include "../components/cmp_sprite.h"
 #include "../components/cmp_weapon_component.h"
+#include "../components/cmp_player_state.h"
 #include "../game.h"
 #include <LevelSystem.h>
 #include <iostream>
@@ -80,6 +81,7 @@ void Level1Scene::Load() {
 		player1->addComponent<WeaponComponent>(missile_offsets.at(i), weapon_num, MISSILES);
 		weapon_num++;
 	}
+	player1->addComponent<PlayerStateComponent>();
   }
   // Create player 2
   {
@@ -112,6 +114,8 @@ void Level1Scene::Load() {
 		  player2->addComponent<WeaponComponent>(missile_offsets.at(i), weapon_num, MISSILES);
 		  weapon_num++;
 	  }
+	  player2->addComponent<PlayerStateComponent>();
+
   }
 
   // Initialise input manager

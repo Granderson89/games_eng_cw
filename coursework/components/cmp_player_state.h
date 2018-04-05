@@ -1,7 +1,7 @@
 #pragma once
 #include "ecm.h"
 
-class PlayerStateComponent : Component
+class PlayerStateComponent : public Component
 {
 private:
 	const float maxHealth = 100.0f;
@@ -18,4 +18,8 @@ public:
 	PlayerStateComponent() = delete;
 
 	void update(double dt) override;
+	void render() override;
+
+
+	void takeDamage(float damage);
 };

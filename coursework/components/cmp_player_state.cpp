@@ -18,5 +18,14 @@ void PlayerStateComponent::update(double dt)
 	if (health <= 0.0f)
 	{
 		// Death resolution here ///////////////////////////////////////////////////////
+
 	}
+}
+
+void PlayerStateComponent::render()
+{
+}
+
+void PlayerStateComponent::takeDamage(float damage) {
+	health -= damage;
 }

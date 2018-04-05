@@ -1,5 +1,6 @@
 #include "cmp_plasma_logic.h"
 #include "cmp_player_physics.h"
+#include "cmp_player_state.h"
 #include "../game.h"
 
 #include <Box2D/Dynamics/Contacts/b2Contact.h>
@@ -11,7 +12,7 @@ using namespace sf;
 // Lifespan of projectile
 float PlasmaComponent::max_lifespan = 3.0f;
 // Full strength of projectile
-float PlasmaComponent::max_strength = 100.0f;
+float PlasmaComponent::max_strength = 10.0f;
 // Speed of projectile
 float PlasmaComponent::speed = 10.0f;
 
@@ -25,6 +26,8 @@ void PlasmaComponent::update(double dt) {
 	auto enemy = _target->GetCompatibleComponent<PlayerPhysicsComponent>().at(0);
 	if (_parent->GetCompatibleComponent<PhysicsComponent>().at(0)->isTouching(*enemy)) {
 		_parent->setForDelete();
+		auto enemyState = _target->GetCompatibleComponent<PlayerStateComponent>().at(0);
+		enemyState->takeDamage(_current_strength);
 	}
 }
 
@@ -56,7 +59,6 @@ PlasmaComponent::PlasmaComponent(Entity* p, shared_ptr<Entity> target, float shi
 	physics->setFriction(0.005f);
 	ship_rotation = deg2rad(ship_rotation);
 	Vector2f direction = Vector2f(-sinf(ship_rotation), cosf(ship_rotation));
-	std::cout << "Direction: (" << direction.x << ", " << direction.y << ")" << std::endl;
 	direction = normalize(direction);
 	physics->impulse(direction * speed);
 }
