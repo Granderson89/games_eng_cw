@@ -10,6 +10,7 @@ private:
 	sf::Vector2f _startingNormals[6];
 	sf::Vector2f _offsets[6];
 	sf::Vector2f _normals[6];
+	bool _firing[6];	// Whether the thruster is firing or not
 	float _power;
 	Entity* _parent;
 

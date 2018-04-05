@@ -34,6 +34,7 @@ PhysicsComponent::PhysicsComponent(Entity* p, bool dyn,
     FixtureDef.friction = _dynamic ? 0.1f : 0.8f;
     FixtureDef.restitution = .2;
     FixtureDef.shape = &Shape;
+	FixtureDef.density = 1.0f;
     // Add to body
     _fixture = _body->CreateFixture(&FixtureDef);
     //_fixture->SetRestitution(.9)
@@ -102,9 +103,8 @@ void PhysicsComponent::impulse(const sf::Vector2f& i) {
 void PhysicsComponent::impulse(const sf::Vector2f& i, const sf::Vector2f& here)
 {
 	auto a = b2Vec2(i.x, i.y * -1.0f);
-	auto b = b2Vec2(here.x, here.y * -1.0f);
+	auto b = sv2_to_bv2(invert_height(here));
 	_body->ApplyLinearImpulse(a, b, true);
-	//_body->ApplyLinearImpulseToCenter(a, true);
 }
 
 void PhysicsComponent::dampen(const sf::Vector2f& i) {
