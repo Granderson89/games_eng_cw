@@ -21,6 +21,11 @@ private:
 		bool thrusterWheelUp;
 		bool thrusterOn[6];
 		bool boostMovement;
+
+		// Menu actions
+		bool menuUp;
+		bool menuDown;
+		bool confirm;
 	};
 	struct inputs
 	{
@@ -42,6 +47,11 @@ private:
 		int selectorAxis[8];	// For selecting thruster using keys, starts North goes clockwise
 		//unsigned int thrusterOn[6];
 		int boostMovement;
+
+		// Menu inputs
+		int menuUp;
+		int menuDown;
+		int confirm;
 	};
 
 	static inputs playerInput[2];
