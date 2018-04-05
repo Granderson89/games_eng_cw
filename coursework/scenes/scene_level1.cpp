@@ -7,6 +7,7 @@
 #include <LevelSystem.h>
 #include <iostream>
 #include <thread>
+#include "../components/cmp_camera.h"
 
 using namespace std;
 using namespace sf;
@@ -15,6 +16,7 @@ static shared_ptr<Entity> player;
 static InputManager im;
 
 void Level1Scene::Load() {
+
   cout << " Scene 1 Load" << endl;
   //ls::loadLevelFile("res/level_1.txt", 40.0f);
 
@@ -34,6 +36,7 @@ void Level1Scene::Load() {
     s->setShape<sf::RectangleShape>(Vector2f(width, length));
     s->getShape().setFillColor(Color::Magenta);
     s->getShape().setOrigin(width / 2.0f, length / 2.0f);
+	player->addTag("player");
 
     auto pc = player->addComponent<PlayerPhysicsComponent>(Vector2f(width, length));
 
@@ -59,44 +62,52 @@ void Level1Scene::Load() {
 	}
   }
 
-  im.initialize();
+
+	// Create a container entity for the camera script (ce - camera entity, cc - camera component)
+	shared_ptr<Entity> ce;
+	ce = makeEntity();
+	auto cc = ce->addComponent<CameraControllerComponent>();
+	ce->addTag("camera");
+	cc->addTarget(player);
+
+	im.initialize();
 
 
-  // Add physics colliders to level tiles.
-  //{
-  //  auto walls = ls::findTiles(ls::WALL);
-  //  for (auto w : walls) {
-  //    auto pos = ls::getTilePosition(w);
-  //    pos += Vector2f(20.f, 20.f); //offset to center
-  //    auto e = makeEntity();
-  //    e->setPosition(pos);
-  //    e->addComponent<PhysicsComponent>(false, Vector2f(40.f, 40.f));
-  //  }
-  //}
+	// Add physics colliders to level tiles.
+	//{
+	//  auto walls = ls::findTiles(ls::WALL);
+	//  for (auto w : walls) {
+	//    auto pos = ls::getTilePosition(w);
+	//    pos += Vector2f(20.f, 20.f); //offset to center
+	//    auto e = makeEntity();
+	//    e->setPosition(pos);
+	//    e->addComponent<PhysicsComponent>(false, Vector2f(40.f, 40.f));
+	//  }
+	//}
 
-  //Simulate long loading times
-  std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-  cout << " Scene 1 Load Done" << endl;
+	//Simulate long loading times
+	std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+	cout << " Scene 1 Load Done" << endl;
 
-  setLoaded(true);
+	setLoaded(true);
 }
 
 void Level1Scene::UnLoad() {
-  cout << "Scene 1 Unload" << endl;
-  player.reset();
-  //ls::unload();
-  Scene::UnLoad();
+	cout << "Scene 1 Unload" << endl;
+	player.reset();
+	//ls::unload();
+	Scene::UnLoad();
 }
 
 void Level1Scene::Update(const double& dt) {
 
-  //if (ls::getTileAt(player->getPosition()) == ls::END) {
-  //  //Engine::ChangeScene((Scene*)&level2);
-  //}
-  Scene::Update(dt);
+	//if (ls::getTileAt(player->getPosition()) == ls::END) {
+	//  //Engine::ChangeScene((Scene*)&level2);
+	//}
+	Scene::Update(dt);
 }
 
 void Level1Scene::Render() {
-  //ls::render(Engine::GetWindow());
-  Scene::Render();
+	//ls::render(Engine::GetWindow());
+	Scene::Render();
 }
