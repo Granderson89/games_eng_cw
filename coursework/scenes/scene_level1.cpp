@@ -5,6 +5,7 @@
 #include "../components/cmp_defensive_turret.h"
 #include "../components/cmp_thrusters.h"
 #include "../components/cmp_player_state.h"
+#include "../components/cmp_camera.h"
 #include "../game.h"
 #include <LevelSystem.h>
 #include <iostream>
@@ -130,6 +131,14 @@ void Level1Scene::Load() {
 	  player2->addComponent<PlayerStateComponent>();
 
   }
+
+  // Create a container entity for the camera script (ce - camera entity, cc - camera component)
+  shared_ptr<Entity> ce;
+  ce = makeEntity();
+  auto cc = ce->addComponent<CameraControllerComponent>();
+  ce->addTag("camera");
+  cc->addTarget(player1);
+  cc->addTarget(player2);
 
   // Initialise input manager
   im.initialize();
