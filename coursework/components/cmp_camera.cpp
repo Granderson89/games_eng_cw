@@ -4,7 +4,7 @@
 
 using namespace sf;
 
-
+Vector2f midpoint;
 
 CameraControllerComponent::CameraControllerComponent(Entity* p) : Component(p)
 {
@@ -18,10 +18,20 @@ void CameraControllerComponent::addTarget(std::shared_ptr<Entity> p)
 	targets.push_back(p);
 }
 
+Vector2f CameraControllerComponent::getMidpoint()
+{
+	return midpoint;
+}
+
+sf::View CameraControllerComponent::getView()
+{
+	return view;
+}
+
 
 void CameraControllerComponent::update(double dt)
 {
-	Vector2f midpoint = Vector2f(0.0f, 0.0f);
+	midpoint = Vector2f(0.0f, 0.0f);
 	float aspectRatio = (float)Renderer::getWindow().getSize().x / (float)Renderer::getWindow().getSize().y;
 
 	for (auto t : targets)

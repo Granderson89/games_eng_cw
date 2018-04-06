@@ -19,6 +19,16 @@ void TextComponent::SetText(const std::string& str) {
   _text.setString(_string);
 }
 
+void TextComponent::AddText(const std::string& str) {
+	_string = str;
+	_text.setString(_text.getString() + _string);
+}
+
+void TextComponent::SetPosition(sf::Vector2f & pos)
+{
+	_text.setPosition(pos);
+}
+
 void TextComponent::Highlight() {
 	_text.setColor(sf::Color::Red);
 }
@@ -26,3 +36,4 @@ void TextComponent::Highlight() {
 void TextComponent::NoHighlight() {
 	_text.setColor(sf::Color::White);
 }
+

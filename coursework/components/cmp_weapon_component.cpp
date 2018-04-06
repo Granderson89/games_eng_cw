@@ -35,6 +35,9 @@ void WeaponComponent::update(double dt) {
 	p1_firetime -= dt;
 	p2_firetime -= dt;
 	_cooldown -= dt;
+	if (_cooldown <= 0.0f) {
+		_cooldown = 0.0f;
+	}
 	// If fire button is pushed, this weapon is next,
 	// weapon has cooled down and firetime delay has run down
 	// fire, reset timers and increment next_weapon
@@ -199,6 +202,60 @@ void WeaponComponent::changeP2Weapon() {
 		p2_active_type = CANNONS;
 		p2_base_cooldown = 1.0f;
 		p2_next_weapon = 15;
+		break;
+	}
+}
+string WeaponComponent::getP1ActiveType() {
+	switch (p1_active_type) {
+	case CANNONS:
+		return "CANNONS";
+		break;
+	case TORPEDOS:
+		return "TORPEDOS";
+		break;
+	case MISSILES:
+		return "MISSILES";
+		break;
+	default:
+		return "CANNONS";
+		break;
+	}
+}
+string WeaponComponent::getP2ActiveType()
+{
+	switch (p2_active_type) {
+	case CANNONS:
+		return "CANNONS";
+		break;
+	case TORPEDOS:
+		return "TORPEDOS";
+		break;
+	case MISSILES:
+		return "MISSILES";
+		break;
+	default:
+		return "CANNONS";
+		break;
+	}
+}
+float WeaponComponent::getCooldown()
+{
+	return _cooldown;
+}
+string WeaponComponent::getType()
+{
+	switch (_type) {
+	case CANNONS:
+		return "CANNONS";
+		break;
+	case TORPEDOS:
+		return "TORPEDOS";
+		break;
+	case MISSILES:
+		return "MISSILES";
+		break;
+	default:
+		return "CANNONS";
 		break;
 	}
 }
