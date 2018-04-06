@@ -1,5 +1,5 @@
 #include "cmp_player_state.h"
-
+#include "../game.h"
 
 
 PlayerStateComponent::PlayerStateComponent(Entity* p) :Component(p)
@@ -18,7 +18,14 @@ void PlayerStateComponent::update(double dt)
 	if (health <= 0.0f)
 	{
 		// Death resolution here ///////////////////////////////////////////////////////
-
+		_parent->setForDelete();
+		if (_parent == player1.get()) {
+			winner = 2;
+		}
+		else {
+			winner = 1;
+		}
+		Engine::ChangeScene(&gameOver);
 	}
 }
 
