@@ -19,13 +19,14 @@ void PlayerPhysicsComponent::update(double dt) {
     // Moving Either Left or Right
     if (im.Player[0].turnRight) {
 	  im.Player[0].turnRight = false;
-	  if (_body->GetAngularVelocity() > -_maxVelocity.x)
-		  _body->ApplyAngularImpulse(_turningSpeed * dt, true);
+		if (_body->GetAngularVelocity() < _maxVelocity.x)
+			_body->ApplyAngularImpulse(-_turningSpeed * dt, true);
 	}
 	else if (im.Player[0].turnLeft) {
 		im.Player[0].turnLeft = false;
-		if (_body->GetAngularVelocity() < _maxVelocity.x)
-			_body->ApplyAngularImpulse(-_turningSpeed * dt, true);
+		if (_body->GetAngularVelocity() > -_maxVelocity.x)
+			_body->ApplyAngularImpulse(_turningSpeed * dt, true);
+		
 	}
 	else if (im.Player[0].moveBackwards) {
 		im.Player[0].moveBackwards = false;
