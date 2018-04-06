@@ -14,14 +14,14 @@ float PlasmaComponent::max_lifespan = 3.0f;
 // Full strength of projectile
 float PlasmaComponent::max_strength = 10.0f;
 // Speed of projectile
-float PlasmaComponent::speed = 10.0f;
+float PlasmaComponent::speed = 1.0f;
 
 // Update - count lifespan and reduce strength of projectile
 void PlasmaComponent::update(double dt) {
 	_current_lifespan += dt;
 	reduceStrength();
 	if (_current_lifespan >= max_lifespan) {
-		//_parent->setForDelete();
+		_parent->setForDelete();
 	}
 	auto enemy = _target->GetCompatibleComponent<PlayerPhysicsComponent>().at(0);
 	if (_parent->GetCompatibleComponent<PhysicsComponent>().at(0)->isTouching(*enemy)) {
@@ -62,7 +62,7 @@ PlasmaComponent::PlasmaComponent(Entity* p, shared_ptr<Entity> target, float shi
 	}
 	physics->setRestitution(0.4f);
 	physics->setFriction(0.005f);
-	ship_rotation = deg2rad(ship_rotation);
+	ship_rotation = deg2rad(ship_rotation - 90.0f);
 	Vector2f direction = Vector2f(-sinf(ship_rotation), cosf(ship_rotation));
 	direction = normalize(direction);
 	physics->impulse(direction * speed);

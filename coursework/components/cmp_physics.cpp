@@ -63,6 +63,7 @@ PhysicsComponent::PhysicsComponent(Entity * p, bool dyn, const sf::Vector2f & si
 		FixtureDef.friction = _dynamic ? 0.1f : 0.8f;
 		FixtureDef.restitution = .2;
 		FixtureDef.shape = &Shape;
+		FixtureDef.density = 1.0f;
 		FixtureDef.filter.categoryBits = filter;
 		if (mask.size() == 1) {
 			FixtureDef.filter.maskBits = mask.at(0);
@@ -70,12 +71,8 @@ PhysicsComponent::PhysicsComponent(Entity * p, bool dyn, const sf::Vector2f & si
 		else if (mask.size() == 2) {
 			FixtureDef.filter.maskBits = mask.at(0) | mask.at(1);
 		}
-		
 		// Add to body
 		_fixture = _body->CreateFixture(&FixtureDef);
-		//_fixture->SetRestitution(.9)
-		FixtureDef.restitution = .2;
-		FixtureDef.density = 1.0f;
 	}
 }
 

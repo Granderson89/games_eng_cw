@@ -11,7 +11,7 @@ float TorpedoComponent::max_lifespan = 5.0f;
 // Full strength of projectile
 float TorpedoComponent::strength = 20.0f;
 // Speed of projectile
-float TorpedoComponent::speed = 7.0f;
+float TorpedoComponent::speed = 1.0f;
 // Range of explosion
 float TorpedoComponent::damage_range = 5.0f;
 
@@ -57,7 +57,7 @@ TorpedoComponent::TorpedoComponent(Entity* p, shared_ptr<Entity> target, float s
 	}
 	physics->setRestitution(0.4f);
 	physics->setFriction(0.005f);
-	ship_rotation = deg2rad(ship_rotation);
+	ship_rotation = deg2rad(ship_rotation - 90.0f);
 	Vector2f direction = Vector2f(-sinf(ship_rotation), cosf(ship_rotation));
 	direction = normalize(direction);
 	physics->impulse(direction * speed);

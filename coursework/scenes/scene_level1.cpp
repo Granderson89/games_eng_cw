@@ -3,6 +3,7 @@
 #include "../components/cmp_sprite.h"
 #include "../components/cmp_weapon_component.h"
 #include "../components/cmp_defensive_turret.h"
+#include "../components/cmp_thrusters.h"
 #include "../components/cmp_player_state.h"
 #include "../game.h"
 #include <LevelSystem.h>
@@ -40,17 +41,17 @@ void Level1Scene::Load() {
   // Weapon mount positions relative to centre of ship
   vector<Vector2f> cannon_offsets;
   for (int i = 0; i < 8; i++) {
-	  auto mount_pos = Vector2f(-length / 2.0f + mount_height + i * 25.0f + 5.0f, width / 2.0f + mount_width);
+	  auto mount_pos = Vector2f(width / 2.0f + mount_width, -length / 2.0f + mount_height + i * 25.0f + 5.0f);
 	  cannon_offsets.push_back(mount_pos);
   }
   vector<Vector2f> torpedo_offsets;
   for (int i = 1; i < 6; i++) {
-	  auto mount_pos = Vector2f(-length / 2.0f + mount_height + i * 25.0f + 5.0f, width / 2.0f + mount_width);
+	  auto mount_pos = Vector2f(width / 2.0f + mount_width, -length / 2.0f + mount_height + i * 25.0f + 5.0f);
 	  torpedo_offsets.push_back(mount_pos);
   }
   vector<Vector2f> missile_offsets;
   for (int i = 3; i < 5; i++) {
-	  auto mount_pos = Vector2f(-length / 2.0f + mount_height + i * 25.0f + 5.0f, width / 2.0f + mount_width);
+	  auto mount_pos = Vector2f(width / 2.0f + mount_width, -length / 2.0f + mount_height + i * 25.0f + 5.0f);
 	  missile_offsets.push_back(mount_pos);
   }
 
@@ -62,13 +63,13 @@ void Level1Scene::Load() {
 	player1->setPosition(p1_start_position);
 	// Add Shape Component
     auto s = player1->addComponent<ShapeComponent>();
-    s->setShape<sf::RectangleShape>(Vector2f(length, width));
+    s->setShape<sf::RectangleShape>(Vector2f(width, length));
     s->getShape().setFillColor(Color::Magenta);
-    s->getShape().setOrigin(length / 2.0f, width / 2.0f);
+    s->getShape().setOrigin(width / 2.0f, length / 2.0f);
 	// Add Player Physics Component and set mass
 	vector<unsigned int> mask;
 	mask.push_back(P2_PROJECTILE_BIT);
-    auto p = player1->addComponent<PlayerPhysicsComponent>(Vector2f(length, width), P1_BIT, mask);
+    auto p = player1->addComponent<PlayerPhysicsComponent>(Vector2f(width, length), P1_BIT, mask);
 	p->setMass(5.0f);
 	// Add weapons
 	int weapon_num = 0;
@@ -88,6 +89,7 @@ void Level1Scene::Load() {
 		weapon_num++;
 	}
 	player1->addComponent<TurretComponent>(0);
+	player1->addComponent<ThrustersComponent>(Vector2f(width, length), 3.0f);
 	player1->addComponent<PlayerStateComponent>();
   }
   // Create player 2
@@ -98,13 +100,13 @@ void Level1Scene::Load() {
 	  player2->setPosition(p2_start_position);
 	  // Add Shape Component
 	  auto s = player2->addComponent<ShapeComponent>();
-	  s->setShape<sf::RectangleShape>(Vector2f(length, width));
+	  s->setShape<sf::RectangleShape>(Vector2f(width, length));
 	  s->getShape().setFillColor(Color::White);
-	  s->getShape().setOrigin(length / 2.0f, width / 2.0f);
+	  s->getShape().setOrigin(width / 2.0f, length / 2.0f);
 	  // Add Player Physics Component and set mass
 	  vector<unsigned int> mask;
 	  mask.push_back(P1_PROJECTILE_BIT);
-	  auto p = player2->addComponent<PlayerPhysicsComponent>(Vector2f(length, width), P2_BIT, mask);
+	  auto p = player2->addComponent<PlayerPhysicsComponent>(Vector2f(width, length), P2_BIT, mask);
 	  p->setMass(5.0f);
 	  // Add weapons
 	  int weapon_num = 15;
@@ -124,6 +126,7 @@ void Level1Scene::Load() {
 		  weapon_num++;
 	  }
 	  player2->addComponent<TurretComponent>(1);
+	  //player2->addComponent<ThrustersComponent>(Vector2f(width, length), 3.0f);
 	  player2->addComponent<PlayerStateComponent>();
 
   }
