@@ -19,4 +19,7 @@ public:
 
 	// Adds an entity to the list of fallowed targets
 	void addTarget(std::shared_ptr<Entity> p);
+
+	sf::Vector2f getMidpoint();
+	sf::View getView();
 };

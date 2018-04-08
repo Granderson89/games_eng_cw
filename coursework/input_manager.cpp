@@ -32,18 +32,34 @@ void InputManager::initialize()
 	playerInput[0].selectorAxis[0] = Keyboard::Num7;
 
 	playerInput[0].boostMovement = Keyboard::Num5;
+
 	// Menu input
 	playerInput[0].menuUp = Keyboard::Up;
 	playerInput[0].menuDown = Keyboard::Down;
 	playerInput[0].confirm = Keyboard::Space;
 	playerInput[0].pause = Keyboard::P;
 
-	playerInput[1].source = -2;
-	playerInput[1].fire = Keyboard::J;
-	playerInput[1].changeWeapon = Keyboard::I;
-	playerInput[1].fireTurret = Keyboard::M;
-	playerInput[1].pause = 7;
 	
+	
+	playerInput[1].source = 0;
+	playerInput[1].moveForward = Joystick::Y;
+	playerInput[1].moveBackwards = Joystick::Y;
+	playerInput[1].turnLeft = Joystick::X;
+	playerInput[1].turnRight = Joystick::X;
+	playerInput[1].fire = 0;
+	playerInput[1].changeWeapon = 1;
+	playerInput[1].turretClockwise = Keyboard::C;
+	playerInput[1].turretCounterClockwise = Keyboard::Z;
+	playerInput[1].fireTurret = 5;
+	playerInput[1].jumpCharging = 3;
+	playerInput[1].thrusterWheelUp = 4;
+	// Thruster selecting
+	playerInput[1].selectorAxis[0] = Joystick::U;
+	playerInput[1].selectorAxis[0] = Joystick::V;
+
+	playerInput[1].boostMovement = Keyboard::Num5;
+	playerInput[1].pause = 7;
+
 }
 
 void InputManager::update()
@@ -74,22 +90,25 @@ void InputManager::update()
 				Player[i].turnRight = false;
 
 			// Analog movement
-			if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::X) > 30.0f)
-				Player[i].moveForward = true;
-			else
-				Player[i].moveForward = false;
-			if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::X) < -30.0f)
-				Player[i].moveForward = true;
-			else
-				Player[i].moveForward = false;
-			if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::Y) > 30.0f)
-				Player[i].moveForward = true;
-			else
-				Player[i].moveForward = false;
 			if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::Y) < -30.0f)
 				Player[i].moveForward = true;
 			else
 				Player[i].moveForward = false;
+
+			if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::Y) > 30.0f)
+				Player[i].moveBackwards = true;
+			else
+				Player[i].moveBackwards = false;
+
+			if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::X) > 30.0f)
+				Player[i].turnRight = true;
+			else
+				Player[i].turnRight = false;
+
+			if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::X) < -30.0f)
+				Player[i].turnLeft = true;
+			else
+				Player[i].turnLeft = false;
 
 			// Fire
 			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].fire))

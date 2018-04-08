@@ -7,6 +7,8 @@
 #include "../components/cmp_thrusters.h"
 #include "../components/cmp_player_state.h"
 #include "../components/cmp_camera.h"
+#include "../components/cmp_hud.h"
+#include "../components/cmp_text.h"
 #include "../game.h"
 #include <LevelSystem.h>
 #include <iostream>
@@ -142,6 +144,24 @@ void Level1Scene::Load() {
   ce->addTag("camera");
   cc->addTarget(player1);
   cc->addTarget(player2);
+
+  // Create a container entity for player 1's hud
+  shared_ptr<Entity> p1he;
+  p1he = makeEntity();
+  p1he->addComponent<HudComponent>(player1, ce);
+  p1he->addComponent<TextComponent>();
+  p1he->addComponent<TextComponent>();
+  p1he->addComponent<TextComponent>();
+  p1he->addComponent<TextComponent>();
+
+  // Create a container entity for player 2's hud
+  shared_ptr<Entity> p2he;
+  p2he = makeEntity();
+  p2he->addComponent<HudComponent>(player2, ce);
+  p2he->addComponent<TextComponent>();
+  p2he->addComponent<TextComponent>();
+  p2he->addComponent<TextComponent>();
+  p2he->addComponent<TextComponent>();
 
   // Initialise input manager
   im.initialize();

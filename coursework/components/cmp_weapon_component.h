@@ -38,7 +38,11 @@ public:
 	
 	static void changeP1Weapon();
 	static void changeP2Weapon();
+	static string getP1ActiveType();
+	static string getP2ActiveType();
 
+	float getCooldown();
+	string getType();
 
 	void update(double dt) override;
 	void render() override {};

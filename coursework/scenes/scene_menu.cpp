@@ -17,6 +17,8 @@ vector<shared_ptr<Entity>> MenuScene::buttons;
 int MenuScene::highlighted = 0;
 // Timer stops highlighted from jumping to fast when user pushes up/down
 float MenuScene::timer = 0;
+// Controller found
+bool controller = false;
 
 void MenuScene::Load() {
   cout << "Menu Load \n";
@@ -90,6 +92,9 @@ void MenuScene::Load() {
 	  buttons.push_back(optionsBtn);
   }
 
+  // Check for a controller
+  controller = ControllerConnected();
+
   HighlightSelected();
   setLoaded(true);
   cout << "Menu Load Done\n";
@@ -97,6 +102,14 @@ void MenuScene::Load() {
 }
 
 void MenuScene::Update(const double& dt) {
+  // Check for a controller
+	if (sf::Joystick::isConnected(0)) {
+		controller = true;
+	}
+	else {
+		controller = false;
+	}
+
   // Countdown timer
   timer -= dt;
   
@@ -119,6 +132,9 @@ void MenuScene::Update(const double& dt) {
 		  if (highlighted < 0) {
 			  highlighted = 0;
 		  }
+		  else if (highlighted == 1 && !controller) {
+			  highlighted--;
+		  }
 		  HighlightSelected();
 	  }
 	  else if (im.Player[0].menuDown) {
@@ -126,6 +142,9 @@ void MenuScene::Update(const double& dt) {
 		  highlighted++;
 		  if (highlighted > 2) {
 			  highlighted = 2;
+		  }
+		  else if (highlighted == 1 && !controller) {
+			  highlighted++;
 		  }
 		  HighlightSelected();
 	  }
@@ -142,5 +161,23 @@ void MenuScene::HighlightSelected() {
 		else {
 			buttons.at(i)->GetCompatibleComponent<TextComponent>().at(0)->NoHighlight();
 		}
+	}
+}
+
+bool MenuScene::ControllerConnected()
+{
+	// Check controller is connected
+	if (sf::Joystick::isConnected(0)) {
+		std::cout << "Controller connected" << std::endl;
+		// Check how many buttons it has
+		unsigned int buttonCount = sf::Joystick::getButtonCount(0);
+		std::cout << "Controller has " << buttonCount << " buttons" << std::endl;
+		// Check if it has a z axis
+		bool hasZ = sf::Joystick::hasAxis(0, sf::Joystick::Z);
+		std::cout << "Controller has a z axis" << std::endl;
+		return true;
+	}
+	else {
+		return false;
 	}
 }

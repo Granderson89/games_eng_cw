@@ -14,10 +14,13 @@ public:
   ~TextComponent() override = default;
 
   void SetText(const std::string& str);
+  void AddText(const std::string& str);
+  void SetPosition(sf::Vector2f& pos);
 
   void Highlight();
   void NoHighlight();
   void SetScale(const float scale);
+
 
 protected:
   std::shared_ptr<sf::Font> _font;
