@@ -151,6 +151,7 @@ void Level1Scene::Load() {
 void Level1Scene::UnLoad() {
   cout << "Scene 1 Unload" << endl;
   player1.reset();
+  player2.reset();
   Scene::UnLoad();
 }
 
