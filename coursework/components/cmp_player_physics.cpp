@@ -11,32 +11,35 @@ using namespace Physics;
 
 void PlayerPhysicsComponent::update(double dt) {
   const auto pos = _parent->getPosition();
+  int player;
+  if (_parent == player1.get()) {
+	  player = 0;
+  }
+  else {
+	  player = 1;
+  }
 
-  if (im.Player[0].moveForward ||
-	  im.Player[0].moveBackwards ||
-	  im.Player[0].turnLeft ||
-	  im.Player[0].turnRight) {
+  if (im.Player[player].moveForward ||
+	  im.Player[player].moveBackwards ||
+	  im.Player[player].turnLeft ||
+	  im.Player[player].turnRight) {
     // Moving Either Left or Right
-    if (im.Player[0].turnRight) {
-	  im.Player[0].turnRight = false;
+    if (im.Player[player].turnRight) {
 		if (_body->GetAngularVelocity() < _maxVelocity.x)
 			_body->ApplyAngularImpulse(-_turningSpeed * dt, true);
 	}
-	else if (im.Player[0].turnLeft) {
-		im.Player[0].turnLeft = false;
+	else if (im.Player[player].turnLeft) {
 		if (_body->GetAngularVelocity() > -_maxVelocity.x)
 			_body->ApplyAngularImpulse(_turningSpeed * dt, true);
 		
 	}
-	else if (im.Player[0].moveBackwards) {
-		im.Player[0].moveBackwards = false;
+	else if (im.Player[player].moveBackwards) {
 		if (getVelocity().y > -_maxVelocity.y) {
 			Vector2f heading = Vector2f(-sinf(_body->GetAngle()), cosf(_body->GetAngle()));
 			impulse(heading * (float)(dt * _speed));
 		}
 	}
 	else {
-		im.Player[0].moveForward = false;
 		if (getVelocity().y > -_maxVelocity.y) {
 			Vector2f heading = Vector2f(-sinf(_body->GetAngle()), cosf(_body->GetAngle()));
 			impulse(heading * -(float)(dt * _speed));

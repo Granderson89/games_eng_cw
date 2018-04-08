@@ -96,7 +96,10 @@ void Engine::Start(unsigned int width, unsigned int height,
       }
 
 	  if (event.type == Event::KeyPressed ||
-		  event.type == Event::KeyReleased) {
+		  event.type == Event::KeyReleased ||
+		  event.type == Event::JoystickButtonPressed ||
+		  event.type == Event::JoystickButtonReleased ||
+		  event.type == Event::JoystickMoved) {
 		  im.update();
 	  }
 
