@@ -12,16 +12,17 @@ static InputManager im;
 
 Texture spritesheet;
 // List of UI buttons
-vector<shared_ptr<Entity>> buttons;
+vector<shared_ptr<Entity>> MenuScene::buttons;
 // Index of highlighted button
-int highlighted = 0;
+int MenuScene::highlighted = 0;
 // Timer stops highlighted from jumping to fast when user pushes up/down
-float timer = 0;
+float MenuScene::timer = 0;
 
 void MenuScene::Load() {
-  im.initialize();
   cout << "Menu Load \n";
-
+  im.initialize();
+  buttons.clear();
+  timer += 0.5f;
   if (!spritesheet.loadFromFile("res/img/futureui1.png")) {
 	  cerr << "Failed to load spritesheet!" << endl;
   }
@@ -67,19 +68,22 @@ void MenuScene::Load() {
 
   HighlightSelected();
   setLoaded(true);
+  cout << "Menu Load Done\n";
+
 }
 
 void MenuScene::Update(const double& dt) {
   // Countdown timer
   timer -= dt;
-  if (im.Player[0].confirm) {
-	  if (highlighted == 0) {
-		  Engine::ChangeScene(&level1);
-	  }
-  }
+  
   // Only change selected if timer has run out
   if (timer <= 0.0f) {
 	  timer = 0.0f;
+	  if (im.Player[0].confirm) {
+		  if (highlighted == 0) {
+			  Engine::ChangeScene(&level1);
+		  }
+	  }
 	  if (im.Player[0].menuUp) {
 		  timer += 0.5f;
 		  highlighted--;
@@ -101,6 +105,7 @@ void MenuScene::Update(const double& dt) {
 }
 
 void MenuScene::HighlightSelected() {
+	std::cout << "Menu highlighted: " << highlighted << std::endl;
 	for (int i = 0; i < buttons.size(); i++) {
 		if (i == highlighted) {
 			buttons.at(i)->GetCompatibleComponent<TextComponent>().at(0)->Highlight();

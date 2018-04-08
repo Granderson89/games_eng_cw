@@ -17,6 +17,7 @@ using namespace sf;
 // Pointers to players
 shared_ptr<Entity> player1;
 shared_ptr<Entity> player2;
+int winner;
 
 // Box2d collision bits
 unsigned int P1_BIT = 1;
