@@ -21,11 +21,28 @@ void ControlsScene::Load() {
 	// Clear buttons
 	buttons.clear();
 	im.Player[0].confirm = false;
-
+	// Work out scale
+	float scale = 1.0f;
+	switch (resolution.x)
+	{
+	case 1920:
+		scale = 1.0f;
+		break;
+	case 1280:
+		scale = 0.667f;
+		break;
+	case 640:
+		scale = 0.333f;
+		break;
+	default:
+		scale = 1.0f;
+		break;
+	}
 	// Title
 	{
 		auto title = makeEntity();
-		title->addComponent<TextComponent>("Controls\n");
+		auto t = title->addComponent<TextComponent>("Controls\n");
+		t->SetScale(scale);
 	}
 
 	// Rectangle for button in spritesheet
@@ -36,8 +53,10 @@ void ControlsScene::Load() {
 		auto s = controlsBtn->addComponent<SpriteComponent>();
 		s->getSprite().setTexture(spritesheet);
 		s->getSprite().setTextureRect(buttonRect);
-		controlsBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width) / 2.0f, buttonRect.height / 2.0f));
+		s->getSprite().setScale(Vector2f(scale, scale));
+		controlsBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width * scale) / 2.0f, buttonRect.height * scale / 2.0f));
 		auto t = controlsBtn->addComponent<TextComponent>("\n   Controls");
+		t->SetScale(scale);
 		buttons.push_back(controlsBtn);
 	}
 	// Back button
@@ -46,8 +65,10 @@ void ControlsScene::Load() {
 		auto s = backBtn->addComponent<SpriteComponent>();
 		s->getSprite().setTexture(spritesheet);
 		s->getSprite().setTextureRect(buttonRect);
-		backBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width) / 2.0f, buttonRect.height * 2.0f));
+		s->getSprite().setScale(Vector2f(scale, scale));
+		backBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width* scale) / 2.0f, buttonRect.height * scale* 2.0f));
 		auto t = backBtn->addComponent<TextComponent>("\n   Back");
+		t->SetScale(scale);
 		buttons.push_back(backBtn);
 	}
 	

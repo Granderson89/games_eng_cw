@@ -17,6 +17,7 @@ public:
 
   void Highlight();
   void NoHighlight();
+  void SetScale(const float scale);
 
 protected:
   std::shared_ptr<sf::Font> _font;

@@ -21,11 +21,29 @@ void OptionsScene::Load() {
 	// Clear buttons
 	buttons.clear();
 	im.Player[0].confirm = false;
-
+	// Work out scale
+	float scale = 1.0f;
+	switch (resolution.x)
+	{
+	case 1920:
+		scale = 1.0f;
+		break;
+	case 1280:
+		scale = 0.667f;
+		break;
+	case 640:
+		scale = 0.333f;
+		break;
+	default:
+		scale = 1.0f;
+		break;
+	}
 	// Title
 	{
 		auto title = makeEntity();
-		title->addComponent<TextComponent>("Options\n");
+		auto t = title->addComponent<TextComponent>("Options\n");
+		t->SetScale(scale);
+
 	}
 
 	// Rectangle for button in spritesheet
@@ -36,8 +54,10 @@ void OptionsScene::Load() {
 		auto s = graphicsBtn->addComponent<SpriteComponent>();
 		s->getSprite().setTexture(spritesheet);
 		s->getSprite().setTextureRect(buttonRect);
-		graphicsBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width) / 2.0f, buttonRect.height / 2.0f));
+		s->getSprite().setScale(Vector2f(scale, scale));
+		graphicsBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width * scale) / 2.0f, buttonRect.height * scale / 2.0f));
 		auto t = graphicsBtn->addComponent<TextComponent>("\n   Graphics");
+		t->SetScale(scale);
 		buttons.push_back(graphicsBtn);
 	}
 	// Controls button
@@ -46,8 +66,10 @@ void OptionsScene::Load() {
 		auto s = controlsBtn->addComponent<SpriteComponent>();
 		s->getSprite().setTexture(spritesheet);
 		s->getSprite().setTextureRect(buttonRect);
-		controlsBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width) / 2.0f, buttonRect.height * 2.0f));
+		s->getSprite().setScale(Vector2f(scale, scale));
+		controlsBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width * scale) / 2.0f, buttonRect.height * scale * 2.0f));
 		auto t = controlsBtn->addComponent<TextComponent>("\n   Controls");
+		t->SetScale(scale);
 		buttons.push_back(controlsBtn);
 	}
 	// Return To Main Menu Button
@@ -56,8 +78,10 @@ void OptionsScene::Load() {
 		auto s = mainMenuBtn->addComponent<SpriteComponent>();
 		s->getSprite().setTexture(spritesheet);
 		s->getSprite().setTextureRect(buttonRect);
-		mainMenuBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width) / 2.0f, buttonRect.height * 3.5f));
+		s->getSprite().setScale(Vector2f(scale, scale));
+		mainMenuBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width * scale) / 2.0f, buttonRect.height * scale * 3.5f));
 		auto t = mainMenuBtn->addComponent<TextComponent>("\n   Return To Main Menu");
+		t->SetScale(scale);
 		buttons.push_back(mainMenuBtn);
 	}
 	
@@ -77,7 +101,7 @@ void OptionsScene::Update(const double& dt) {
 			Engine::ChangeScene(&controls);
 		}
 		if (highlighted == 2) {
-			Engine::ChangeScene(&menu);
+ 			Engine::ChangeScene(&menu);
 		}
 	}
 	// Only change selected if timer has run out

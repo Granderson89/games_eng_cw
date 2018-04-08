@@ -26,3 +26,8 @@ void TextComponent::Highlight() {
 void TextComponent::NoHighlight() {
 	_text.setColor(sf::Color::White);
 }
+
+void TextComponent::SetScale(const float scale)
+{
+	_text.setScale(sf::Vector2f(scale, scale));
+}

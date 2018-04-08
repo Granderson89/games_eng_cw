@@ -10,6 +10,11 @@ GraphicsScene graphics;
 Level1Scene level1;
 GameOverScene gameOver;
 
+// Graphics defaults
+Vector2i resolution(1920, 1080);
+unsigned int window_style = sf::Style::Fullscreen;
+
+
 int main() {
-	Engine::Start(1920, 1080, "Some Spaceship Game", &menu);
+	Engine::Start(resolution.x, resolution.y, "Some Spaceship Game", window_style, &menu);
 }

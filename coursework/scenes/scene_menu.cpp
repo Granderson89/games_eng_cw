@@ -27,11 +27,28 @@ void MenuScene::Load() {
   if (!spritesheet.loadFromFile("res/img/futureui1.png")) {
 	  cerr << "Failed to load spritesheet!" << endl;
   }
-
+  // Work out scale
+  float scale = 1.0f;
+  switch (resolution.x)
+  {
+  case 1920:
+	  scale = 1.0f;
+	  break;
+  case 1280:
+	  scale = 0.667f;
+	  break;
+  case 640:
+	  scale = 0.333f;
+	  break;
+  default:
+	  scale = 1.0f;
+	  break;
+  }
   // Title
   {
 	  auto title = makeEntity();
 	  auto t = title->addComponent<TextComponent>("Some Spaceship Game\nSpacebar to select");
+	  t->SetScale(scale);
   }
 
   // Rectangle for button in spritesheet
@@ -42,8 +59,10 @@ void MenuScene::Load() {
 	  auto s = onePlayBtn->addComponent<SpriteComponent>();
 	  s->getSprite().setTexture(spritesheet);
 	  s->getSprite().setTextureRect(buttonRect);
-	  onePlayBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width) / 2.0f, buttonRect.height / 2.0f));
+	  s->getSprite().setScale(Vector2f(scale, scale));
+	  onePlayBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width * scale) / 2.0f, buttonRect.height * scale / 2.0f));
 	  auto t = onePlayBtn->addComponent<TextComponent>("\n   One Player");
+	  t->SetScale(scale);
 	  buttons.push_back(onePlayBtn);
   }
   // Two Player button
@@ -52,8 +71,10 @@ void MenuScene::Load() {
 	  auto s = twoPlayBtn->addComponent<SpriteComponent>();
 	  s->getSprite().setTexture(spritesheet);
 	  s->getSprite().setTextureRect(buttonRect);
-	  twoPlayBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width) / 2.0f, buttonRect.height * 2.0f));
+	  s->getSprite().setScale(Vector2f(scale, scale));
+	  twoPlayBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width* scale) / 2.0f, buttonRect.height * scale* 2.0f));
 	  auto t = twoPlayBtn->addComponent<TextComponent>("\n   Two Player");
+	  t->SetScale(scale);
 	  buttons.push_back(twoPlayBtn);
   }
   // Two Player button
@@ -62,8 +83,10 @@ void MenuScene::Load() {
 	  auto s = optionsBtn->addComponent<SpriteComponent>();
 	  s->getSprite().setTexture(spritesheet);
 	  s->getSprite().setTextureRect(buttonRect);
-	  optionsBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width) / 2.0f, buttonRect.height * 3.5f));
+	  s->getSprite().setScale(Vector2f(scale, scale));
+	  optionsBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width * scale) / 2.0f, buttonRect.height * scale* 3.5f));
 	  auto t = optionsBtn->addComponent<TextComponent>("\n   Options");
+	  t->SetScale(scale);
 	  buttons.push_back(optionsBtn);
   }
 
