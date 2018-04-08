@@ -7,6 +7,7 @@ MenuScene menu;
 OptionsScene options;
 ControlsScene controls;
 GraphicsScene graphics;
+PauseScene pause;
 Level1Scene level1;
 GameOverScene gameOver;
 

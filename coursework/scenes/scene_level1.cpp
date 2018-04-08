@@ -163,6 +163,9 @@ void Level1Scene::UnLoad() {
 }
 
 void Level1Scene::Update(const double& dt) {
+	if (im.Player[0].pause || im.Player[1].pause) {
+		Engine::ChangeScene(&pause);
+	}
   Scene::Update(dt);
 }
 

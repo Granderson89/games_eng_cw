@@ -32,16 +32,18 @@ void InputManager::initialize()
 	playerInput[0].selectorAxis[0] = Keyboard::Num7;
 
 	playerInput[0].boostMovement = Keyboard::Num5;
-	
-	playerInput[1].source = -2;
-	playerInput[1].fire = Keyboard::J;
-	playerInput[1].changeWeapon = Keyboard::I;
-	playerInput[1].fireTurret = Keyboard::M;
-
 	// Menu input
 	playerInput[0].menuUp = Keyboard::Up;
 	playerInput[0].menuDown = Keyboard::Down;
 	playerInput[0].confirm = Keyboard::Space;
+	playerInput[0].pause = Keyboard::P;
+
+	playerInput[1].source = -2;
+	playerInput[1].fire = Keyboard::J;
+	playerInput[1].changeWeapon = Keyboard::I;
+	playerInput[1].fireTurret = Keyboard::M;
+	playerInput[1].pause = 7;
+	
 }
 
 void InputManager::update()
@@ -182,6 +184,12 @@ void InputManager::update()
 			else
 				for (int j = 0; j < 6; j++)
 					Player[i].thrusterOn[j] = false;
+			
+			// Pause
+			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].pause))
+				Player[i].pause = true;
+			else
+				Player[i].pause = false;
 		}
 		// Keyboard
 		else
@@ -322,6 +330,11 @@ void InputManager::update()
 			else {
 				Player[i].confirm = false;
 			}
+			// Pause
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].pause))
+				Player[i].pause = true;
+			else
+				Player[i].pause = false;
 		}
 	}
 }

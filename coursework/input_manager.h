@@ -26,6 +26,8 @@ private:
 		bool menuUp;
 		bool menuDown;
 		bool confirm;
+
+		bool pause;
 	};
 	struct inputs
 	{
@@ -52,6 +54,8 @@ private:
 		int menuUp;
 		int menuDown;
 		int confirm;
+
+		int pause;
 	};
 
 	static inputs playerInput[2];
