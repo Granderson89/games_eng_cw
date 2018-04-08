@@ -22,6 +22,7 @@ void MenuScene::Load() {
   cout << "Menu Load \n";
   im.initialize();
   buttons.clear();
+  im.Player[0].confirm = false;
   timer += 0.5f;
   if (!spritesheet.loadFromFile("res/img/futureui1.png")) {
 	  cerr << "Failed to load spritesheet!" << endl;
@@ -81,7 +82,12 @@ void MenuScene::Update(const double& dt) {
 	  timer = 0.0f;
 	  if (im.Player[0].confirm) {
 		  if (highlighted == 0) {
+			  timer += 0.5f;
 			  Engine::ChangeScene(&level1);
+		  }
+		  if (highlighted == 2) {
+			  timer += 0.5f;
+			  Engine::ChangeScene(&options);
 		  }
 	  }
 	  if (im.Player[0].menuUp) {

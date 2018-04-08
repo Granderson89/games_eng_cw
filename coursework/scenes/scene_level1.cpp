@@ -1,4 +1,5 @@
 #include "scene_level1.h"
+#include "system_renderer.h"
 #include "../components/cmp_player_physics.h"
 #include "../components/cmp_sprite.h"
 #include "../components/cmp_weapon_component.h"
@@ -18,6 +19,8 @@ using namespace sf;
 shared_ptr<Entity> player1;
 shared_ptr<Entity> player2;
 int winner;
+
+shared_ptr<Entity> ce;
 
 // Box2d collision bits
 unsigned int P1_BIT = 1;
@@ -134,7 +137,6 @@ void Level1Scene::Load() {
   }
 
   // Create a container entity for the camera script (ce - camera entity, cc - camera component)
-  shared_ptr<Entity> ce;
   ce = makeEntity();
   auto cc = ce->addComponent<CameraControllerComponent>();
   ce->addTag("camera");
@@ -152,6 +154,11 @@ void Level1Scene::Load() {
 void Level1Scene::UnLoad() {
   cout << "Scene 1 Unload" << endl;
   player1.reset();
+  player2.reset();
+  sf::View view;
+  view.reset(FloatRect(0.0f, 0.0f, 1920.0f, 1080.0f));	// hardcoded values ///////////////////////////////////////////////
+  Renderer::getWindow().setView(view);
+  ce.reset();
   Scene::UnLoad();
 }
 

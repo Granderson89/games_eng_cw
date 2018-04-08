@@ -1,4 +1,4 @@
-#include "scene_game_over.h"
+#include "scene_options.h"
 #include "../components/cmp_text.h"
 #include "../components/cmp_sprite.h"
 #include "../game.h"
@@ -9,38 +9,46 @@ using namespace sf;
 static InputManager im;
 
 // List of UI buttons
-vector<shared_ptr<Entity>> GameOverScene::buttons;
+vector<shared_ptr<Entity>> OptionsScene::buttons;
 
 // Timer stops highlighted from jumping to fast when user pushes up/down
-float GameOverScene::timer = 0;
+float OptionsScene::timer = 0;
 
-void GameOverScene::Load() {
-	cout << "Game Over Load \n";
+void OptionsScene::Load() {
+	cout << "Options Screen Load \n";
 	// Index of highlighted button
 	highlighted = 0;
 	// Clear buttons
 	buttons.clear();
-	im.initialize();
 	im.Player[0].confirm = false;
 
 	// Title
 	{
 		auto title = makeEntity();
-		string win = "Game Over\nPlayer " + std::to_string(winner) + " wins!";
-		auto t = title->addComponent<TextComponent>(win);
+		title->addComponent<TextComponent>("Options\n");
 	}
 
 	// Rectangle for button in spritesheet
 	auto buttonRect = IntRect(0, 0, 410, 140);
-	// Play Again button
+	// Graphics button
 	{
-		shared_ptr<Entity> playAgainBtn = makeEntity();
-		auto s = playAgainBtn->addComponent<SpriteComponent>();
+		shared_ptr<Entity> graphicsBtn = makeEntity();
+		auto s = graphicsBtn->addComponent<SpriteComponent>();
 		s->getSprite().setTexture(spritesheet);
 		s->getSprite().setTextureRect(buttonRect);
-		playAgainBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width) / 2.0f, buttonRect.height / 2.0f));
-		auto t = playAgainBtn->addComponent<TextComponent>("\n   Play Again");
-		buttons.push_back(playAgainBtn);
+		graphicsBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width) / 2.0f, buttonRect.height / 2.0f));
+		auto t = graphicsBtn->addComponent<TextComponent>("\n   Graphics");
+		buttons.push_back(graphicsBtn);
+	}
+	// Controls button
+	{
+		shared_ptr<Entity> controlsBtn = makeEntity();
+		auto s = controlsBtn->addComponent<SpriteComponent>();
+		s->getSprite().setTexture(spritesheet);
+		s->getSprite().setTextureRect(buttonRect);
+		controlsBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width) / 2.0f, buttonRect.height * 2.0f));
+		auto t = controlsBtn->addComponent<TextComponent>("\n   Controls");
+		buttons.push_back(controlsBtn);
 	}
 	// Return To Main Menu Button
 	{
@@ -48,37 +56,28 @@ void GameOverScene::Load() {
 		auto s = mainMenuBtn->addComponent<SpriteComponent>();
 		s->getSprite().setTexture(spritesheet);
 		s->getSprite().setTextureRect(buttonRect);
-		mainMenuBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width) / 2.0f, buttonRect.height * 2.0f));
+		mainMenuBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width) / 2.0f, buttonRect.height * 3.5f));
 		auto t = mainMenuBtn->addComponent<TextComponent>("\n   Return To Main Menu");
 		buttons.push_back(mainMenuBtn);
 	}
-	// Quit button
-	{
-		shared_ptr<Entity> quitBtn = makeEntity();
-		auto s = quitBtn->addComponent<SpriteComponent>();
-		s->getSprite().setTexture(spritesheet);
-		s->getSprite().setTextureRect(buttonRect);
-		quitBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width) / 2.0f, buttonRect.height * 3.5f));
-		auto t = quitBtn->addComponent<TextComponent>("\n   Quit");
-		buttons.push_back(quitBtn);
-	}
+	
 
 	HighlightSelected();
 	setLoaded(true);
 }
 
-void GameOverScene::Update(const double& dt) {
+void OptionsScene::Update(const double& dt) {
 	// Countdown timer
 	timer -= dt;
 	if (im.Player[0].confirm) {
 		if (highlighted == 0) {
-			Engine::ChangeScene(&level1);
+			Engine::ChangeScene(&graphics);
 		}
 		if (highlighted == 1) {
-			Engine::ChangeScene(&menu);
+			Engine::ChangeScene(&controls);
 		}
 		if (highlighted == 2) {
-			Engine::GetWindow().close();
+			Engine::ChangeScene(&menu);
 		}
 	}
 	// Only change selected if timer has run out
@@ -104,8 +103,8 @@ void GameOverScene::Update(const double& dt) {
 	Scene::Update(dt);
 }
 
-void GameOverScene::HighlightSelected() {
-	std::cout << "GameOver highlighted: " << highlighted << std::endl;
+void OptionsScene::HighlightSelected() {
+	std::cout << "Options highlighted: " << highlighted << std::endl;
 	for (int i = 0; i < buttons.size(); i++) {
 		if (i == highlighted) {
 			buttons.at(i)->GetCompatibleComponent<TextComponent>().at(0)->Highlight();
