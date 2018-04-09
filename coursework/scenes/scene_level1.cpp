@@ -166,7 +166,7 @@ void Level1Scene::Load() {
   // Initialise input manager
   im.initialize();
   //Simulate long loading times
-  std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+  //std::this_thread::sleep_for(std::chrono::milliseconds(3000));
   cout << " Scene 1 Load Done" << endl;
   setLoaded(true);
 }

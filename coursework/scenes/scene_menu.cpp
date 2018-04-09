@@ -91,7 +91,18 @@ void MenuScene::Load() {
 	  t->SetScale(scale);
 	  buttons.push_back(optionsBtn);
   }
-
+  // Quit button
+  {
+	  shared_ptr<Entity> quitBtn = makeEntity();
+	  auto s = quitBtn->addComponent<SpriteComponent>();
+	  s->getSprite().setTexture(spritesheet);
+	  s->getSprite().setTextureRect(buttonRect);
+	  s->getSprite().setScale(Vector2f(scale, scale));
+	  quitBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width * scale) / 2.0f, buttonRect.height * scale* 5.0f));
+	  auto t = quitBtn->addComponent<TextComponent>("\n   Quit");
+	  t->SetScale(scale);
+	  buttons.push_back(quitBtn);
+  }
   // Check for a controller
   controller = ControllerConnected();
 
@@ -121,9 +132,13 @@ void MenuScene::Update(const double& dt) {
 			  timer += 0.5f;
 			  Engine::ChangeScene(&level1);
 		  }
-		  if (highlighted == 2) {
+		  else if (highlighted == 2) {
 			  timer += 0.5f;
 			  Engine::ChangeScene(&options);
+		  }
+		  else if (highlighted == 3) {
+			  timer += 0.5f;
+			  Engine::GetWindow().close();
 		  }
 	  }
 	  if (im.Player[0].menuUp) {
@@ -140,8 +155,8 @@ void MenuScene::Update(const double& dt) {
 	  else if (im.Player[0].menuDown) {
 		  timer += 0.5f;
 		  highlighted++;
-		  if (highlighted > 2) {
-			  highlighted = 2;
+		  if (highlighted > 3) {
+			  highlighted = 3;
 		  }
 		  else if (highlighted == 1 && !controller) {
 			  highlighted++;
