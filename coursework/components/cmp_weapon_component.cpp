@@ -6,6 +6,7 @@
 #include "cmp_hurt_player.h"
 #include "engine.h"
 #include "../game.h"
+#include <SFML/Audio.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
@@ -29,6 +30,10 @@ float WeaponComponent::p2_firetime = 0.0f;
 type WeaponComponent::p2_active_type = CANNONS;
 // Base cooldown of weapons
 float WeaponComponent::p2_base_cooldown = 1.0f;
+
+sf::SoundBuffer buffer;
+sf::Sound sound;
+
 
 void WeaponComponent::update(double dt) {
 	// Countdown timers
@@ -145,11 +150,18 @@ void WeaponComponent::fire(int target) const {
 		s->getShape().setOrigin(1.0f, 1.0f);
 		if (target == 0) {
 			auto m = projectile->addComponent<MissileComponent>(player1);
+			sf::SoundBuffer buffer;
+			buffer.loadFromFile("res/sounds/missile.ogg");
+			sound.setBuffer(buffer);
+			sound.play();
 			// Attach a steering component
 			projectile->addComponent<SteeringComponent>(player1, m->getSpeed());
 		}
 		if (target == 1) {
 			auto m = projectile->addComponent<MissileComponent>(player2);
+			buffer.loadFromFile("res/sounds/missile.ogg");
+			sound.setBuffer(buffer);
+			sound.play();
 			// Attach a steering component
 			projectile->addComponent<SteeringComponent>(player2, m->getSpeed());
 		}
