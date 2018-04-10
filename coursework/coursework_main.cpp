@@ -18,5 +18,6 @@ unsigned int window_style = sf::Style::Default;
 
 int main() {
 	InputManager::initialize();
+	controls.readPrefs();
 	Engine::Start(resolution.x, resolution.y, "Some Spaceship Game", window_style, &menu);
 }
