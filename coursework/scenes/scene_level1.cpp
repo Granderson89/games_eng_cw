@@ -36,6 +36,10 @@ unsigned int P2_TURRET_PROJ_BIT = 32;
 // Input Manager
 static InputManager im;
 
+// Sounds
+sf::SoundBuffer Level1Scene::bgBuffer;
+sf::Sound Level1Scene::bgSound;
+
 void Level1Scene::Load() {
   cout << " Scene 1 Load" << endl;
 
@@ -167,6 +171,7 @@ void Level1Scene::Load() {
   im.initialize();
   //Simulate long loading times
   //std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+  bgSound.play();
   cout << " Scene 1 Load Done" << endl;
   setLoaded(true);
 }
@@ -186,9 +191,19 @@ void Level1Scene::Update(const double& dt) {
 	if (im.Player[0].pause || im.Player[1].pause) {
 		Engine::ChangeScene(&pause);
 	}
+	// Loop background music
+	if (bgSound.getStatus() == SoundSource::Status::Stopped) {
+		bgSound.play();
+	}
   Scene::Update(dt);
 }
 
 void Level1Scene::Render() {
   Scene::Render();
+}
+
+void Level1Scene::loadSounds()
+{
+	bgBuffer.loadFromFile("res/sounds/bg.ogg");
+	bgSound.setBuffer(bgBuffer);
 }

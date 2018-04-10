@@ -8,6 +8,9 @@ using namespace sf;
 
 shared_ptr<PhysicsComponent> phc;
 
+// Sounds
+sf::SoundBuffer ThrustersComponent::thrustBuffer;
+sf::Sound ThrustersComponent::thrustSound;
 
 ThrustersComponent::ThrustersComponent(Entity* p, const Vector2f& dim, const float& power) : Component(p)
 {
@@ -87,9 +90,16 @@ void ThrustersComponent::update(double dt)
 	}
 }
 
+void ThrustersComponent::loadSounds()
+{
+	thrustBuffer.loadFromFile("res/sounds/thrust.wav");
+	thrustSound.setBuffer(thrustBuffer);
+}
 
 void ThrustersComponent::fireThruster(const int& index)
 {
 	//phc->impulse(_normals[index] * _power, _parent->getPosition() - _offsets[index]);
 	_firing[index] = true;
+	if (thrustSound.getStatus() != SoundSource::Status::Playing)
+		thrustSound.play();
 }

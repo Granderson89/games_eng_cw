@@ -5,6 +5,7 @@
 #include "../components/cmp_plasma_logic.h"
 #include "../components/cmp_torpedo_logic.h"
 #include "../components/cmp_missile_logic.h"
+#include "../components/cmp_thrusters.h"
 #include "../game.h"
 #include <SFML/Window/Keyboard.hpp>
 #include <iostream>
@@ -115,6 +116,8 @@ void MenuScene::Load() {
   PlasmaComponent::loadSounds();
   TorpedoComponent::loadSounds();
   MissileComponent::loadSounds();
+  ThrustersComponent::loadSounds();
+  Level1Scene::loadSounds();
   setLoaded(true);
   cout << "Menu Load Done\n";
 
