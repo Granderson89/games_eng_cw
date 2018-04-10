@@ -20,7 +20,6 @@ extern GraphicsScene graphics;
 extern Level1Scene level1;
 extern PauseScene pause;
 extern GameOverScene gameOver;
-extern InputManager im;
 extern Vector2i resolution;
 extern unsigned int window_style;
 extern shared_ptr<Entity> player1;

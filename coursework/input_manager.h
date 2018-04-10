@@ -2,6 +2,8 @@
 
 #include <SFML\Graphics.hpp>
 
+using namespace sf;
+
 class InputManager
 {
 private:
@@ -58,12 +60,31 @@ private:
 		int pause;
 	};
 
-	static inputs playerInput[2];
-	//static inputs player2Input;
+	
 public:
 	static actions Player[2];
 	//static actions Player2;
+	static inputs playerInput[2];
+	//static inputs player2Input;
+
+	// Last key pressed
+	static Keyboard::Key _lastKeyPressed;
+	// String names of the keys
+	static const char* keyNames[];
+
+	// Last button pressed
+	static std::map<int, int> _lastButtonPressed;
+	// String names of the buttons
+	static std::map<int, const char*> buttonNames;
 
 	static void initialize();
+	static void initializeKeyboard(int player);
+	static void initializeController(int player);
+	static void update(Keyboard::Key);
+	static void update(int, int);
 	static void update();
+
+	static Keyboard::Key getLastKeyPressed();
+	static void clearLastPressed();
+	static int getLastButtonPressed(int);
 };

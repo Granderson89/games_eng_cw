@@ -8,8 +8,6 @@
 using namespace std;
 using namespace sf;
 
-static InputManager im;
-
 // List of UI buttons
 vector<shared_ptr<Entity>> GraphicsScene::buttons;
 // Timer stops highlighted from jumping to fast when user pushes up/down
@@ -21,7 +19,7 @@ void GraphicsScene::Load() {
 	highlighted = 0;
 	// Clear buttons
 	buttons.clear();
-	im.Player[0].confirm = false;
+	InputManager::Player[0].confirm = false;
 	// Work out scale
 	float scale = 1.0f;
 	switch (resolution.x)
@@ -129,7 +127,7 @@ void GraphicsScene::Load() {
 void GraphicsScene::Update(const double& dt) {
 	// Countdown timer
 	timer -= dt;
-	if (im.Player[0].confirm) {
+	if (InputManager::Player[0].confirm) {
 		if (highlighted == 0) {
 			resolution = Vector2i(640, 360);
 			window_style = sf::Style::Default;
@@ -164,7 +162,7 @@ void GraphicsScene::Update(const double& dt) {
 	// Only change selected if timer has run out
 	if (timer <= 0.0f) {
 		timer = 0.0f;
-		if (im.Player[0].menuUp) {
+		if (InputManager::Player[0].menuUp) {
 			timer += 0.5f;
 			highlighted--;
 			if (highlighted < 0) {
@@ -172,7 +170,7 @@ void GraphicsScene::Update(const double& dt) {
 			}
 			HighlightSelected();
 		}
-		else if (im.Player[0].menuDown) {
+		else if (InputManager::Player[0].menuDown) {
 			timer += 0.5f;
 			highlighted++;
 			if (highlighted > 5) {

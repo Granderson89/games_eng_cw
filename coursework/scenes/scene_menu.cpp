@@ -8,8 +8,6 @@
 using namespace std;
 using namespace sf;
 
-static InputManager im;
-
 Texture spritesheet;
 // List of UI buttons
 vector<shared_ptr<Entity>> MenuScene::buttons;
@@ -22,9 +20,8 @@ bool controller = false;
 
 void MenuScene::Load() {
   cout << "Menu Load \n";
-  im.initialize();
   buttons.clear();
-  im.Player[0].confirm = false;
+  InputManager::Player[0].confirm = false;
   timer += 0.5f;
   if (!spritesheet.loadFromFile("res/img/futureui1.png")) {
 	  cerr << "Failed to load spritesheet!" << endl;
@@ -104,7 +101,7 @@ void MenuScene::Load() {
 	  buttons.push_back(quitBtn);
   }
   // Check for a controller
-  controller = ControllerConnected();
+  controller = ControllerConnected(0);
 
   HighlightSelected();
   setLoaded(true);
@@ -127,7 +124,7 @@ void MenuScene::Update(const double& dt) {
   // Only change selected if timer has run out
   if (timer <= 0.0f) {
 	  timer = 0.0f;
-	  if (im.Player[0].confirm) {
+	  if (InputManager::Player[0].confirm) {
 		  if (highlighted == 0) {
 			  timer += 0.5f;
 			  Engine::ChangeScene(&level1);
@@ -141,7 +138,7 @@ void MenuScene::Update(const double& dt) {
 			  Engine::GetWindow().close();
 		  }
 	  }
-	  if (im.Player[0].menuUp) {
+	  if (InputManager::Player[0].menuUp) {
 		  timer += 0.5f;
 		  highlighted--;
 		  if (highlighted < 0) {
@@ -152,7 +149,7 @@ void MenuScene::Update(const double& dt) {
 		  }
 		  HighlightSelected();
 	  }
-	  else if (im.Player[0].menuDown) {
+	  else if (InputManager::Player[0].menuDown) {
 		  timer += 0.5f;
 		  highlighted++;
 		  if (highlighted > 3) {
@@ -179,16 +176,16 @@ void MenuScene::HighlightSelected() {
 	}
 }
 
-bool MenuScene::ControllerConnected()
+bool MenuScene::ControllerConnected(int id)
 {
 	// Check controller is connected
-	if (sf::Joystick::isConnected(0)) {
+	if (sf::Joystick::isConnected(id)) {
 		std::cout << "Controller connected" << std::endl;
 		// Check how many buttons it has
-		unsigned int buttonCount = sf::Joystick::getButtonCount(0);
+		unsigned int buttonCount = sf::Joystick::getButtonCount(id);
 		std::cout << "Controller has " << buttonCount << " buttons" << std::endl;
 		// Check if it has a z axis
-		bool hasZ = sf::Joystick::hasAxis(0, sf::Joystick::Z);
+		bool hasZ = sf::Joystick::hasAxis(id, sf::Joystick::Z);
 		std::cout << "Controller has a z axis" << std::endl;
 		return true;
 	}

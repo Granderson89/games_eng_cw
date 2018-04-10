@@ -13,9 +13,10 @@ GameOverScene gameOver;
 
 // Graphics defaults
 Vector2i resolution(1920, 1080);
-unsigned int window_style = sf::Style::Fullscreen;
+unsigned int window_style = sf::Style::Default;
 
 
 int main() {
+	InputManager::initialize();
 	Engine::Start(resolution.x, resolution.y, "Some Spaceship Game", window_style, &menu);
 }
