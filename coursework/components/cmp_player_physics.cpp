@@ -35,13 +35,13 @@ void PlayerPhysicsComponent::update(double dt) {
 	}
 	else if (im.Player[player].moveBackwards) {
 		if (getVelocity().y > -_maxVelocity.y) {
-			Vector2f heading = Vector2f(-sinf(_body->GetAngle()), cosf(_body->GetAngle()));
+			Vector2f heading = Vector2f(sinf(_body->GetAngle()), cosf(_body->GetAngle()));
 			impulse(heading * (float)(dt * _speed));
 		}
 	}
 	else {
 		if (getVelocity().y > -_maxVelocity.y) {
-			Vector2f heading = Vector2f(-sinf(_body->GetAngle()), cosf(_body->GetAngle()));
+			Vector2f heading = Vector2f(sinf(_body->GetAngle()), cosf(_body->GetAngle()));
 			impulse(heading * -(float)(dt * _speed));
 		}
     }

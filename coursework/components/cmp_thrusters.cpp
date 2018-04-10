@@ -55,7 +55,7 @@ void ThrustersComponent::update(double dt)
 	for (int i = 0; i < 6; i++)
 	{
 		if (_firing[i])
-			phc->impulse(_normals[i] * _power * (float)dt, _parent->getPosition() - _offsets[i]);
+			phc->impulse(_normals[i] * _power * (float)dt, _parent->getPosition() + _offsets[i]);
 		_firing[i] = false;
 	}
 
