@@ -17,6 +17,6 @@ unsigned int window_style = sf::Style::Default;
 
 
 int main() {
-	im.initialize();
+	InputManager::initialize();
 	Engine::Start(resolution.x, resolution.y, "Some Spaceship Game", window_style, &menu);
 }

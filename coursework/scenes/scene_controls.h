@@ -36,6 +36,7 @@ public:
 	~ControlsScene() override = default;
 
 	void Load() override;
+	void UnLoad() override;
 
 	void Update(const double& dt) override;
 
@@ -47,5 +48,5 @@ public:
 	void UpdateControls(int player, const char* fire, const char* changeWeapon, const char* fireTurret, const char* jumpCharging);
 
 	void createPlayerButtons(int player, float scale, IntRect buttonRect);
-
+	void readPrefs();
 };

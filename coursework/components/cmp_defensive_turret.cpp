@@ -29,21 +29,21 @@ void TurretComponent::update(double dt) {
 	// If fire button is pushed, this weapon is next,
 	// weapon has cooled down and firetime delay has run down
 	// fire, reset timers and increment next_weapon
-	if (im.Player[0].fireTurret) {
+	if (InputManager::Player[0].fireTurret) {
 		if (p1_next_weapon == _weapon_num)
 			if (_cooldown <= 0.0f)
 				if (p1_firetime <= 0.0f) {
-					im.Player[0].fire = false;
+					InputManager::Player[0].fire = false;
 					fire(1);
 					_cooldown = p1_base_cooldown;
 					p1_firetime = 0.1f;
 				}
 	}
 
-	if (im.Player[1].fireTurret) {
+	if (InputManager::Player[1].fireTurret) {
 		if (p2_next_weapon == _weapon_num &&
 			_cooldown <= 0.0f && p2_firetime <= 0.0f) {
-			im.Player[1].fire = false;
+			InputManager::Player[1].fire = false;
 			fire(0);
 			_cooldown = p2_base_cooldown;
 			p2_firetime = 0.1f;

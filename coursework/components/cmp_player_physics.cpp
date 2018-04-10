@@ -19,21 +19,21 @@ void PlayerPhysicsComponent::update(double dt) {
 	  player = 1;
   }
 
-  if (im.Player[player].moveForward ||
-	  im.Player[player].moveBackwards ||
-	  im.Player[player].turnLeft ||
-	  im.Player[player].turnRight) {
+  if (InputManager::Player[player].moveForward ||
+	  InputManager::Player[player].moveBackwards ||
+	  InputManager::Player[player].turnLeft ||
+	  InputManager::Player[player].turnRight) {
     // Moving Either Left or Right
-    if (im.Player[player].turnRight) {
+    if (InputManager::Player[player].turnRight) {
 		if (_body->GetAngularVelocity() < _maxVelocity.x)
 			_body->ApplyAngularImpulse(-_turningSpeed * dt, true);
 	}
-	else if (im.Player[player].turnLeft) {
+	else if (InputManager::Player[player].turnLeft) {
 		if (_body->GetAngularVelocity() > -_maxVelocity.x)
 			_body->ApplyAngularImpulse(_turningSpeed * dt, true);
 		
 	}
-	else if (im.Player[player].moveBackwards) {
+	else if (InputManager::Player[player].moveBackwards) {
 		if (getVelocity().y > -_maxVelocity.y) {
 			Vector2f heading = Vector2f(-sinf(_body->GetAngle()), cosf(_body->GetAngle()));
 			impulse(heading * (float)(dt * _speed));

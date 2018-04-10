@@ -18,7 +18,7 @@ void OptionsScene::Load() {
 	highlighted = 0;
 	// Clear buttons
 	buttons.clear();
-	im.Player[0].confirm = false;
+	InputManager::Player[0].confirm = false;
 	// Work out scale
 	float scale = 1.0f;
 	switch (resolution.x)
@@ -91,7 +91,7 @@ void OptionsScene::Load() {
 void OptionsScene::Update(const double& dt) {
 	// Countdown timer
 	timer -= dt;
-	if (im.Player[0].confirm) {
+	if (InputManager::Player[0].confirm) {
 		if (highlighted == 0) {
 			Engine::ChangeScene(&graphics);
 		}
@@ -105,7 +105,7 @@ void OptionsScene::Update(const double& dt) {
 	// Only change selected if timer has run out
 	if (timer <= 0.0f) {
 		timer = 0.0f;
-		if (im.Player[0].menuUp) {
+		if (InputManager::Player[0].menuUp) {
 			timer += 0.5f;
 			highlighted--;
 			if (highlighted < 0) {
@@ -113,7 +113,7 @@ void OptionsScene::Update(const double& dt) {
 			}
 			HighlightSelected();
 		}
-		else if (im.Player[0].menuDown) {
+		else if (InputManager::Player[0].menuDown) {
 			timer += 0.5f;
 			highlighted++;
 			if (highlighted > 2) {

@@ -97,13 +97,13 @@ void Engine::Start(unsigned int width, unsigned int height,
 
 	  if (event.type == Event::KeyPressed ||
 		  event.type == Event::KeyReleased) {
-		  im.update(event.key.code);
+		  InputManager::update(event.key.code);
 	  }
 
 	  if (event.type == Event::JoystickButtonPressed ||
 		  event.type == Event::JoystickButtonReleased ||
 		  event.type == Event::JoystickMoved) {
-		  im.update(event.joystickButton.joystickId, event.joystickButton.button);
+		  InputManager::update(event.joystickButton.joystickId, event.joystickButton.button);
 	  }
 
     }
