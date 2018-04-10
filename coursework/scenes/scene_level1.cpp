@@ -76,6 +76,7 @@ void Level1Scene::Load() {
 	// Add Player Physics Component and set mass
 	vector<unsigned int> mask;
 	mask.push_back(P2_PROJECTILE_BIT);
+	mask.push_back(P2_BIT);
     auto p = player1->addComponent<PlayerPhysicsComponent>(Vector2f(width, length), P1_BIT, mask);
 	p->setMass(5.0f);
 	// Add weapons
@@ -113,6 +114,7 @@ void Level1Scene::Load() {
 	  // Add Player Physics Component and set mass
 	  vector<unsigned int> mask;
 	  mask.push_back(P1_PROJECTILE_BIT);
+	  mask.push_back(P1_BIT);
 	  auto p = player2->addComponent<PlayerPhysicsComponent>(Vector2f(width, length), P2_BIT, mask);
 	  p->setMass(5.0f);
 	  // Add weapons
