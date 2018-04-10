@@ -17,8 +17,10 @@ public:
 	~GraphicsScene() override = default;
 
 	void Load() override;
+	void UnLoad() override;
 
 	void Update(const double& dt) override;
 
 	void HighlightSelected();
+	void readPrefs();
 };

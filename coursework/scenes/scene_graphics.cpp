@@ -4,6 +4,8 @@
 #include "../components/cmp_sprite.h"
 #include "../components/cmp_camera.h"
 #include "../game.h"
+#include <iostream>
+#include <fstream>
 
 using namespace std;
 using namespace sf;
@@ -124,6 +126,17 @@ void GraphicsScene::Load() {
 	setLoaded(true);
 }
 
+void GraphicsScene::UnLoad() {
+	ofstream saveFile;
+	saveFile.open("graphicsPrefs.txt");
+	saveFile << resolution.x << "\n";
+	saveFile << resolution.y << "\n";
+	saveFile << window_style << "\n";
+
+	saveFile.close();
+	Scene::UnLoad();
+}
+
 void GraphicsScene::Update(const double& dt) {
 	// Countdown timer
 	timer -= dt;
@@ -192,4 +205,26 @@ void GraphicsScene::HighlightSelected() {
 			buttons.at(i)->GetCompatibleComponent<TextComponent>().at(0)->NoHighlight();
 		}
 	}
+}
+
+void GraphicsScene::readPrefs()
+{
+	string line;
+	ifstream prefs("graphicsPrefs.txt");
+	if (prefs.is_open()) {
+		// Resolution
+		getline(prefs, line);
+		unsigned int resX = stoi(line);
+		resolution.x = resX;
+		getline(prefs, line);
+		unsigned int resY = stoi(line);
+		resolution.y = resY;
+		// Window style
+		getline(prefs, line);
+		int style = stoi(line);
+		window_style = style;
+		prefs.close();
+	}
+	else 
+		cout << "Unable to open file\n";
 }
