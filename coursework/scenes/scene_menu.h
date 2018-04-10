@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine.h"
+#include <SFML/Audio.hpp>
 
 using namespace std;
 
@@ -10,6 +11,9 @@ private:
 	static vector<shared_ptr<Entity>> buttons;
 	static int highlighted;
 	static float timer;
+	static sf::SoundBuffer menubgBuffer;
+	static sf::Sound menubgSound;
+
 public:
   MenuScene() = default;
   ~MenuScene() override = default;
@@ -20,4 +24,6 @@ public:
 
   void HighlightSelected();
   bool ControllerConnected();
+
+  static void loadSounds();
 };

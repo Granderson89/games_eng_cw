@@ -171,6 +171,7 @@ void Level1Scene::Load() {
   im.initialize();
   //Simulate long loading times
   //std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+  bgSound.setLoop(true);
   bgSound.play();
   cout << " Scene 1 Load Done" << endl;
   setLoaded(true);
@@ -180,6 +181,7 @@ void Level1Scene::UnLoad() {
   cout << "Scene 1 Unload" << endl;
   player1.reset();
   player2.reset();
+  bgSound.stop();
   sf::View view;
   view.reset(FloatRect(0.0f, 0.0f, 1920.0f, 1080.0f));	// hardcoded values ///////////////////////////////////////////////
   Renderer::getWindow().setView(view);
@@ -190,10 +192,6 @@ void Level1Scene::UnLoad() {
 void Level1Scene::Update(const double& dt) {
 	if (im.Player[0].pause || im.Player[1].pause) {
 		Engine::ChangeScene(&pause);
-	}
-	// Loop background music
-	if (bgSound.getStatus() == SoundSource::Status::Stopped) {
-		bgSound.play();
 	}
   Scene::Update(dt);
 }

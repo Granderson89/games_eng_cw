@@ -25,6 +25,10 @@ float MenuScene::timer = 0;
 // Controller found
 bool controller = false;
 
+// Sounds
+sf::SoundBuffer MenuScene::menubgBuffer;
+sf::Sound MenuScene::menubgSound;
+
 void MenuScene::Load() {
   cout << "Menu Load \n";
   im.initialize();
@@ -112,18 +116,16 @@ void MenuScene::Load() {
   controller = ControllerConnected();
 
   HighlightSelected();
-  WeaponComponent::loadSounds();
-  PlasmaComponent::loadSounds();
-  TorpedoComponent::loadSounds();
-  MissileComponent::loadSounds();
-  ThrustersComponent::loadSounds();
-  Level1Scene::loadSounds();
+  menubgSound.setLoop(true);
   setLoaded(true);
   cout << "Menu Load Done\n";
 
 }
 
 void MenuScene::Update(const double& dt) {
+	if (menubgSound.getStatus() != SoundSource::Status::Playing) {
+		menubgSound.play();
+	}
   // Check for a controller
 	if (sf::Joystick::isConnected(0)) {
 		controller = true;
@@ -141,6 +143,7 @@ void MenuScene::Update(const double& dt) {
 	  if (im.Player[0].confirm) {
 		  if (highlighted == 0) {
 			  timer += 0.5f;
+			  menubgSound.stop();
 			  Engine::ChangeScene(&level1);
 		  }
 		  else if (highlighted == 2) {
@@ -207,4 +210,10 @@ bool MenuScene::ControllerConnected()
 	else {
 		return false;
 	}
+}
+
+void MenuScene::loadSounds()
+{
+	menubgBuffer.loadFromFile("res/sounds/menubg.ogg");
+	menubgSound.setBuffer(menubgBuffer);
 }
