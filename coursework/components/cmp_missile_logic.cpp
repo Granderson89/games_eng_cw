@@ -13,6 +13,10 @@ float MissileComponent::strength = 30.0f;
 // Speed of projectile
 float MissileComponent::speed = 100.0f;
 
+// Sounds
+sf::SoundBuffer MissileComponent::explosionBuffer;
+sf::Sound MissileComponent::explosionSound;
+
 // Update - count lifespan and reduce strength of projectile
 void MissileComponent::update(double dt) {
 	auto enemy = _target->GetCompatibleComponent<PlayerPhysicsComponent>().at(0);
@@ -27,7 +31,14 @@ void MissileComponent::render() {
 
 }
 
+void MissileComponent::loadSounds()
+{
+	explosionBuffer.loadFromFile("res/sounds/explosion.wav");
+	explosionSound.setBuffer(explosionBuffer);
+}
+
 void MissileComponent::explode() {
+	explosionSound.play();
 	_parent->setForDelete();
 }
 

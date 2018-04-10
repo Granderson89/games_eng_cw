@@ -2,6 +2,9 @@
 #include "../components/cmp_text.h"
 #include "../components/cmp_sprite.h"
 #include "../components/cmp_weapon_component.h"
+#include "../components/cmp_plasma_logic.h"
+#include "../components/cmp_torpedo_logic.h"
+#include "../components/cmp_missile_logic.h"
 #include "../game.h"
 #include <SFML/Window/Keyboard.hpp>
 #include <iostream>
@@ -108,6 +111,10 @@ void MenuScene::Load() {
   controller = ControllerConnected();
 
   HighlightSelected();
+  WeaponComponent::loadSounds();
+  PlasmaComponent::loadSounds();
+  TorpedoComponent::loadSounds();
+  MissileComponent::loadSounds();
   setLoaded(true);
   cout << "Menu Load Done\n";
 
@@ -165,7 +172,7 @@ void MenuScene::Update(const double& dt) {
 		  HighlightSelected();
 	  }
   }
-  WeaponComponent::loadSounds();
+
   Scene::Update(dt);
 }
 

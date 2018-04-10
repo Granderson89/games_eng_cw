@@ -31,8 +31,8 @@ type WeaponComponent::p2_active_type = CANNONS;
 // Base cooldown of weapons
 float WeaponComponent::p2_base_cooldown = 1.0f;
 
+// Sounds
 sf::SoundBuffer WeaponComponent::plasmaBuffer;
-
 sf::SoundBuffer WeaponComponent::torpedoBuffer;
 sf::SoundBuffer WeaponComponent::missileBuffer;
 sf::Sound WeaponComponent::plasmaSound;
