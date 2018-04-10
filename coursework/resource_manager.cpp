@@ -1,5 +1,11 @@
 #include "resource_manager.h"
 
+Texture ResourceManager::tex_test = Texture();
+Texture ResourceManager::Tex_background = Texture();
+Texture ResourceManager::Tex_player1 = Texture();
+Texture ResourceManager::Tex_player2 = Texture();
+
+
 
 bool ResourceManager::Load()
 {
@@ -32,4 +38,5 @@ bool ResourceManager::Load()
 		if (test)
 			Tex_background = tex_test;
 	}
+	return good;
 }
