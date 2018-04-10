@@ -48,7 +48,6 @@ void ControlsScene::Load() {
 
 	// Rectangle for button in spritesheet
 	auto buttonRect = IntRect(0, 0, 410, 140);
-	readPrefs();
 
 	// Player 1
 	createPlayerButtons(0, scale, buttonRect);
@@ -81,6 +80,7 @@ void ControlsScene::UnLoad() {
 	saveFile << InputManager::playerInput[1].confirm << "\n";
 
 	saveFile.close();
+	Scene::UnLoad();
 }
 
 void ControlsScene::Update(const double& dt) {
@@ -593,6 +593,6 @@ void ControlsScene::readPrefs() {
 		}
 		prefs.close();
 	}
-
-	else cout << "Unable to open file\n";
+	else 
+		cout << "Unable to open file\n";
 }
