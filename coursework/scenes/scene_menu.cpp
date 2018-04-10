@@ -1,6 +1,7 @@
 #include "scene_menu.h"
 #include "../components/cmp_text.h"
 #include "../components/cmp_sprite.h"
+#include "../components/cmp_weapon_component.h"
 #include "../game.h"
 #include <SFML/Window/Keyboard.hpp>
 #include <iostream>
@@ -164,6 +165,7 @@ void MenuScene::Update(const double& dt) {
 		  HighlightSelected();
 	  }
   }
+  WeaponComponent::loadSounds();
   Scene::Update(dt);
 }
 

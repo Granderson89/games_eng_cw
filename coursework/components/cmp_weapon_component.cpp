@@ -31,8 +31,13 @@ type WeaponComponent::p2_active_type = CANNONS;
 // Base cooldown of weapons
 float WeaponComponent::p2_base_cooldown = 1.0f;
 
-sf::SoundBuffer buffer;
-sf::Sound sound;
+sf::SoundBuffer WeaponComponent::plasmaBuffer;
+
+sf::SoundBuffer WeaponComponent::torpedoBuffer;
+sf::SoundBuffer WeaponComponent::missileBuffer;
+sf::Sound WeaponComponent::plasmaSound;
+sf::Sound WeaponComponent::torpedoSound;
+sf::Sound WeaponComponent::missileSound;
 
 
 void WeaponComponent::update(double dt) {
@@ -132,6 +137,7 @@ void WeaponComponent::fire(int target) const {
 			auto l = projectile->addComponent<PlasmaComponent>(player2, _parent->getRotation());
 			projectile->addTag("p1_projectiles");
 		}
+		plasmaSound.play();
 	}
 	if (_type == TORPEDOS) {
 		s->setShape<sf::CircleShape>(4.0f);
@@ -143,6 +149,7 @@ void WeaponComponent::fire(int target) const {
 		if (target == 1) {
 			auto l = projectile->addComponent<TorpedoComponent>(player2, _parent->getRotation());
 		}
+		torpedoSound.play();
 	}
 	if (_type == MISSILES) {
 		s->setShape<sf::CircleShape>(2.0f);
@@ -150,21 +157,15 @@ void WeaponComponent::fire(int target) const {
 		s->getShape().setOrigin(1.0f, 1.0f);
 		if (target == 0) {
 			auto m = projectile->addComponent<MissileComponent>(player1);
-			sf::SoundBuffer buffer;
-			buffer.loadFromFile("res/sounds/missile.ogg");
-			sound.setBuffer(buffer);
-			sound.play();
 			// Attach a steering component
 			projectile->addComponent<SteeringComponent>(player1, m->getSpeed());
 		}
 		if (target == 1) {
 			auto m = projectile->addComponent<MissileComponent>(player2);
-			buffer.loadFromFile("res/sounds/missile.ogg");
-			sound.setBuffer(buffer);
-			sound.play();
 			// Attach a steering component
 			projectile->addComponent<SteeringComponent>(player2, m->getSpeed());
 		}
+		missileSound.play();
 	}
 }
 
@@ -249,6 +250,17 @@ string WeaponComponent::getP2ActiveType()
 		return "CANNONS";
 		break;
 	}
+}
+void WeaponComponent::loadSounds()
+{
+	plasmaBuffer.loadFromFile("res/sounds/plasma.wav");
+	plasmaSound.setBuffer(plasmaBuffer);
+
+	torpedoBuffer.loadFromFile("res/sounds/torpedo.wav");
+	torpedoSound.setBuffer(torpedoBuffer);
+
+	missileBuffer.loadFromFile("res/sounds/missile.wav");
+	missileSound.setBuffer(missileBuffer);
 }
 float WeaponComponent::getCooldown()
 {
