@@ -22,7 +22,6 @@ bool controller = false;
 
 void MenuScene::Load() {
   cout << "Menu Load \n";
-  im.initialize();
   buttons.clear();
   im.Player[0].confirm = false;
   timer += 0.5f;
@@ -104,7 +103,7 @@ void MenuScene::Load() {
 	  buttons.push_back(quitBtn);
   }
   // Check for a controller
-  controller = ControllerConnected();
+  controller = ControllerConnected(0);
 
   HighlightSelected();
   setLoaded(true);
@@ -179,16 +178,16 @@ void MenuScene::HighlightSelected() {
 	}
 }
 
-bool MenuScene::ControllerConnected()
+bool MenuScene::ControllerConnected(int id)
 {
 	// Check controller is connected
-	if (sf::Joystick::isConnected(0)) {
+	if (sf::Joystick::isConnected(id)) {
 		std::cout << "Controller connected" << std::endl;
 		// Check how many buttons it has
-		unsigned int buttonCount = sf::Joystick::getButtonCount(0);
+		unsigned int buttonCount = sf::Joystick::getButtonCount(id);
 		std::cout << "Controller has " << buttonCount << " buttons" << std::endl;
 		// Check if it has a z axis
-		bool hasZ = sf::Joystick::hasAxis(0, sf::Joystick::Z);
+		bool hasZ = sf::Joystick::hasAxis(id, sf::Joystick::Z);
 		std::cout << "Controller has a z axis" << std::endl;
 		return true;
 	}

@@ -8,8 +8,6 @@
 using namespace std;
 using namespace sf;
 
-static InputManager im;
-
 // List of UI buttons
 vector<shared_ptr<Entity>> GraphicsScene::buttons;
 // Timer stops highlighted from jumping to fast when user pushes up/down

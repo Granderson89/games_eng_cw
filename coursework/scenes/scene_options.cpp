@@ -6,8 +6,6 @@
 using namespace std;
 using namespace sf;
 
-static InputManager im;
-
 // List of UI buttons
 vector<shared_ptr<Entity>> OptionsScene::buttons;
 

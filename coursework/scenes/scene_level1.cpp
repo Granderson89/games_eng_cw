@@ -32,11 +32,9 @@ unsigned int P2_BIT = 8;
 unsigned int P2_PROJECTILE_BIT = 16;
 unsigned int P2_TURRET_PROJ_BIT = 32;
 
-
-// Input Manager
-static InputManager im;
-
 void Level1Scene::Load() {
+	std::cout << "Player 1 fire: " << im.playerInput[0].fire << std::endl;
+
   cout << " Scene 1 Load" << endl;
 
   // Ship dimensions
@@ -163,11 +161,11 @@ void Level1Scene::Load() {
   p2he->addComponent<TextComponent>();
   p2he->addComponent<TextComponent>();
 
-  // Initialise input manager
-  im.initialize();
   //Simulate long loading times
   //std::this_thread::sleep_for(std::chrono::milliseconds(3000));
   cout << " Scene 1 Load Done" << endl;
+  std::cout << "Player 1 fire: " << im.playerInput[0].fire << std::endl;
+
   setLoaded(true);
 }
 

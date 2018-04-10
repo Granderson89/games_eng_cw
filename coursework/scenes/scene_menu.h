@@ -19,5 +19,5 @@ public:
   void Update(const double& dt) override;
 
   void HighlightSelected();
-  bool ControllerConnected();
+  static bool ControllerConnected(int id);
 };

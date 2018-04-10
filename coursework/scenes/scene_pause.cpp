@@ -8,8 +8,6 @@
 using namespace std;
 using namespace sf;
 
-static InputManager im;
-
 // List of UI buttons
 vector<shared_ptr<Entity>> PauseScene::buttons;
 // Index of highlighted button
@@ -19,7 +17,6 @@ float PauseScene::timer = 0;
 
 void PauseScene::Load() {
   cout << "Pause Load \n";
-  im.initialize();
   buttons.clear();
   im.Player[0].confirm = false;
   timer += 0.5f;

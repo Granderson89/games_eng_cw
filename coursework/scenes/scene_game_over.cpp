@@ -6,8 +6,6 @@
 using namespace std;
 using namespace sf;
 
-static InputManager im;
-
 // List of UI buttons
 vector<shared_ptr<Entity>> GameOverScene::buttons;
 
@@ -20,7 +18,6 @@ void GameOverScene::Load() {
 	highlighted = 0;
 	// Clear buttons
 	buttons.clear();
-	im.initialize();
 	im.Player[0].confirm = false;
 
 	// Title
