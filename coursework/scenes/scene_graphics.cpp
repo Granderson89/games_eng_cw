@@ -179,15 +179,15 @@ void GraphicsScene::Update(const double& dt) {
 			timer += 0.5f;
 			highlighted--;
 			if (highlighted < 0) {
-				highlighted = 0;
+				highlighted = buttons.size() - 1;
 			}
 			HighlightSelected();
 		}
 		else if (InputManager::Player[0].menuDown) {
 			timer += 0.5f;
 			highlighted++;
-			if (highlighted > 5) {
-				highlighted = 5;
+			if (highlighted > buttons.size() - 1) {
+				highlighted = 0;
 			}
 			HighlightSelected();
 		}

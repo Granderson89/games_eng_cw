@@ -109,15 +109,15 @@ void OptionsScene::Update(const double& dt) {
 			timer += 0.5f;
 			highlighted--;
 			if (highlighted < 0) {
-				highlighted = 0;
+				highlighted = buttons.size() - 1;
 			}
 			HighlightSelected();
 		}
 		else if (InputManager::Player[0].menuDown) {
 			timer += 0.5f;
 			highlighted++;
-			if (highlighted > 2) {
-				highlighted = 2;
+			if (highlighted > buttons.size() - 1) {
+				highlighted = 0;
 			}
 			HighlightSelected();
 		}

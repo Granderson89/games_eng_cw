@@ -142,7 +142,7 @@ void MenuScene::Update(const double& dt) {
 		  timer += 0.5f;
 		  highlighted--;
 		  if (highlighted < 0) {
-			  highlighted = 0;
+			  highlighted = buttons.size() - 1;
 		  }
 		  else if (highlighted == 1 && !controller) {
 			  highlighted--;
@@ -152,8 +152,8 @@ void MenuScene::Update(const double& dt) {
 	  else if (InputManager::Player[0].menuDown) {
 		  timer += 0.5f;
 		  highlighted++;
-		  if (highlighted > 3) {
-			  highlighted = 3;
+		  if (highlighted > buttons.size() - 1) {
+			  highlighted = 0;
 		  }
 		  else if (highlighted == 1 && !controller) {
 			  highlighted++;
