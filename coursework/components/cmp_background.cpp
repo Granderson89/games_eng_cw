@@ -45,7 +45,6 @@ void BackgroundBuilderComponent::update(double dt)
 	Vector2f offset = Vector2f(fmod(_cam->getMidpoint().x, bgSize.x * 2), fmod(_cam->getMidpoint().y, bgSize.y * 2));
 	for (int i = 0; i < rows; i++)
 		for (int j = 0; j < colls; j++)
-			_sprites[i * colls + j]->getSprite().setPosition(Vector2f(j * bgSize.x
-				, i * bgSize.y)
+			_sprites[i * colls + j]->getSprite().setPosition(Vector2f(j * bgSize.x, i * bgSize.y)
 				+ _cam->getMidpoint() + topLeft - offset);
 }
