@@ -17,7 +17,8 @@ BackgroundBuilderComponent::BackgroundBuilderComponent(Entity* p) : Component(p)
 	for (int i = 0; i < rows * colls; i++)
 		_sprites.push_back(p->addComponent<SpriteComponent>());
 
-	topLeft = -Vector2f(_max_zoom / 2.0f, (_max_zoom / (_cam->getView().getSize().x / _cam->getView().getSize().y)) / 2.0f);
+	topLeft = -Vector2f(colls * bgSize.x / 2.0f, rows * bgSize.y / 2.0f) + Vector2f(bgSize.x * 2.0f, bgSize.y);
+	/*topLeft = -Vector2f(_max_zoom / 2.0f, (_max_zoom / (_cam->getView().getSize().x / _cam->getView().getSize().y)) / 2.0f);*/
 
 	for (int i = 0; i < rows; i++)
 		for (int j = 0; j < colls; j++)

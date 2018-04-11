@@ -47,6 +47,12 @@ void Level1Scene::Load() {
 	// Weapon mount dimensions
 	float mount_width = 4.0f;
 	float mount_height = 4.0f;
+
+	// Create a container entity for the camera script (ce - camera entity, cc - camera component)
+	ce = makeEntity();
+	auto cc = ce->addComponent<CameraControllerComponent>();
+	ce->addComponent<BackgroundBuilderComponent>();
+
 	// Weapon mount positions relative to centre of ship
 	vector<Vector2f> cannon_offsets;
 	for (int i = 0; i < 8; i++) {
@@ -111,7 +117,7 @@ void Level1Scene::Load() {
 		// Add Shape Component
 		auto s = player2->addComponent<ShapeComponent>();
 		s->setShape<sf::RectangleShape>(Vector2f(width, length));
-		s->getShape().setFillColor(Color::White);
+		s->getShape().setFillColor(Color::Red);
 		s->getShape().setOrigin(width / 2.0f, length / 2.0f);
 		// Add Player Physics Component and set mass
 		vector<unsigned int> mask;
@@ -142,14 +148,11 @@ void Level1Scene::Load() {
 
 	}
 
-	// Create a container entity for the camera script (ce - camera entity, cc - camera component)
-	ce = makeEntity();
-	auto cc = ce->addComponent<CameraControllerComponent>();
+	
 	ce->addTag("camera");
 	cc->addTarget(player1);
 	cc->addTarget(player2);
 
-	ce->addComponent<BackgroundBuilderComponent>();
 
 	// Create a container entity for player 1's hud
 	shared_ptr<Entity> p1he;
