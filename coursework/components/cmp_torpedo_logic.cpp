@@ -3,6 +3,8 @@
 #include "cmp_player_physics.h"
 #include "cmp_player_state.h"
 
+#include <Box2D/Dynamics/Contacts/b2Contact.h>
+
 using namespace std;
 using namespace sf;
 
@@ -23,10 +25,16 @@ void TorpedoComponent::update(double dt) {
 	}
 
 	auto enemy = _target->GetCompatibleComponent<PlayerPhysicsComponent>().at(0);
-	if (_parent->GetCompatibleComponent<PhysicsComponent>().at(0)->isTouching(*enemy)) {
-		explode();
-		auto enemyState = _target->GetCompatibleComponent<PlayerStateComponent>().at(0);
-		enemyState->takeDamage(strength);
+	auto enemy_fix = enemy->getFixture();
+	auto contacts = _parent->GetCompatibleComponent<PhysicsComponent>().at(0)->getTouching();
+	for (int i = 0; i < contacts.size(); i++) {
+		auto fixtureA = contacts[i]->GetFixtureA();
+		auto fixtureB = contacts[i]->GetFixtureB();
+		if (fixtureA == enemy_fix || fixtureB == enemy_fix) {
+			_parent->setForDelete();
+			auto enemyState = _target->GetCompatibleComponent<PlayerStateComponent>().at(0);
+			enemyState->takeDamage(strength);
+		}
 	}
 	
 }
