@@ -9,11 +9,11 @@ using namespace std;
 using namespace sf;
 
 // Lifespan of projectile
-float TurretProjComponent::max_lifespan = 3.0f;
+float TurretProjComponent::max_lifespan = 0.25f;
 // Full strength of projectile
 float TurretProjComponent::strength = 10.0f;
 // Speed of projectile
-float TurretProjComponent::speed = 10.0f;
+float TurretProjComponent::speed = 0.01f;
 
 // Update - count lifespan and reduce strength of projectile
 void TurretProjComponent::update(double dt) {
@@ -45,7 +45,7 @@ void TurretProjComponent::render() {
 
 }
 
-TurretProjComponent::TurretProjComponent(Entity* p, shared_ptr<Entity> target, float ship_rotation)
+TurretProjComponent::TurretProjComponent(Entity* p, shared_ptr<Entity> target, float turret_rotation)
 	: Component(p), _target(target), _current_lifespan(max_lifespan) {
 	// Attach a physics component and apply impulse
 	vector<unsigned int> mask;
@@ -60,8 +60,7 @@ TurretProjComponent::TurretProjComponent(Entity* p, shared_ptr<Entity> target, f
 	}
 	physics->setRestitution(0.4f);
 	physics->setFriction(0.005f);
-	ship_rotation = deg2rad(ship_rotation);
-	Vector2f direction = Vector2f(-sinf(ship_rotation), cosf(ship_rotation));
+	Vector2f direction = Vector2f(-sinf(turret_rotation), cosf(turret_rotation));
 	direction = normalize(direction);
 	physics->impulse(direction * speed);
 }
