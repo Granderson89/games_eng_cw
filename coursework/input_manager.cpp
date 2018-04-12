@@ -167,7 +167,7 @@ void InputManager::initialize()
 
 	
 	
-	playerInput[1].source = 1;
+	playerInput[1].source = 0;
 	playerInput[1].moveForward = Joystick::Y;
 	playerInput[1].moveBackwards = Joystick::Y;
 	playerInput[1].turnLeft = Joystick::X;

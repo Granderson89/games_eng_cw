@@ -32,6 +32,8 @@ unsigned int P2_BIT = 8;
 unsigned int P2_PROJECTILE_BIT = 16;
 unsigned int P2_TURRET_PROJ_BIT = 32;
 
+unsigned int BOUNDARY_BIT = 64;
+
 void Level1Scene::Load() {
 	std::cout << "Player 1 fire: " << InputManager::playerInput[0].fire << std::endl;
 
@@ -75,6 +77,7 @@ void Level1Scene::Load() {
 	vector<unsigned int> mask;
 	mask.push_back(P2_PROJECTILE_BIT);
 	mask.push_back(P2_BIT);
+	mask.push_back(BOUNDARY_BIT);
     auto p = player1->addComponent<PlayerPhysicsComponent>(Vector2f(width, length), P1_BIT, mask);
 	p->setMass(5.0f);
 	// Add weapons
@@ -113,6 +116,7 @@ void Level1Scene::Load() {
 	  vector<unsigned int> mask;
 	  mask.push_back(P1_PROJECTILE_BIT);
 	  mask.push_back(P1_BIT);
+	  mask.push_back(BOUNDARY_BIT);
 	  auto p = player2->addComponent<PlayerPhysicsComponent>(Vector2f(width, length), P2_BIT, mask);
 	  p->setMass(5.0f);
 	  // Add weapons
