@@ -3,7 +3,6 @@
 #include "cmp_torpedo_logic.h"
 #include "cmp_missile_logic.h"
 #include "cmp_ai_steering.h"
-#include "cmp_hurt_player.h"
 #include "engine.h"
 #include "../game.h"
 #include <SFML/Graphics/CircleShape.hpp>
