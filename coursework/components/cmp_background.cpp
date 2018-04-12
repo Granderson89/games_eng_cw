@@ -12,14 +12,16 @@ BackgroundBuilderComponent::BackgroundBuilderComponent(Entity* p) : Component(p)
 	_cam = p->GetCompatibleComponent<CameraControllerComponent>()[0];
 	bgSize = ResourceManager::Tex_background.getSize();
 
+	// Add enough sprites to cover maximum zoom area
 	rows = _max_zoom / bgSize.x + 1;
 	colls = (_max_zoom * (_cam->getView().getSize().x / _cam->getView().getSize().y)) / bgSize.y + 1;
 	for (int i = 0; i < rows * colls; i++)
 		_sprites.push_back(p->addComponent<SpriteComponent>());
 
+	// Calculate the first tile offset
 	topLeft = -Vector2f(colls * bgSize.x / 2.0f, rows * bgSize.y / 2.0f) + Vector2f(bgSize.x * 2.0f, bgSize.y);
-	/*topLeft = -Vector2f(_max_zoom / 2.0f, (_max_zoom / (_cam->getView().getSize().x / _cam->getView().getSize().y)) / 2.0f);*/
 
+	// Prepare the sprites
 	for (int i = 0; i < rows; i++)
 		for (int j = 0; j < colls; j++)
 		{
@@ -43,7 +45,10 @@ BackgroundBuilderComponent::~BackgroundBuilderComponent()
 
 void BackgroundBuilderComponent::update(double dt)
 {
+	// Offset used to give the illusion of a stationary background
 	Vector2f offset = Vector2f(fmod(_cam->getMidpoint().x, bgSize.x * 2), fmod(_cam->getMidpoint().y, bgSize.y * 2));
+
+	// Tile the sprites
 	for (int i = 0; i < rows; i++)
 		for (int j = 0; j < colls; j++)
 			_sprites[i * colls + j]->getSprite().setPosition(Vector2f(j * bgSize.x, i * bgSize.y)
