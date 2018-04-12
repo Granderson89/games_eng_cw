@@ -146,12 +146,12 @@ void WeaponComponent::fire(int target) const {
 		if (target == 0) {
 			auto m = projectile->addComponent<MissileComponent>(player1);
 			// Attach a steering component
-			projectile->addComponent<SteeringComponent>(player1, m->getSpeed());
+			projectile->addComponent<SteeringComponent>(player1.get(), m->getSpeed());
 		}
 		if (target == 1) {
 			auto m = projectile->addComponent<MissileComponent>(player2);
 			// Attach a steering component
-			projectile->addComponent<SteeringComponent>(player2, m->getSpeed());
+			projectile->addComponent<SteeringComponent>(player2.get(), m->getSpeed());
 		}
 	}
 }
