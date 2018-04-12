@@ -10,6 +10,12 @@ class CameraControllerComponent : public Component
 private:
 	std::vector<std::shared_ptr<Entity>> targets;
 	sf::View view;
+	bool boundary_active = false;
+	sf::Vector2f locked_midpoint;
+	float locked_p1_dist;
+	float locked_p2_dist;
+
+
 public:
 	explicit CameraControllerComponent(Entity* p);
 	CameraControllerComponent() = delete;
