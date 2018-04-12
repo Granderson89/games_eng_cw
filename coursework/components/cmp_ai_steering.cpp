@@ -10,7 +10,7 @@ void SteeringComponent::update(double dt) {
 	_parent->GetCompatibleComponent<PhysicsComponent>().at(0)->setVelocity(output.direction);
 }
 
-SteeringComponent::SteeringComponent(Entity* p, shared_ptr<Entity> target, float speed)
+SteeringComponent::SteeringComponent(Entity* p, Entity* target, float speed)
 	: _target(target), _seek(Seek(p, target, speed)), Component(p) {}
 
 void SteeringComponent::move(const sf::Vector2f &p) {

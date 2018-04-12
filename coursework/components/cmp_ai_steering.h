@@ -11,6 +11,6 @@ public:
 	void move(const sf::Vector2f&);
 	void move(float x, float y);
 	void render() override {}
-	explicit SteeringComponent(Entity *p, shared_ptr<Entity> target, float speed);
+	explicit SteeringComponent(Entity *p, Entity* target, float speed);
 	SteeringComponent() = delete;
 };

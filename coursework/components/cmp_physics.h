@@ -18,6 +18,7 @@ public:
 
 
   b2Fixture* const getFixture() const;
+  b2Body* const getBody() const;
   bool isTouching(const PhysicsComponent& pc) const;
   bool isTouching(const PhysicsComponent& pc, b2Contact const* bc) const;
   std::vector<const b2Contact*> getTouching() const;
