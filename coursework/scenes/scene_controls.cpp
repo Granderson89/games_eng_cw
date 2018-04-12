@@ -535,9 +535,9 @@ void ControlsScene::readPrefs() {
 			int source = stoi(line);
 			InputManager::playerInput[0].source = source;
 			if (source < 0)
-				InputManager::initializeKeyboard(source);
+				InputManager::initializeKeyboard(0);
 			else
-				InputManager::initializeController(source);
+				InputManager::initializeController(0);
 			// Fire
 			getline(prefs, line);
 			int fire = stoi(line);
@@ -567,9 +567,9 @@ void ControlsScene::readPrefs() {
 			int source = stoi(line);
 			InputManager::playerInput[1].source = source;
 			if (source < 0)
-				InputManager::initializeKeyboard(source);
+				InputManager::initializeKeyboard(1);
 			else
-				InputManager::initializeController(source);
+				InputManager::initializeController(1);
 			// Fire
 			getline(prefs, line);
 			int fire = stoi(line);
