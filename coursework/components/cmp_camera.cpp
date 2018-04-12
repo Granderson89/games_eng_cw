@@ -59,7 +59,7 @@ void CameraControllerComponent::update(double dt)
 	}
 	width += margin;
 	
-	if (width > 50.0f) {
+	if (width > 2000.0f) {
 		if (!boundary_active) {
 			locked_midpoint = midpoint;
 			locked_p1_dist = length(player1->getPosition() - locked_midpoint);
@@ -124,7 +124,7 @@ void CameraControllerComponent::update(double dt)
 			old2.at(i)->setForDelete();
 		}
 	}
-	else if (width < 25.0f) {
+	else if (width < 1950.0f) {
 		boundary_active = false;
 		auto old1 = level1.ents.find("boundary1");
 		for (int i = 0; i < old1.size(); i++) {
