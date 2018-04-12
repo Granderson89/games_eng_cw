@@ -13,6 +13,8 @@ int TurretComponent::p1_next_weapon = 0;
 float TurretComponent::p1_firetime = 0.0f;
 // Base cooldown of weapons
 float TurretComponent::p1_base_cooldown = 0.1f;
+// Rotation of turret
+float TurretComponent::p1_turret_rotation = 0.0f;
 
 // Keeps track of which weapon to fire next
 int TurretComponent::p2_next_weapon = 1;
@@ -20,6 +22,8 @@ int TurretComponent::p2_next_weapon = 1;
 float TurretComponent::p2_firetime = 0.0f;
 // Base cooldown of weapons
 float TurretComponent::p2_base_cooldown = 0.1f;
+// Rotation of turret
+float TurretComponent::p2_turret_rotation = 0.0f;
 
 void TurretComponent::update(double dt) {
 	// Countdown timers
@@ -49,6 +53,20 @@ void TurretComponent::update(double dt) {
 			p2_firetime = 0.1f;
 		}
 	}
+
+	// Rotate turret
+	if (InputManager::Player[0].turretClockwise) {
+		p1_turret_rotation += dt;
+	}
+	if (InputManager::Player[0].turretCounterClockwise) {
+		p1_turret_rotation -= dt;
+	}
+	if (InputManager::Player[1].turretClockwise) {
+		p2_turret_rotation += dt;
+	}
+	if (InputManager::Player[1].turretCounterClockwise) {
+		p2_turret_rotation -= dt;
+	}
 }
 
 void TurretComponent::fire(int target) const {
@@ -59,10 +77,10 @@ void TurretComponent::fire(int target) const {
 	s->getShape().setFillColor(Color::Green);
 	s->getShape().setOrigin(2.0f, 2.0f);
 	if (target == 0) {
-		auto l = projectile->addComponent<TurretProjComponent>(player1, _parent->getRotation());
+		auto l = projectile->addComponent<TurretProjComponent>(player1, p2_turret_rotation);
 	}
 	if (target == 1) {
-		auto l = projectile->addComponent<TurretProjComponent>(player2, _parent->getRotation());
+		auto l = projectile->addComponent<TurretProjComponent>(player2, p1_turret_rotation);
 	}
 }
 
