@@ -10,7 +10,7 @@ using namespace sf;
 vector<shared_ptr<Entity>> OptionsScene::buttons;
 
 // Timer stops highlighted from jumping to fast when user pushes up/down
-float OptionsScene::timer = 0;
+float OptionsScene::timer = 0.5f;
 
 void OptionsScene::Load() {
 	cout << "Options Screen Load \n";
@@ -91,17 +91,6 @@ void OptionsScene::Load() {
 void OptionsScene::Update(const double& dt) {
 	// Countdown timer
 	timer -= dt;
-	if (InputManager::Player[0].confirm) {
-		if (highlighted == 0) {
-			Engine::ChangeScene(&graphics);
-		}
-		if (highlighted == 1) {
-			Engine::ChangeScene(&controls);
-		}
-		if (highlighted == 2) {
- 			Engine::ChangeScene(&menu);
-		}
-	}
 	// Only change selected if timer has run out
 	if (timer <= 0.0f) {
 		timer = 0.0f;
@@ -120,6 +109,17 @@ void OptionsScene::Update(const double& dt) {
 				highlighted = 0;
 			}
 			HighlightSelected();
+		}
+		else if (InputManager::Player[0].confirm) {
+			if (highlighted == 0) {
+				Engine::ChangeScene(&graphics);
+			}
+			if (highlighted == 1) {
+				Engine::ChangeScene(&controls);
+			}
+			if (highlighted == 2) {
+				Engine::ChangeScene(&menu);
+			}
 		}
 	}
 	Scene::Update(dt);
