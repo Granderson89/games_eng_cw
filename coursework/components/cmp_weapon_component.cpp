@@ -41,32 +41,35 @@ void WeaponComponent::update(double dt) {
 	// weapon has cooled down and firetime delay has run down
 	// fire, reset timers and increment next_weapon
 	if (InputManager::Player[0].fire) {
-		if (_type == p1_active_type)
-			if (p1_next_weapon == _weapon_num)
-				if (_cooldown <= 0.0f)
+		if (_type == p1_active_type) {
+			if (p1_next_weapon == _weapon_num) {
+				if (_cooldown <= 0.0f) {
 					if (p1_firetime <= 0.0f) {
-			InputManager::Player[0].fire = false;
-			fire(1);
-			_cooldown = p1_base_cooldown;
-			p1_firetime = 0.7f;
-			p1_next_weapon++;
-			switch (_type) {
-			case CANNONS:
-				if (p1_next_weapon > 7)
-					p1_next_weapon = 0;
-				break;
-			case TORPEDOS:
-				if (p1_next_weapon < 8 || p1_next_weapon > 12)
-					p1_next_weapon = 8;
-				break;
-			case MISSILES:
-				if (p1_next_weapon < 13 || p1_next_weapon > 14)
-					p1_next_weapon = 3;
-				break;
-			default:
-				if (p1_next_weapon > 7)
-					p1_next_weapon = 0;
-				break;
+						InputManager::Player[0].fire = false;
+						fire(1);
+						_cooldown = p1_base_cooldown;
+						p1_firetime = 0.7f;
+						p1_next_weapon++;
+						switch (_type) {
+						case CANNONS:
+							if (p1_next_weapon > 7)
+								p1_next_weapon = 0;
+							break;
+						case TORPEDOS:
+							if (p1_next_weapon < 8 || p1_next_weapon > 12)
+								p1_next_weapon = 8;
+							break;
+						case MISSILES:
+							if (p1_next_weapon < 13 || p1_next_weapon > 14)
+								p1_next_weapon = 13;
+							break;
+						default:
+							if (p1_next_weapon > 7)
+								p1_next_weapon = 0;
+							break;
+						}
+					}
+				}
 			}
 		}
 	}
