@@ -248,7 +248,6 @@ void InputManager::initializeController(int player)
 	playerInput[player].menuUp = 3;
 	playerInput[player].menuDown = 0;
 	playerInput[player].confirm = 1;
-	playerInput[player].pause = Keyboard::P;
 }
 
 void InputManager::update()

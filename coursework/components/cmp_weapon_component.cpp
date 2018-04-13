@@ -29,11 +29,16 @@ type WeaponComponent::p2_active_type = CANNONS;
 // Base cooldown of weapons
 float WeaponComponent::p2_base_cooldown = 1.0f;
 
+float p1_change_timer = 0.0f;
+float p2_change_timer = 0.0f;
+
 void WeaponComponent::update(double dt) {
 	// Countdown timers
-	p1_firetime -= dt;
+	p1_firetime -= dt / 15.0;
 	p2_firetime -= dt / 15.0;
 	_cooldown -= dt;
+	p1_change_timer -= dt / 15.0;
+	p2_change_timer -= dt / 15.0;
 	if (_cooldown <= 0.0f) {
 		_cooldown = 0.0f;
 	}
@@ -74,8 +79,17 @@ void WeaponComponent::update(double dt) {
 		}
 	}
 	if (InputManager::Player[0].changeWeapon) {
-		InputManager::Player[0].changeWeapon = false;
-		changeP1Weapon();
+		if (InputManager::playerInput[0].source >= 0) {
+			if (p1_change_timer < 0.0f) {
+				InputManager::Player[0].changeWeapon = false;
+				p1_change_timer = 0.5f;
+				changeP1Weapon();
+			}
+		}
+		else {
+			InputManager::Player[0].changeWeapon = false;
+			changeP1Weapon();
+		}
 	}
 
 	if (InputManager::Player[1].fire) {
@@ -107,9 +121,19 @@ void WeaponComponent::update(double dt) {
 			}
 		}
 	}
+
 	if (InputManager::Player[1].changeWeapon) {
-		InputManager::Player[1].changeWeapon = false;
-		changeP2Weapon();
+		if (InputManager::playerInput[1].source >= 0) {
+			if (p2_change_timer < 0.0f) {
+				InputManager::Player[1].changeWeapon = false;
+				p2_change_timer = 0.5f;
+				changeP2Weapon();
+			}
+		}
+		else {
+			InputManager::Player[1].changeWeapon = false;
+			changeP2Weapon();
+		}
 	}
 }
 
