@@ -11,7 +11,7 @@ using namespace sf;
 // Lifespan of projectile
 float TorpedoComponent::max_lifespan = 5.0f;
 // Full strength of projectile
-float TorpedoComponent::strength = 20.0f;
+float TorpedoComponent::strength = 5.0f;
 // Speed of projectile
 float TorpedoComponent::speed = 1.0f;
 // Range of explosion

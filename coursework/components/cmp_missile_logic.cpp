@@ -10,7 +10,7 @@ using namespace std;
 using namespace sf;
 
 // Full strength of projectile
-float MissileComponent::strength = 30.0f;
+float MissileComponent::strength = 10.0f;
 // Speed of projectile
 float MissileComponent::speed = 100.0f;
 
