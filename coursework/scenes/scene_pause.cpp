@@ -96,6 +96,7 @@ void PauseScene::Update(const double& dt) {
 		  if (highlighted == 1) {
 			  timer += 0.5f;
 			  Engine::ChangeScene(&menu);
+			  level1.UnLoad();
 		  }
 	  }
 	  if (InputManager::Player[0].menuUp) {
