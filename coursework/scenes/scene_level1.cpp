@@ -139,7 +139,6 @@ void Level1Scene::Load() {
 		  weapon_num++;
 	  }
 	  player2->addComponent<TurretComponent>(1);
-	  //player2->addComponent<ThrustersComponent>(Vector2f(width, length), 3.0f);
 	  player2->addComponent<PlayerStateComponent>();
 	  auto sm = player2->addComponent<StateMachineComponent>();
 	  sm->addState("seek", make_shared<SeekState>(player2, player1));
