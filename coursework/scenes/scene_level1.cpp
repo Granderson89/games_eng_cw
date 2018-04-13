@@ -40,6 +40,7 @@ void Level1Scene::Load() {
 	std::cout << "Player 1 fire: " << InputManager::playerInput[0].fire << std::endl;
 
   cout << " Scene 1 Load" << endl;
+  
 
   // Ship dimensions
   float width = 50.0f;
@@ -146,9 +147,7 @@ void Level1Scene::Load() {
 		  sm->addState("flee", make_shared<FleeState>(player2, player1));
 		  sm->addState("face", make_shared<FaceState>(player2, player1));
 		  sm->changeState("face");
-		  InputManager::playerInput[1].source = -2;
 	  }
-	  
   }
 
   // Create a container entity for the camera script (ce - camera entity, cc - camera component)
@@ -189,7 +188,7 @@ void Level1Scene::UnLoad() {
   player1.reset();
   player2.reset();
   sf::View view;
-  view.reset(FloatRect(0.0f, 0.0f, resolution.x, resolution.y));	// hardcoded values ///////////////////////////////////////////////
+  view.reset(FloatRect(0.0f, 0.0f, resolution.x, resolution.y));
   Renderer::getWindow().setView(view);
   ce.reset();
   Scene::UnLoad();
