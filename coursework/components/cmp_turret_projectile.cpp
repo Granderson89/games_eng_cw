@@ -31,12 +31,18 @@ void TurretProjComponent::update(double dt) {
 		_enemy_projectiles = _parent->scene->ents.find("p2_projectiles");
 	}
 	// Test for collisions
+	auto contacts = _parent->GetCompatibleComponent<PhysicsComponent>().at(0)->getTouching();
 	for (int i = 0; i < _enemy_projectiles.size(); i++) {
 		auto enemyProj = _enemy_projectiles.at(i);
-		if (_parent->GetCompatibleComponent<PhysicsComponent>().at(0)->isTouching(*enemyProj->GetCompatibleComponent<PhysicsComponent>().at(0))) {
-			// Delete both if true
-			_parent->setForDelete();
-			enemyProj->setForDelete();
+		auto enemyProjFix = enemyProj->GetCompatibleComponent<PhysicsComponent>().at(0)->getFixture();
+		for (int j = 0; j < contacts.size(); j++) {
+			auto fixtureA = contacts[i]->GetFixtureA();
+			auto fixtureB = contacts[i]->GetFixtureB();
+			if (fixtureA == enemyProjFix || fixtureB == enemyProjFix) {
+				// Delete both if true
+				_parent->setForDelete();
+				enemyProj->setForDelete();
+			}
 		}
 	}
 }
