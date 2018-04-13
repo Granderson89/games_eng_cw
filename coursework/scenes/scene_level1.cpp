@@ -194,7 +194,7 @@ void Level1Scene::UnLoad() {
 
 void Level1Scene::Update(const double& dt) {
 	if (InputManager::Player[0].pause || InputManager::Player[1].pause) {
-		Engine::ChangeScene(&pause);
+		Engine::PauseScene(&pause);
 	}
   Scene::Update(dt);
 }

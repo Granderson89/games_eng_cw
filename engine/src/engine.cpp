@@ -12,6 +12,7 @@
 using namespace sf;
 using namespace std;
 Scene* Engine::_activeScene = nullptr;
+Scene* Engine::_pausedScene = nullptr;
 std::string Engine::_gameName;
 
 static bool loading = false;
@@ -149,6 +150,30 @@ void Engine::ChangeScene(Scene* s) {
 	_activeScene->Load();
     loading = true;
   }
+}
+
+void Engine::PauseScene(Scene* s) {
+	cout << "Eng: pausing scene: " << _activeScene << endl;
+	_pausedScene = _activeScene;
+	_activeScene = s;
+
+	if (!s->isLoaded()) {
+		cout << "Eng: Entering Loading Screen\n";
+		loadingTime = 0;
+		//_activeScene->LoadAsync();
+		_activeScene->Load();
+		loading = true;
+	}
+}
+
+void Engine::ResumeScene() {
+	cout << "Eng: resuming scene: " << _pausedScene << endl;
+	auto old = _activeScene;
+	_activeScene = _pausedScene;
+
+	if (old != nullptr) {
+		old->UnLoad(); // todo: Unload Async
+	}
 }
 
 void Scene::Update(const double& dt) { ents.update(dt); }
