@@ -64,7 +64,6 @@ void CameraControllerComponent::update(double dt)
 			locked_midpoint = midpoint;
 			locked_p1_dist = length(player1->getPosition() - locked_midpoint);
 			locked_p2_dist = length(player2->getPosition() - locked_midpoint);
-
 		}
 		boundary_active = true;
 		{

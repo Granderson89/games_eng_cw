@@ -28,14 +28,14 @@ int winner;
 shared_ptr<Entity> ce;
 
 // Box2d collision bits
-unsigned int P1_BIT = 1;
-unsigned int P1_PROJECTILE_BIT = 2;
-unsigned int P1_TURRET_PROJ_BIT = 4;
+unsigned int P1_BIT = 64;
+unsigned int P1_PROJECTILE_BIT = 128;
+unsigned int P1_TURRET_PROJ_BIT = 256;
 unsigned int P2_BIT = 8;
 unsigned int P2_PROJECTILE_BIT = 16;
 unsigned int P2_TURRET_PROJ_BIT = 32;
 
-unsigned int BOUNDARY_BIT = 64;
+unsigned int BOUNDARY_BIT = 512;
 
 void Level1Scene::Load() {
 	std::cout << "Player 1 fire: " << InputManager::playerInput[0].fire << std::endl;
@@ -53,7 +53,7 @@ void Level1Scene::Load() {
   // Weapon mount positions relative to centre of ship
   vector<Vector2f> cannon_offsets;
   for (int i = 0; i < 8; i++) {
-	  auto mount_pos = Vector2f(width / 2.0f + mount_width, -length / 2.0f + mount_height + i * 25.0f + 5.0f);
+	  auto mount_pos = Vector2f(width / 2.0f + mount_width + 50.0f, -length / 2.0f + mount_height + i * 25.0f + 5.0f);
 	  cannon_offsets.push_back(mount_pos);
   }
   vector<Vector2f> torpedo_offsets;
@@ -66,6 +66,10 @@ void Level1Scene::Load() {
 	  auto mount_pos = Vector2f(width / 2.0f + mount_width, -length / 2.0f + mount_height + i * 25.0f + 5.0f);
 	  missile_offsets.push_back(mount_pos);
   }
+  Vector2f p2_start_position(800.0f, 250.0f);
+  player2 = makeEntity();
+  player2->addTag("p2");
+  player2->setPosition(p2_start_position);
 
   // Create player 1
   {
@@ -73,6 +77,7 @@ void Level1Scene::Load() {
 	player1 = makeEntity();
 	player1->addTag("p1");
 	player1->setPosition(p1_start_position);
+
 	// Add Shape Component
    // auto s = player1->addComponent<ShapeComponent>();
    // s->setShape<sf::RectangleShape>(Vector2f(width, length));
@@ -93,17 +98,17 @@ void Level1Scene::Load() {
 	int weapon_num = 0;
 	// CANNONS
 	for (int i = 0; i < 8; i++) {
-		player1->addComponent<WeaponComponent>(cannon_offsets.at(i), weapon_num, CANNONS);
+		player1->addComponent<WeaponComponent>(player2.get(), cannon_offsets.at(i), weapon_num, CANNONS);
 		weapon_num++;
 	}
 	// TORPEDOS
 	for (int i = 0; i < 5; i++) {
-		player1->addComponent<WeaponComponent>(torpedo_offsets.at(i), weapon_num, TORPEDOS);
+		player1->addComponent<WeaponComponent>(player2.get(), torpedo_offsets.at(i), weapon_num, TORPEDOS);
 		weapon_num++;
 	}
 	// MISSILES
 	for (int i = 0; i < 2; i++) {
-		player1->addComponent<WeaponComponent>(missile_offsets.at(i), weapon_num, MISSILES);
+		player1->addComponent<WeaponComponent>(player2.get(), missile_offsets.at(i), weapon_num, MISSILES);
 		weapon_num++;
 	}
 	player1->addComponent<TurretComponent>(0);
@@ -112,10 +117,6 @@ void Level1Scene::Load() {
   }
   // Create player 2
   {
-	  Vector2f p2_start_position(800.0f, 250.0f);
-	  player2 = makeEntity();
-	  player2->addTag("p2");
-	  player2->setPosition(p2_start_position);
 	  // Add Shape Component
 	  //auto s = player2->addComponent<ShapeComponent>();
 	  //s->setShape<sf::RectangleShape>(Vector2f(width, length));
@@ -136,17 +137,17 @@ void Level1Scene::Load() {
 	  int weapon_num = 15;
 	  // CANNONS
 	  for (int i = 0; i < 8; i++) {
-		  player2->addComponent<WeaponComponent>(cannon_offsets.at(i), weapon_num, CANNONS);
+		  player2->addComponent<WeaponComponent>(player1.get(), cannon_offsets.at(i), weapon_num, CANNONS);
 		  weapon_num++;
 	  }
 	  // TORPEDOS
 	  for (int i = 0; i < 5; i++) {
-		  player2->addComponent<WeaponComponent>(torpedo_offsets.at(i), weapon_num, TORPEDOS);
+		  player2->addComponent<WeaponComponent>(player1.get(), torpedo_offsets.at(i), weapon_num, TORPEDOS);
 		  weapon_num++;
 	  }
 	  // MISSILES
 	  for (int i = 0; i < 2; i++) {
-		  player2->addComponent<WeaponComponent>(missile_offsets.at(i), weapon_num, MISSILES);
+		  player2->addComponent<WeaponComponent>(player1.get(), missile_offsets.at(i), weapon_num, MISSILES);
 		  weapon_num++;
 	  }
 	  player2->addComponent<TurretComponent>(1);

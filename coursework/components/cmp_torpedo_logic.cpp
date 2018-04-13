@@ -48,7 +48,7 @@ void TorpedoComponent::explode() {
 
 }
 
-TorpedoComponent::TorpedoComponent(Entity* p, shared_ptr<Entity> target, float ship_rotation)
+TorpedoComponent::TorpedoComponent(Entity* p, shared_ptr<Entity> target, Vector2f direction)
 	: Component(p), _target(target), _current_lifespan(max_lifespan) {
 	// Attach a physics component and apply impulse
 	vector<unsigned int> mask;
@@ -65,8 +65,6 @@ TorpedoComponent::TorpedoComponent(Entity* p, shared_ptr<Entity> target, float s
 	}
 	physics->setRestitution(0.4f);
 	physics->setFriction(0.005f);
-	ship_rotation = deg2rad(ship_rotation - 90.0f);
-	Vector2f direction = Vector2f(-sinf(ship_rotation), cosf(ship_rotation));
 	direction = normalize(direction);
 	physics->impulse(direction * speed);
 }

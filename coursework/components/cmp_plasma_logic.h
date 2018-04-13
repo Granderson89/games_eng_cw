@@ -10,13 +10,13 @@ protected:
 	static float max_strength;
 	static float speed;
 
-	shared_ptr<Entity> _target;
+	Entity* _target;
 	float _current_strength;
 	float _current_lifespan;
 
 public:
 	PlasmaComponent() = delete;
-	explicit PlasmaComponent(Entity* p, shared_ptr<Entity> target, float ship_rotation);
+	explicit PlasmaComponent(Entity* p, Entity* target, Vector2f direction);
 
 	void reduceStrength();
 

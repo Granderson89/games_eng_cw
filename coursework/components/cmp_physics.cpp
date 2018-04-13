@@ -71,6 +71,9 @@ PhysicsComponent::PhysicsComponent(Entity * p, bool dyn, const sf::Vector2f & si
 		else if (mask.size() == 2) {
 			FixtureDef.filter.maskBits = mask.at(0) | mask.at(1);
 		}
+		else if (mask.size() == 3) {
+			FixtureDef.filter.maskBits = mask.at(0) | mask.at(1) | mask.at(2);
+		}
 		// Add to body
 		_fixture = _body->CreateFixture(&FixtureDef);
 	}

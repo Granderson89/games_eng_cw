@@ -16,7 +16,7 @@ protected:
 
 public:
 	TorpedoComponent() = delete;
-	explicit TorpedoComponent(Entity* p, shared_ptr<Entity> target, float ship_rotation);
+	explicit TorpedoComponent(Entity* p, shared_ptr<Entity> target, Vector2f direction);
 
 	void explode();
 

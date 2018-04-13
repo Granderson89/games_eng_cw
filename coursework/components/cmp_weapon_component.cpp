@@ -114,19 +114,47 @@ void WeaponComponent::update(double dt) {
 }
 
 void WeaponComponent::fire(int target) const {
+	// Get rotation of ship and the port and starboard
+	// vectors
+	float ship_rotation = _parent->getRotation();
+	Vector2f starboard = Vector2f(1.0f, 0.0f);
+	starboard = rotate(starboard, ship_rotation);
+	Vector2f port = Vector2f(-1.0f, 0.0f);
+	port = rotate(port, ship_rotation);
+	// Get the vector to the enemy and normalize
+	Vector2f enemy = _target->getPosition() - _parent->getPosition();
+	enemy = normalize(enemy);
+	// Get the dot product
+	Vector2f multiply = starboard * enemy;
+	float dot = multiply.x + multiply.y;
+	// If dot < 0, place mounts on the port side
+	Vector2f position;
+	Vector2f direction;
+	if (dot < 0.0f) {
+		position.x = _offset.x * -1.0f;
+		position.y = _offset.y;
+		direction = port;
+	}
+	// If dot >= 0, place mounts on the starboard side
+	else {
+		position.x = _offset.x;
+		position.y = _offset.y;
+		direction = starboard;
+	}
+	// Create a projectile and set it's position relative to ship
 	auto projectile = _parent->scene->makeEntity();
-	projectile->setPosition(_parent->getPosition() + rotate(Vector2f(_offset), _parent->getRotation()));
+	projectile->setPosition(_parent->getPosition() + rotate(Vector2f(position), _parent->getRotation()));
 	auto s = projectile->addComponent<ShapeComponent>();
 	if (_type == CANNONS) {
 		s->setShape<sf::CircleShape>(8.0f);
 		s->getShape().setFillColor(Color::Red);
 		s->getShape().setOrigin(4.0f, 4.0f);
 		if (target == 0) {
-			auto l = projectile->addComponent<PlasmaComponent>(player1, _parent->getRotation());
+			auto l = projectile->addComponent<PlasmaComponent>(_target, direction);
 			projectile->addTag("p2_projectiles");
 		}
 		if (target == 1) {
-			auto l = projectile->addComponent<PlasmaComponent>(player2, _parent->getRotation());
+			auto l = projectile->addComponent<PlasmaComponent>(_target, direction);
 			projectile->addTag("p1_projectiles");
 		}
 	}
@@ -135,11 +163,11 @@ void WeaponComponent::fire(int target) const {
 		s->getShape().setFillColor(Color::Yellow);
 		s->getShape().setOrigin(2.0f, 2.0f);
 		if (target == 0) {
-			auto l = projectile->addComponent<TorpedoComponent>(player1, _parent->getRotation());
+			auto l = projectile->addComponent<TorpedoComponent>(player1, direction);
 			projectile->addTag("p2_projectiles");
 		}
 		if (target == 1) {
-			auto l = projectile->addComponent<TorpedoComponent>(player2, _parent->getRotation());
+			auto l = projectile->addComponent<TorpedoComponent>(player2, direction);
 			projectile->addTag("p1_projectiles");
 		}
 	}
@@ -265,5 +293,5 @@ string WeaponComponent::getType()
 		break;
 	}
 }
-WeaponComponent::WeaponComponent(Entity* p, Vector2f offset, const int weapon_num, type weapon_type)
-	: Component(p), _cooldown(1.0f), _offset(offset), _weapon_num(weapon_num), _type(weapon_type) {}
+WeaponComponent::WeaponComponent(Entity* p, Entity* target, Vector2f offset, const int weapon_num, type weapon_type)
+	: Component(p), _target(target), _cooldown(1.0f), _offset(offset), _weapon_num(weapon_num), _type(weapon_type) {}
