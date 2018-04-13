@@ -543,22 +543,46 @@ void InputManager::update()
 					Player[i].thrusterOn[j] = false;
 			
 			// Menu
-			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].menuUp)) {
-				Player[i].menuUp = true;
+			static bool mup = false;
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].menuUp))
+			{
+				if (!mup)
+					Player[i].menuUp = true;
+				else
+					Player[i].menuUp = false;
+				mup = true;
 			}
-			else {
+			else
+			{
+				mup = false;
 				Player[i].menuUp = false;
 			}
-			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].menuDown)) {
-				Player[i].menuDown = true;
+			static bool mdown = false;
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].menuDown))
+			{
+				if (!mdown)
+					Player[i].menuDown = true;
+				else
+					Player[i].menuDown = false;
+				mdown = true;
 			}
-			else {
+			else
+			{
+				mdown = false;
 				Player[i].menuDown = false;
 			}
-			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].confirm)) {
-				Player[i].confirm = true;
+			static bool mconf;
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].confirm))
+			{
+				if (!mconf)
+					Player[i].confirm = true;
+				else
+					Player[i].confirm = false;
+				mconf = true;
 			}
-			else {
+			else
+			{
+				mconf = false;
 				Player[i].confirm = false;
 			}
 			// Pause
@@ -570,15 +594,13 @@ void InputManager::update()
 	}
 }
 
-void InputManager::update(int source, int button)
+void InputManager::storeButton(int source, int button)
 {
 	_lastButtonPressed[source] = button;
-	update();
 }
 
-void InputManager::update(Keyboard::Key key) {
+void InputManager::storeKey(Keyboard::Key key) {
 	_lastKeyPressed = key;
-	update();
 }
 
 Keyboard::Key InputManager::getLastKeyPressed()

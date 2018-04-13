@@ -100,16 +100,17 @@ void Engine::Start(unsigned int width, unsigned int height,
 
 	  if (event.type == Event::KeyPressed ||
 		  event.type == Event::KeyReleased) {
-		  InputManager::update(event.key.code);
+		  InputManager::storeKey(event.key.code);
 	  }
 
 	  if (event.type == Event::JoystickButtonPressed ||
 		  event.type == Event::JoystickButtonReleased ||
 		  event.type == Event::JoystickMoved) {
-		  InputManager::update(event.joystickButton.joystickId, event.joystickButton.button);
+		  InputManager::storeButton(event.joystickButton.joystickId, event.joystickButton.button);
 	  }
 
     }
+	InputManager::update();
     if (Keyboard::isKeyPressed(Keyboard::Escape)) {
       window.close();
     }

@@ -8,8 +8,6 @@ using namespace sf;
 
 // List of UI buttons
 vector<shared_ptr<Entity>> GameOverScene::buttons;
-// Timer stops highlighted from jumping to fast when user pushes up/down
-float GameOverScene::timer = 0;
 
 void GameOverScene::Load() {
 	cout << "Game Over Load \n";
@@ -87,8 +85,6 @@ void GameOverScene::Load() {
 }
 
 void GameOverScene::Update(const double& dt) {
-	// Countdown timer
-	timer -= dt;
 	if (InputManager::Player[0].confirm) {
 		if (highlighted == 0) {
 			Engine::ChangeScene(&level1);
@@ -100,25 +96,19 @@ void GameOverScene::Update(const double& dt) {
 			Engine::GetWindow().close();
 		}
 	}
-	// Only change selected if timer has run out
-	if (timer <= 0.0f) {
-		timer = 0.0f;
-		if (InputManager::Player[0].menuUp) {
-			timer += 0.5f;
-			highlighted--;
-			if (highlighted < 0) {
-				highlighted = buttons.size() - 1;
-			}
-			HighlightSelected();
+	if (InputManager::Player[0].menuUp) {
+		highlighted--;
+		if (highlighted < 0) {
+			highlighted = buttons.size() - 1;
 		}
-		else if (InputManager::Player[0].menuDown) {
-			timer += 0.5f;
-			highlighted++;
-			if (highlighted > buttons.size() - 1) {
-				highlighted = 0;
-			}
-			HighlightSelected();
+		HighlightSelected();
+	}
+	else if (InputManager::Player[0].menuDown) {
+		highlighted++;
+		if (highlighted > buttons.size() - 1) {
+			highlighted = 0;
 		}
+		HighlightSelected();
 	}
 	Scene::Update(dt);
 }

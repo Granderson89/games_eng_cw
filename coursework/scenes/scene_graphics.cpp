@@ -12,8 +12,6 @@ using namespace sf;
 
 // List of UI buttons
 vector<shared_ptr<Entity>> GraphicsScene::buttons;
-// Timer stops highlighted from jumping to fast when user pushes up/down
-float GraphicsScene::timer = 0;
 
 void GraphicsScene::Load() {
 	cout << "Graphics Screen Load \n";
@@ -138,8 +136,6 @@ void GraphicsScene::UnLoad() {
 }
 
 void GraphicsScene::Update(const double& dt) {
-	// Countdown timer
-	timer -= dt;
 	if (InputManager::Player[0].confirm) {
 		if (highlighted == 0) {
 			resolution = Vector2i(640, 360);
@@ -172,11 +168,7 @@ void GraphicsScene::Update(const double& dt) {
 		}
 
 	}
-	// Only change selected if timer has run out
-	if (timer <= 0.0f) {
-		timer = 0.0f;
 		if (InputManager::Player[0].menuUp) {
-			timer += 0.5f;
 			highlighted--;
 			if (highlighted < 0) {
 				highlighted = buttons.size() - 1;
@@ -184,14 +176,12 @@ void GraphicsScene::Update(const double& dt) {
 			HighlightSelected();
 		}
 		else if (InputManager::Player[0].menuDown) {
-			timer += 0.5f;
 			highlighted++;
 			if (highlighted > buttons.size() - 1) {
 				highlighted = 0;
 			}
 			HighlightSelected();
 		}
-	}
 	Scene::Update(dt);
 }
 
