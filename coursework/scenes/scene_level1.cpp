@@ -12,6 +12,7 @@
 #include "../components/cmp_state_machine.h"
 #include "../game.h"
 #include "../steering_states.h"
+#include "../resource_manager.h"
 #include <LevelSystem.h>
 #include <iostream>
 #include <thread>
@@ -38,6 +39,7 @@ unsigned int BOUNDARY_BIT = 64;
 
 void Level1Scene::Load() {
 	std::cout << "Player 1 fire: " << InputManager::playerInput[0].fire << std::endl;
+	ResourceManager::Load();
 
   cout << " Scene 1 Load" << endl;
 
@@ -71,10 +73,14 @@ void Level1Scene::Load() {
 	player1->addTag("p1");
 	player1->setPosition(p1_start_position);
 	// Add Shape Component
-    auto s = player1->addComponent<ShapeComponent>();
-    s->setShape<sf::RectangleShape>(Vector2f(width, length));
-    s->getShape().setFillColor(Color::Magenta);
-    s->getShape().setOrigin(width / 2.0f, length / 2.0f);
+   // auto s = player1->addComponent<ShapeComponent>();
+   // s->setShape<sf::RectangleShape>(Vector2f(width, length));
+   // s->getShape().setFillColor(Color::Magenta);
+   // s->getShape().setOrigin(width / 2.0f, length / 2.0f);
+	auto spr = player1->addComponent<SpriteComponent>();
+	spr->getSprite().setTexture(ResourceManager::Tex_player1);
+	spr->getSprite().setOrigin(ResourceManager::Tex_player1.getSize().x / 2, ResourceManager::Tex_player1.getSize().y / 2);
+	spr->getSprite().setScale(width / (float)ResourceManager::Tex_player1.getSize().x, length / (float)ResourceManager::Tex_player1.getSize().y);
 	// Add Player Physics Component and set mass
 	vector<unsigned int> mask;
 	mask.push_back(P2_PROJECTILE_BIT);
@@ -110,10 +116,14 @@ void Level1Scene::Load() {
 	  player2->addTag("p2");
 	  player2->setPosition(p2_start_position);
 	  // Add Shape Component
-	  auto s = player2->addComponent<ShapeComponent>();
-	  s->setShape<sf::RectangleShape>(Vector2f(width, length));
-	  s->getShape().setFillColor(Color::White);
-	  s->getShape().setOrigin(width / 2.0f, length / 2.0f);
+	  //auto s = player2->addComponent<ShapeComponent>();
+	  //s->setShape<sf::RectangleShape>(Vector2f(width, length));
+	  //s->getShape().setFillColor(Color::White);
+	  //s->getShape().setOrigin(width / 2.0f, length / 2.0f);
+	  auto spr = player2->addComponent<SpriteComponent>();
+	  spr->getSprite().setTexture(ResourceManager::Tex_player2);
+	  spr->getSprite().setOrigin(ResourceManager::Tex_player2.getSize().x / 2, ResourceManager::Tex_player2.getSize().y / 2);
+	  spr->getSprite().setScale(width / (float)ResourceManager::Tex_player2.getSize().x, length / (float)ResourceManager::Tex_player2.getSize().y);
 	  // Add Player Physics Component and set mass
 	  vector<unsigned int> mask;
 	  mask.push_back(P1_PROJECTILE_BIT);

@@ -24,14 +24,14 @@ bool ResourceManager::Load()
 		if (test)
 			Tex_background = tex_test;
 	}
-	if (!Tex_player1.loadFromFile("res/img/player1.png"))
+	if (!Tex_player1.loadFromFile("res/img/Player1.png"))
 	{
 		cout << "Background image file not found!" << endl;
 		good = false;
 		if (test)
 			Tex_background = tex_test;
 	}
-	if (!Tex_player2.loadFromFile("res/img/player2.png"))
+	if (!Tex_player2.loadFromFile("res/img/Player2.png"))
 	{
 		cout << "Background image file not found!" << endl;
 		good = false;

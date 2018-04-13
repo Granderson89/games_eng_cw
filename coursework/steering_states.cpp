@@ -14,8 +14,8 @@ float close_distance = 400.0f;
 float low_health = 25.0f;
 
 void SeekState::execute(Entity *owner, double dt) noexcept {
-	auto s = owner->get_components<ShapeComponent>();
-	s[0]->getShape().setFillColor(Color::Green);
+	//auto s = owner->get_components<ShapeComponent>();
+	//s[0]->getShape().setFillColor(Color::Green);
 	auto output = _steering.getSteering();
 	auto body = owner->get_components<PlayerPhysicsComponent>().at(0)->getBody();
 	auto new_position = sv2_to_bv2(invert_height(owner->getPosition() + (output.direction * (float)dt)));
@@ -41,8 +41,8 @@ void SeekState::execute(Entity *owner, double dt) noexcept {
 }
 
 void FleeState::execute(Entity *owner, double dt) noexcept {
-	auto s = owner->get_components<ShapeComponent>();
-	s[0]->getShape().setFillColor(Color::Yellow);
+	//auto s = owner->get_components<ShapeComponent>();
+	//s[0]->getShape().setFillColor(Color::Yellow);
 	auto output = _steering.getSteering();
 	auto body = owner->get_components<PlayerPhysicsComponent>().at(0)->getBody();
 	auto new_position = sv2_to_bv2(invert_height(owner->getPosition() + (output.direction * (float)dt)));
@@ -65,8 +65,8 @@ void FleeState::execute(Entity *owner, double dt) noexcept {
 }
 
 void FaceState::execute(Entity *owner, double dt) noexcept {
-	auto s = owner->get_components<ShapeComponent>();
-	s[0]->getShape().setFillColor(Color::Blue);
+	//auto s = owner->get_components<ShapeComponent>();
+	//s[0]->getShape().setFillColor(Color::Blue);
 	// Turn to face player
 	auto output = _steering.getSteering();
 	auto body = owner->get_components<PlayerPhysicsComponent>().at(0)->getBody();

@@ -134,7 +134,7 @@ std::shared_ptr<Entity> Scene::makeEntity() {
 void Engine::setVsync(bool b) { _window->setVerticalSyncEnabled(b); }
 
 void Engine::ChangeScene(Scene* s) {
-  cout << "Eng: changing scene: " << s << endl;
+//  cout << "Eng: changing scene: " << s << endl;
   auto old = _activeScene;
   _activeScene = s;
 
@@ -143,7 +143,7 @@ void Engine::ChangeScene(Scene* s) {
   }
 
   if (!s->isLoaded()) {
-    cout << "Eng: Entering Loading Screen\n";
+//    cout << "Eng: Entering Loading Screen\n";
     loadingTime =0;
     //_activeScene->LoadAsync();
 	_activeScene->Load();
