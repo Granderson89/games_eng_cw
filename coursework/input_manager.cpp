@@ -234,14 +234,14 @@ void InputManager::initializeController(int player)
 	playerInput[player].turnRight = Joystick::X;
 	playerInput[player].fire = 0;
 	playerInput[player].changeWeapon = 1;
-	playerInput[player].turretClockwise = Keyboard::C;
-	playerInput[player].turretCounterClockwise = Keyboard::Z;
+	playerInput[player].turretClockwise = Joystick::U;
+	playerInput[player].turretCounterClockwise = Joystick::U;
 	playerInput[player].fireTurret = 5;
 	playerInput[player].jumpCharging = 3;
 	playerInput[player].thrusterWheelUp = 4;
 	// Thruster selecting
-	playerInput[player].selectorAxis[0] = Joystick::U;
-	playerInput[player].selectorAxis[0] = Joystick::V;
+	//playerInput[player].selectorAxis[0] = Joystick::U;
+	//playerInput[player].selectorAxis[0] = Joystick::V;
 	playerInput[player].boostMovement = Keyboard::Num5;
 	playerInput[player].pause = 7;
 	// Menu input
@@ -311,11 +311,11 @@ void InputManager::update()
 				Player[i].changeWeapon = false;
 
 			// Turret stuff
-			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].turretClockwise))
+			if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::U) < -30.0f)
 				Player[i].turretClockwise = true;
 			else
 				Player[i].turretClockwise = false;
-			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].turretCounterClockwise))
+			if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::U) > 30.0f)
 				Player[i].turretCounterClockwise = true;
 			else
 				Player[i].turretCounterClockwise = false;
@@ -424,7 +424,7 @@ void InputManager::update()
 				Player[i].pause = false;
 		}
 		// Keyboard
-		else
+		else if (playerInput[i].source == -1)
 		{
 			// Movement
 			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].moveForward))

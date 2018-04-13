@@ -18,6 +18,9 @@ float MenuScene::timer = 0;
 // Controller found
 bool controller = false;
 
+// Number of human players
+int players;
+
 void MenuScene::Load() {
   cout << "Menu Load \n";
   buttons.clear();
@@ -127,6 +130,12 @@ void MenuScene::Update(const double& dt) {
 	  if (InputManager::Player[0].confirm) {
 		  if (highlighted == 0) {
 			  timer += 0.5f;
+			  players = 1;
+			  Engine::ChangeScene(&level1);
+		  }
+		  else if (highlighted == 1) {
+			  timer += 0.5f;
+			  players = 2;
 			  Engine::ChangeScene(&level1);
 		  }
 		  else if (highlighted == 2) {

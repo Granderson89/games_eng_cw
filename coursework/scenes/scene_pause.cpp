@@ -1,4 +1,5 @@
 #include "scene_pause.h"
+#include "system_renderer.h"
 #include "../components/cmp_text.h"
 #include "../components/cmp_sprite.h"
 #include "../game.h"
@@ -78,6 +79,9 @@ void PauseScene::Load() {
 }
 
 void PauseScene::Update(const double& dt) {
+	sf::View view;
+	view.reset(FloatRect(0.0f, 0.0f, resolution.x, resolution.y));	// hardcoded values ///////////////////////////////////////////////
+	Renderer::getWindow().setView(view);
   // Countdown timer
   timer -= dt;
   
@@ -92,6 +96,7 @@ void PauseScene::Update(const double& dt) {
 		  if (highlighted == 1) {
 			  timer += 0.5f;
 			  Engine::ChangeScene(&menu);
+			  level1.UnLoad();
 		  }
 	  }
 	  if (InputManager::Player[0].menuUp) {
