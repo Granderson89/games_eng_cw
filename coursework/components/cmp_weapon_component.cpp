@@ -32,7 +32,7 @@ float WeaponComponent::p2_base_cooldown = 1.0f;
 void WeaponComponent::update(double dt) {
 	// Countdown timers
 	p1_firetime -= dt;
-	p2_firetime -= dt;
+	p2_firetime -= dt / 15.0;
 	_cooldown -= dt;
 	if (_cooldown <= 0.0f) {
 		_cooldown = 0.0f;
@@ -85,7 +85,7 @@ void WeaponComponent::update(double dt) {
 			InputManager::Player[1].fire = false;
 			fire(0);
 			_cooldown = p2_base_cooldown;
-			p2_firetime = 0.7f;
+			p2_firetime = 1.0f;
 			p2_next_weapon++;
 			switch (_type) {
 			case CANNONS:
