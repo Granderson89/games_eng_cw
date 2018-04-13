@@ -140,11 +140,15 @@ void Level1Scene::Load() {
 	  }
 	  player2->addComponent<TurretComponent>(1);
 	  player2->addComponent<PlayerStateComponent>();
-	  auto sm = player2->addComponent<StateMachineComponent>();
-	  sm->addState("seek", make_shared<SeekState>(player2, player1));
-	  sm->addState("flee", make_shared<FleeState>(player2, player1));
-	  sm->addState("face", make_shared<FaceState>(player2, player1));
-	  sm->changeState("face");
+	  if (players == 1) {
+		  auto sm = player2->addComponent<StateMachineComponent>();
+		  sm->addState("seek", make_shared<SeekState>(player2, player1));
+		  sm->addState("flee", make_shared<FleeState>(player2, player1));
+		  sm->addState("face", make_shared<FaceState>(player2, player1));
+		  sm->changeState("face");
+		  InputManager::playerInput[1].source = -2;
+	  }
+	  
   }
 
   // Create a container entity for the camera script (ce - camera entity, cc - camera component)

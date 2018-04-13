@@ -424,7 +424,7 @@ void InputManager::update()
 				Player[i].pause = false;
 		}
 		// Keyboard
-		else
+		else if (playerInput[i].source == -1)
 		{
 			// Movement
 			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].moveForward))

@@ -33,4 +33,5 @@ extern unsigned int P2_PROJECTILE_BIT;
 extern unsigned int P2_TURRET_PROJ_BIT;
 extern unsigned int BOUNDARY_BIT;
 
+extern int players;
 extern int winner;
