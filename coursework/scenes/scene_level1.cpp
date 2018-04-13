@@ -186,7 +186,7 @@ void Level1Scene::UnLoad() {
   player1.reset();
   player2.reset();
   sf::View view;
-  view.reset(FloatRect(0.0f, 0.0f, 1920.0f, 1080.0f));	// hardcoded values ///////////////////////////////////////////////
+  view.reset(FloatRect(0.0f, 0.0f, resolution.x, resolution.y));	// hardcoded values ///////////////////////////////////////////////
   Renderer::getWindow().setView(view);
   ce.reset();
   Scene::UnLoad();

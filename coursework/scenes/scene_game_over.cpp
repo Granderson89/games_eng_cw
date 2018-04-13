@@ -8,7 +8,6 @@ using namespace sf;
 
 // List of UI buttons
 vector<shared_ptr<Entity>> GameOverScene::buttons;
-
 // Timer stops highlighted from jumping to fast when user pushes up/down
 float GameOverScene::timer = 0;
 
@@ -19,12 +18,29 @@ void GameOverScene::Load() {
 	// Clear buttons
 	buttons.clear();
 	InputManager::Player[0].confirm = false;
-
+	// Work out scale
+	float scale = 1.0f;
+	switch (resolution.x)
+	{
+	case 1920:
+		scale = 1.0f;
+		break;
+	case 1280:
+		scale = 0.667f;
+		break;
+	case 640:
+		scale = 0.333f;
+		break;
+	default:
+		scale = 1.0f;
+		break;
+	}
 	// Title
 	{
 		auto title = makeEntity();
 		string win = "Game Over\nPlayer " + std::to_string(winner) + " wins!";
 		auto t = title->addComponent<TextComponent>(win);
+		t->SetScale(scale);
 	}
 
 	// Rectangle for button in spritesheet
@@ -35,8 +51,10 @@ void GameOverScene::Load() {
 		auto s = playAgainBtn->addComponent<SpriteComponent>();
 		s->getSprite().setTexture(spritesheet);
 		s->getSprite().setTextureRect(buttonRect);
-		playAgainBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width) / 2.0f, buttonRect.height / 2.0f));
+		s->getSprite().setScale(Vector2f(scale, scale));
+		playAgainBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width * scale) / 2.0f, buttonRect.height * scale / 2.0f));
 		auto t = playAgainBtn->addComponent<TextComponent>("\n   Play Again");
+		t->SetScale(scale);
 		buttons.push_back(playAgainBtn);
 	}
 	// Return To Main Menu Button
@@ -45,8 +63,10 @@ void GameOverScene::Load() {
 		auto s = mainMenuBtn->addComponent<SpriteComponent>();
 		s->getSprite().setTexture(spritesheet);
 		s->getSprite().setTextureRect(buttonRect);
-		mainMenuBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width) / 2.0f, buttonRect.height * 2.0f));
+		s->getSprite().setScale(Vector2f(scale, scale));
+		mainMenuBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width * scale) / 2.0f, buttonRect.height * scale * 2.0f));
 		auto t = mainMenuBtn->addComponent<TextComponent>("\n   Return To Main Menu");
+		t->SetScale(scale);
 		buttons.push_back(mainMenuBtn);
 	}
 	// Quit button
@@ -55,8 +75,10 @@ void GameOverScene::Load() {
 		auto s = quitBtn->addComponent<SpriteComponent>();
 		s->getSprite().setTexture(spritesheet);
 		s->getSprite().setTextureRect(buttonRect);
-		quitBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width) / 2.0f, buttonRect.height * 3.5f));
+		s->getSprite().setScale(Vector2f(scale, scale));
+		quitBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width * scale) / 2.0f, buttonRect.height * scale * 3.5f));
 		auto t = quitBtn->addComponent<TextComponent>("\n   Quit");
+		t->SetScale(scale);
 		buttons.push_back(quitBtn);
 	}
 
