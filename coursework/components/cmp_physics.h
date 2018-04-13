@@ -4,6 +4,8 @@
 #include "ecm.h"
 #include <Box2D/Dynamics/b2Body.h>
 
+using namespace std;
+
 class PhysicsComponent : public Component {
 protected:
   b2Body* _body;
@@ -12,8 +14,11 @@ protected:
 
 public:
   PhysicsComponent(Entity* p, bool dyn, const sf::Vector2f& size);
+  PhysicsComponent(Entity* p, bool dyn, const sf::Vector2f& size, int filter, vector<unsigned int> mask);
+
 
   b2Fixture* const getFixture() const;
+  b2Body* const getBody() const;
   bool isTouching(const PhysicsComponent& pc) const;
   bool isTouching(const PhysicsComponent& pc, b2Contact const* bc) const;
   std::vector<const b2Contact*> getTouching() const;
@@ -24,6 +29,8 @@ public:
   void update(double dt) override;
   void render() override;
   void impulse(const sf::Vector2f& i);
+  // Applies impulse to an object at a world position
+  void impulse(const sf::Vector2f& i, const sf::Vector2f& here);
   void dampen(const sf::Vector2f& s);
   void setVelocity(const sf::Vector2f& v);
   void teleport(const sf::Vector2f& v);

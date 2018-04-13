@@ -32,14 +32,17 @@ class Engine {
 public:
   Engine() = delete;
   static void Start(unsigned int width, unsigned int height,
-                    const std::string& gameName, Scene* scn);
+                    const std::string& gameName, unsigned int style, Scene* scn);
   static void ChangeScene(Scene*);
+  static void PauseScene(Scene*);
+  static void ResumeScene();
   static sf::RenderWindow& GetWindow();
   static sf::Vector2u getWindowSize();
   static void setVsync(bool b);
 
 private:
   static Scene* _activeScene;
+  static Scene* _pausedScene;
   static std::string _gameName;
   static void Update();
   static void Render(sf::RenderWindow& window);

@@ -7,10 +7,12 @@
 #include <future>
 #include <iostream>
 #include <stdexcept>
+#include "../coursework/game.h"
 
 using namespace sf;
 using namespace std;
 Scene* Engine::_activeScene = nullptr;
+Scene* Engine::_pausedScene = nullptr;
 std::string Engine::_gameName;
 
 static bool loading = false;
@@ -64,7 +66,9 @@ void Engine::Update() {
   if (loading) {
     Loading_update(dt, _activeScene);
   } else if (_activeScene != nullptr) {
-    Physics::update(dt);
+	  if (_activeScene != &pause) {
+		  Physics::update(dt);
+	  }
     _activeScene->Update(dt);
   }
 }
@@ -80,8 +84,8 @@ void Engine::Render(RenderWindow& window) {
 }
 
 void Engine::Start(unsigned int width, unsigned int height,
-                   const std::string& gameName, Scene* scn) {
-  RenderWindow window(VideoMode(width, height), gameName);
+                   const std::string& gameName, unsigned int style, Scene* scn) {
+  RenderWindow window(VideoMode(width, height), gameName, style);
   _gameName = gameName;
   _window = &window;
   Renderer::initialise(window);
@@ -93,6 +97,18 @@ void Engine::Start(unsigned int width, unsigned int height,
       if (event.type == Event::Closed) {
         window.close();
       }
+
+	  if (event.type == Event::KeyPressed ||
+		  event.type == Event::KeyReleased) {
+		  InputManager::update(event.key.code);
+	  }
+
+	  if (event.type == Event::JoystickButtonPressed ||
+		  event.type == Event::JoystickButtonReleased ||
+		  event.type == Event::JoystickMoved) {
+		  InputManager::update(event.joystickButton.joystickId, event.joystickButton.button);
+	  }
+
     }
     if (Keyboard::isKeyPressed(Keyboard::Escape)) {
       window.close();
@@ -121,7 +137,7 @@ std::shared_ptr<Entity> Scene::makeEntity() {
 void Engine::setVsync(bool b) { _window->setVerticalSyncEnabled(b); }
 
 void Engine::ChangeScene(Scene* s) {
-  cout << "Eng: changing scene: " << s << endl;
+//  cout << "Eng: changing scene: " << s << endl;
   auto old = _activeScene;
   _activeScene = s;
 
@@ -130,12 +146,36 @@ void Engine::ChangeScene(Scene* s) {
   }
 
   if (!s->isLoaded()) {
-    cout << "Eng: Entering Loading Screen\n";
+//    cout << "Eng: Entering Loading Screen\n";
     loadingTime =0;
-    _activeScene->LoadAsync();
-	//_activeScene->Load();
+    //_activeScene->LoadAsync();
+	_activeScene->Load();
     loading = true;
   }
+}
+
+void Engine::PauseScene(Scene* s) {
+	cout << "Eng: pausing scene: " << _activeScene << endl;
+	_pausedScene = _activeScene;
+	_activeScene = s;
+
+	if (!s->isLoaded()) {
+		cout << "Eng: Entering Loading Screen\n";
+		loadingTime = 0;
+		//_activeScene->LoadAsync();
+		_activeScene->Load();
+		loading = true;
+	}
+}
+
+void Engine::ResumeScene() {
+	cout << "Eng: resuming scene: " << _pausedScene << endl;
+	auto old = _activeScene;
+	_activeScene = _pausedScene;
+
+	if (old != nullptr) {
+		old->UnLoad(); // todo: Unload Async
+	}
 }
 
 void Scene::Update(const double& dt) { ents.update(dt); }
