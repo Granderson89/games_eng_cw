@@ -66,7 +66,9 @@ void Engine::Update() {
   if (loading) {
     Loading_update(dt, _activeScene);
   } else if (_activeScene != nullptr) {
-    Physics::update(dt);
+	  if (_activeScene != &pause) {
+		  Physics::update(dt);
+	  }
     _activeScene->Update(dt);
   }
 }
