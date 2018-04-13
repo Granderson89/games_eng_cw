@@ -136,9 +136,11 @@ void WeaponComponent::fire(int target) const {
 		s->getShape().setOrigin(2.0f, 2.0f);
 		if (target == 0) {
 			auto l = projectile->addComponent<TorpedoComponent>(player1, _parent->getRotation());
+			projectile->addTag("p2_projectiles");
 		}
 		if (target == 1) {
 			auto l = projectile->addComponent<TorpedoComponent>(player2, _parent->getRotation());
+			projectile->addTag("p1_projectiles");
 		}
 	}
 	if (_type == MISSILES) {
@@ -149,11 +151,13 @@ void WeaponComponent::fire(int target) const {
 			auto m = projectile->addComponent<MissileComponent>(player1);
 			// Attach a steering component
 			projectile->addComponent<SteeringComponent>(player1.get(), m->getSpeed());
+			projectile->addTag("p2_projectiles");
 		}
 		if (target == 1) {
 			auto m = projectile->addComponent<MissileComponent>(player2);
 			// Attach a steering component
 			projectile->addComponent<SteeringComponent>(player2.get(), m->getSpeed());
+			projectile->addTag("p1_projectiles");
 		}
 	}
 }

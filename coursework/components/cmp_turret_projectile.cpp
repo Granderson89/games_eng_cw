@@ -36,8 +36,8 @@ void TurretProjComponent::update(double dt) {
 		auto enemyProj = _enemy_projectiles.at(i);
 		auto enemyProjFix = enemyProj->GetCompatibleComponent<PhysicsComponent>().at(0)->getFixture();
 		for (int j = 0; j < contacts.size(); j++) {
-			auto fixtureA = contacts[i]->GetFixtureA();
-			auto fixtureB = contacts[i]->GetFixtureB();
+			auto fixtureA = contacts[j]->GetFixtureA();
+			auto fixtureB = contacts[j]->GetFixtureB();
 			if (fixtureA == enemyProjFix || fixtureB == enemyProjFix) {
 				// Delete both if true
 				_parent->setForDelete();
@@ -69,4 +69,5 @@ TurretProjComponent::TurretProjComponent(Entity* p, shared_ptr<Entity> target, f
 	Vector2f direction = Vector2f(-sinf(turret_rotation), cosf(turret_rotation));
 	direction = normalize(direction);
 	physics->impulse(direction * speed);
+	physics->getBody()->SetBullet(true);
 }
