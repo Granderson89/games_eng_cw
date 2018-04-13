@@ -24,10 +24,16 @@ void PlasmaComponent::update(double dt) {
 		_parent->setForDelete();
 	}
 	auto enemy = _target->GetCompatibleComponent<PlayerPhysicsComponent>().at(0);
-	if (_parent->GetCompatibleComponent<PhysicsComponent>().at(0)->isTouching(*enemy)) {
-		_parent->setForDelete();
-		auto enemyState = _target->GetCompatibleComponent<PlayerStateComponent>().at(0);
-		enemyState->takeDamage(_current_strength);
+	auto enemy_fix = enemy->getFixture();
+	auto contacts = _parent->GetCompatibleComponent<PhysicsComponent>().at(0)->getTouching();
+	for (int i = 0; i < contacts.size(); i++) {
+		auto fixtureA = contacts[i]->GetFixtureA();
+		auto fixtureB = contacts[i]->GetFixtureB();
+		if (fixtureA == enemy_fix || fixtureB == enemy_fix) {
+			_parent->setForDelete();
+			auto enemyState = _target->GetCompatibleComponent<PlayerStateComponent>().at(0);
+			enemyState->takeDamage(_current_strength);
+		}
 	}
 }
 

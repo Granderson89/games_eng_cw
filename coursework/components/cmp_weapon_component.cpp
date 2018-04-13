@@ -3,7 +3,6 @@
 #include "cmp_torpedo_logic.h"
 #include "cmp_missile_logic.h"
 #include "cmp_ai_steering.h"
-#include "cmp_hurt_player.h"
 #include "engine.h"
 #include "../game.h"
 #include <SFML/Graphics/CircleShape.hpp>
@@ -33,7 +32,7 @@ float WeaponComponent::p2_base_cooldown = 1.0f;
 void WeaponComponent::update(double dt) {
 	// Countdown timers
 	p1_firetime -= dt;
-	p2_firetime -= dt;
+	p2_firetime -= dt / 15.0;
 	_cooldown -= dt;
 	if (_cooldown <= 0.0f) {
 		_cooldown = 0.0f;
@@ -42,32 +41,35 @@ void WeaponComponent::update(double dt) {
 	// weapon has cooled down and firetime delay has run down
 	// fire, reset timers and increment next_weapon
 	if (InputManager::Player[0].fire) {
-		if (_type == p1_active_type)
-			if (p1_next_weapon == _weapon_num)
-				if (_cooldown <= 0.0f)
+		if (_type == p1_active_type) {
+			if (p1_next_weapon == _weapon_num) {
+				if (_cooldown <= 0.0f) {
 					if (p1_firetime <= 0.0f) {
-			InputManager::Player[0].fire = false;
-			fire(1);
-			_cooldown = p1_base_cooldown;
-			p1_firetime = 0.7f;
-			p1_next_weapon++;
-			switch (_type) {
-			case CANNONS:
-				if (p1_next_weapon > 7)
-					p1_next_weapon = 0;
-				break;
-			case TORPEDOS:
-				if (p1_next_weapon < 8 || p1_next_weapon > 12)
-					p1_next_weapon = 8;
-				break;
-			case MISSILES:
-				if (p1_next_weapon < 13 || p1_next_weapon > 14)
-					p1_next_weapon = 3;
-				break;
-			default:
-				if (p1_next_weapon > 7)
-					p1_next_weapon = 0;
-				break;
+						InputManager::Player[0].fire = false;
+						fire(1);
+						_cooldown = p1_base_cooldown;
+						p1_firetime = 0.7f;
+						p1_next_weapon++;
+						switch (_type) {
+						case CANNONS:
+							if (p1_next_weapon > 7)
+								p1_next_weapon = 0;
+							break;
+						case TORPEDOS:
+							if (p1_next_weapon < 8 || p1_next_weapon > 12)
+								p1_next_weapon = 8;
+							break;
+						case MISSILES:
+							if (p1_next_weapon < 13 || p1_next_weapon > 14)
+								p1_next_weapon = 13;
+							break;
+						default:
+							if (p1_next_weapon > 7)
+								p1_next_weapon = 0;
+							break;
+						}
+					}
+				}
 			}
 		}
 	}
@@ -83,7 +85,7 @@ void WeaponComponent::update(double dt) {
 			InputManager::Player[1].fire = false;
 			fire(0);
 			_cooldown = p2_base_cooldown;
-			p2_firetime = 0.7f;
+			p2_firetime = 1.0f;
 			p2_next_weapon++;
 			switch (_type) {
 			case CANNONS:

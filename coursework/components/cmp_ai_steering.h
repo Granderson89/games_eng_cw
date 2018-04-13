@@ -5,7 +5,7 @@
 class SteeringComponent : public Component {
 protected:
 	Seek _seek;
-	shared_ptr<Entity> _target;
+	Entity* _target;
 public:
 	void update(double) override;
 	void move(const sf::Vector2f&);

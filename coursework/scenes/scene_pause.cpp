@@ -87,7 +87,7 @@ void PauseScene::Update(const double& dt) {
 	  if (InputManager::Player[0].confirm) {
 		  if (highlighted == 0) {
 			  timer += 0.5f;
-			  Engine::ChangeScene(&level1);
+			  Engine::ResumeScene();
 		  }
 		  if (highlighted == 1) {
 			  timer += 0.5f;
