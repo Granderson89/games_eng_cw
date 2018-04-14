@@ -13,13 +13,14 @@ BackgroundBuilderComponent::BackgroundBuilderComponent(Entity* p) : Component(p)
 	bgSize = ResourceManager::Tex_background.getSize();
 
 	// Add enough sprites to cover maximum zoom area
-	rows = _max_zoom / bgSize.x + 1;
-	colls = (_max_zoom * (_cam->getView().getSize().x / _cam->getView().getSize().y)) / bgSize.y + 1;
+	float aspect = (_cam->getView().getSize().x / _cam->getView().getSize().y);
+	rows = (_max_zoom * 2.0f / (_cam->getView().getSize().x / _cam->getView().getSize().y)) / bgSize.y + 1;
+	colls = _max_zoom * 2.0f / bgSize.x + 1;
 	for (int i = 0; i < rows * colls; i++)
 		_sprites.push_back(p->addComponent<SpriteComponent>());
 
 	// Calculate the first tile offset
-	topLeft = -Vector2f(colls * bgSize.x / 2.0f, rows * bgSize.y / 2.0f) + Vector2f(bgSize.x * 2.0f, bgSize.y);
+	topLeft = -Vector2f(colls * bgSize.x / 2.0f, rows * bgSize.y / 2.0f);
 
 	// Prepare the sprites
 	for (int i = 0; i < rows; i++)

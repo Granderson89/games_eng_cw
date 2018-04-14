@@ -8,7 +8,7 @@
 class BackgroundBuilderComponent : public Component
 {
 private:
-	const float _max_zoom = 5000;	///////////////////////////////////// maybe should be in game.h
+	const float _max_zoom = 6000;	///////////////////////////////////// maybe should be in game.h
 	std::shared_ptr<CameraControllerComponent> _cam;
 	std::vector<std::shared_ptr<SpriteComponent>> _sprites;
 public:

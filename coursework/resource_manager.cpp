@@ -16,7 +16,7 @@ bool ResourceManager::Load()
 		good = false;
 		test = false;
 	}
-	if (!Tex_background.loadFromFile("res/img/test.png"))
+	if (!Tex_background.loadFromFile("res/img/background.jpeg"))
 	{
 		good = false;
 		if (test)
