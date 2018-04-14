@@ -123,6 +123,13 @@ void Level1Scene::Load() {
 		spr->getSprite().setTexture(ResourceManager::Tex_player2);
 		spr->getSprite().setOrigin(ResourceManager::Tex_player2.getSize().x / 2, ResourceManager::Tex_player2.getSize().y / 2);
 		spr->getSprite().setScale(width / (float)ResourceManager::Tex_player2.getSize().x, length / (float)ResourceManager::Tex_player2.getSize().y);
+		if (players == 1) {
+			auto sm = player2->addComponent<StateMachineComponent>();
+			sm->addState("seek", make_shared<SeekState>(player2, player1));
+			sm->addState("flee", make_shared<FleeState>(player2, player1));
+			sm->addState("face", make_shared<FaceState>(player2, player1));
+			sm->changeState("face");
+		}
 		// Add Player Physics Component and set mass
 		vector<unsigned int> mask;
 		mask.push_back(P1_PROJECTILE_BIT);
@@ -149,13 +156,6 @@ void Level1Scene::Load() {
 		}
 		player2->addComponent<TurretComponent>(1);
 		player2->addComponent<PlayerStateComponent>();
-		if (players == 1) {
-			auto sm = player2->addComponent<StateMachineComponent>();
-			sm->addState("seek", make_shared<SeekState>(player2, player1));
-			sm->addState("flee", make_shared<FleeState>(player2, player1));
-			sm->addState("face", make_shared<FaceState>(player2, player1));
-			sm->changeState("face");
-		}
 	}
 
 	ce->addTag("camera");
@@ -163,24 +163,93 @@ void Level1Scene::Load() {
 	cc->addTarget(player1);
 	cc->addTarget(player2);
 
-	// Create a container entity for player 1's hud
-	shared_ptr<Entity> p1he;
-	p1he = makeEntity();
-	p1he->addComponent<HudComponent>(player1, ce);
-	p1he->addComponent<TextComponent>();
-	p1he->addComponent<TextComponent>();
-	p1he->addComponent<TextComponent>();
-	p1he->addComponent<TextComponent>();
-
-	// Create a container entity for player 2's hud
-	shared_ptr<Entity> p2he;
-	p2he = makeEntity();
-	p2he->addComponent<HudComponent>(player2, ce);
-	p2he->addComponent<TextComponent>();
-	p2he->addComponent<TextComponent>();
-	p2he->addComponent<TextComponent>();
-	p2he->addComponent<TextComponent>();
-
+	{
+		// Create a container entity for player 1's hud
+		shared_ptr<Entity> p1he;
+		p1he = makeEntity();
+		// Create a container entity for player 1's weapon type
+		shared_ptr<Entity> p1wt;
+		p1wt = makeEntity();
+		// Create container entites for player 1's cooldowns
+		vector <shared_ptr<Entity>> p1cds;
+		for (int i = 0; i < 8; i++) {
+			shared_ptr<Entity> cool;
+			cool = makeEntity();
+			p1cds.push_back(cool);
+		}
+		// Add the hud component
+		p1he->addComponent<HudComponent>(player1, p1wt, p1cds, ce);
+		// Health bar
+		auto healthBarBg = p1he->addComponent<ShapeComponent>();
+		healthBarBg->setShape<sf::RectangleShape>(Vector2f(1.0f, 30.0f));
+		healthBarBg->getShape().setFillColor(Color::Red);
+		healthBarBg->getShape().setScale(Vector2f(100.0f, 1.0f));
+		auto healthBar = p1he->addComponent<ShapeComponent>();
+		healthBar->setShape<sf::RectangleShape>(Vector2f(1.0f, 30.0f));
+		auto healthText = p1he->addComponent<TextComponent>();
+		healthText->SetText("Health");
+		healthText->SetColor(sf::Color::Blue);
+		healthText->SetScale(0.5f);
+		// Selected weapon type
+		auto weaponType = p1wt->addComponent<SpriteComponent>();
+		weaponType->getSprite().setTexture(ResourceManager::tex_test);
+		weaponType->getSprite().setOrigin(ResourceManager::tex_test.getSize().x / 2, ResourceManager::tex_test.getSize().y / 2);
+		// Cooldowns
+		for (int i = 0; i < 8; i++) {
+			auto cooldown = p1cds.at(i)->addComponent<SpriteComponent>();
+			cooldown->getSprite().setTexture(ResourceManager::tex_test);
+			cooldown->getSprite().setOrigin(ResourceManager::tex_test.getSize().x / 2, ResourceManager::tex_test.getSize().y / 2);
+			auto timer = p1cds.at(i)->addComponent<ShapeComponent>();
+			timer->setShape<sf::RectangleShape>(Vector2f(ResourceManager::tex_test.getSize().x, ResourceManager::tex_test.getSize().y));
+			timer->getShape().setOrigin(ResourceManager::tex_test.getSize().x / 2, ResourceManager::tex_test.getSize().y / 2);
+			sf::Color timerColor = sf::Color::Black;
+			timerColor.a = 128.0f;
+			timer->getShape().setFillColor(timerColor);
+		}
+	}
+	{
+		// Create a container entity for player 2's hud
+		shared_ptr<Entity> p2he;
+		p2he = makeEntity();
+		// Create a container entity for player 2's weapon type
+		shared_ptr<Entity> p2wt;
+		p2wt = makeEntity();
+		// Create container entites for player 2's cooldowns
+		vector <shared_ptr<Entity>> p2cds;
+		for (int i = 0; i < 8; i++) {
+			shared_ptr<Entity> cool;
+			cool = makeEntity();
+			p2cds.push_back(cool);
+		}
+		// Add the hud component
+		p2he->addComponent<HudComponent>(player2, p2wt, p2cds, ce);
+		// Health bar
+		auto healthBarBg = p2he->addComponent<ShapeComponent>();
+		healthBarBg->setShape<sf::RectangleShape>(Vector2f(1.0f, 30.0f));
+		healthBarBg->getShape().setFillColor(Color::Blue);
+		auto healthBar = p2he->addComponent<ShapeComponent>();
+		healthBar->setShape<sf::RectangleShape>(Vector2f(1.0f, 30.0f));
+		auto healthText = p2he->addComponent<TextComponent>();
+		healthText->SetText("Health");
+		healthText->SetColor(sf::Color::Red);
+		healthText->SetScale(0.5f);
+		// Selected weapon type
+		auto weaponType = p2wt->addComponent<SpriteComponent>();
+		weaponType->getSprite().setTexture(ResourceManager::tex_test);
+		weaponType->getSprite().setOrigin(ResourceManager::tex_test.getSize().x / 2, ResourceManager::tex_test.getSize().y / 2);
+		// Cooldowns
+		for (int i = 0; i < 8; i++) {
+			auto cooldown = p2cds.at(i)->addComponent<SpriteComponent>();
+			cooldown->getSprite().setTexture(ResourceManager::tex_test);
+			cooldown->getSprite().setOrigin(ResourceManager::tex_test.getSize().x / 2, ResourceManager::tex_test.getSize().y / 2);
+			auto timer = p2cds.at(i)->addComponent<ShapeComponent>();
+			timer->setShape<sf::RectangleShape>(Vector2f(ResourceManager::tex_test.getSize().x, ResourceManager::tex_test.getSize().y));
+			timer->getShape().setOrigin(ResourceManager::tex_test.getSize().x / 2, ResourceManager::tex_test.getSize().y / 2);
+			sf::Color timerColor = sf::Color::Black;
+			timerColor.a = 128.0f;
+			timer->getShape().setFillColor(timerColor);
+		}
+	}
 	//Simulate long loading times
 	//std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 	cout << " Scene 1 Load Done" << endl;
