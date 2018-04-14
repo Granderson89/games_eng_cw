@@ -78,11 +78,7 @@ void Level1Scene::Load() {
 	player1->addTag("p1");
 	player1->setPosition(p1_start_position);
 
-	// Add Shape Component
-   // auto s = player1->addComponent<ShapeComponent>();
-   // s->setShape<sf::RectangleShape>(Vector2f(width, length));
-   // s->getShape().setFillColor(Color::Magenta);
-   // s->getShape().setOrigin(width / 2.0f, length / 2.0f);
+	// Add Sprite Component
 	auto spr = player1->addComponent<SpriteComponent>();
 	spr->getSprite().setTexture(ResourceManager::Tex_player1);
 	spr->getSprite().setOrigin(ResourceManager::Tex_player1.getSize().x / 2, ResourceManager::Tex_player1.getSize().y / 2);
@@ -117,11 +113,7 @@ void Level1Scene::Load() {
   }
   // Create player 2
   {
-	  // Add Shape Component
-	  //auto s = player2->addComponent<ShapeComponent>();
-	  //s->setShape<sf::RectangleShape>(Vector2f(width, length));
-	  //s->getShape().setFillColor(Color::White);
-	  //s->getShape().setOrigin(width / 2.0f, length / 2.0f);
+	  // Add Sprite Component
 	  auto spr = player2->addComponent<SpriteComponent>();
 	  spr->getSprite().setTexture(ResourceManager::Tex_player2);
 	  spr->getSprite().setOrigin(ResourceManager::Tex_player2.getSize().x / 2, ResourceManager::Tex_player2.getSize().y / 2);
