@@ -16,8 +16,6 @@ vector<shared_ptr<Entity>> ControlsScene::controls;
 selection ControlsScene::highlighted = P1_SOURCE;
 selection ControlsScene::changeControl = NONE;
 
-// Timer stops highlighted from jumping to fast when user pushes up/down
-float ControlsScene::timer = 0;
 
 void ControlsScene::Load() {
 	cout << "Controls Screen Load \n";
@@ -27,7 +25,6 @@ void ControlsScene::Load() {
 	buttons.clear();
 	InputManager::Player[0].confirm = false;
 	InputManager::Player[1].confirm = false;
-	timer += 1.0f;
 	// Work out scale
 	float scale = 1.0f;
 	switch (resolution.x)
@@ -84,236 +81,224 @@ void ControlsScene::UnLoad() {
 }
 
 void ControlsScene::Update(const double& dt) {
-	// Countdown timer
-	timer -= dt;
 	if (changeControl == NONE) {
-		// Only change selected if timer has run out
-		if (timer <= 0.0f) {
-			timer = 0.0f;
-			// Move selection up
-			if (InputManager::Player[0].menuUp ||
-				InputManager::Player[1].menuUp) {
-				timer += 0.5f;
-				highlighted = (selection)((int)highlighted - 1);
-				if (highlighted < 0) {
-					highlighted = (selection)(buttons.size() - 1);
-				}
-				HighlightSelected();
+		// Move selection up
+		if (InputManager::Player[0].menuUp ||
+			InputManager::Player[1].menuUp) {
+			highlighted = (selection)((int)highlighted - 1);
+			if (highlighted < 0) {
+				highlighted = (selection)(buttons.size() - 1);
 			}
-			// Move selection down
-			else if (InputManager::Player[0].menuDown ||
-				InputManager::Player[1].menuDown) {
-				timer += 0.5f;
-				highlighted = (selection)((int)highlighted + 1);
-				if (highlighted > buttons.size() - 1) {
-					highlighted = (selection)0;
-				}
-				HighlightSelected();
-			}
-			// Confirm selection
-			else if (InputManager::Player[0].confirm ||
-				InputManager::Player[1].confirm) {
-				InputManager::Player[0].confirm = false;
-				InputManager::Player[1].confirm = false;
-				timer += 0.5f;
-				// Perform functions
-				switch (highlighted) {
-					// Player 1
-				case P1_SOURCE:
-					SwapSource(0);
-					break;
-				case P1_FIRE:
-					changeControl = highlighted;
-					break;
-				case P1_CHANGE_WEAPON:
-					changeControl = highlighted;
-					break;
-				case P1_FIRE_TURRET:
-					changeControl = highlighted;
-					break;
-				case P1_CHARGE_JUMP:
-					changeControl = highlighted;
-					break;
-					// Player 2
-				case P2_SOURCE:
-					SwapSource(1);
-					break;
-				case P2_FIRE:
-					changeControl = highlighted;
-					break;
-				case P2_CHANGE_WEAPON:
-					changeControl = highlighted;
-					break;
-				case P2_FIRE_TURRET:
-					changeControl = highlighted;
-					break;
-				case P2_CHARGE_JUMP:
-					changeControl = highlighted;
-					break;
-				case BACK:
-					Engine::ChangeScene(&options);
-					break;
-				default:
-					break;
-				}
-			}
+			HighlightSelected();
 		}
-	}
-	else {
-		if (timer <= 0.0f) {
-			timer = 0.0f;
-			switch (changeControl) {
+		// Move selection down
+		else if (InputManager::Player[0].menuDown ||
+			InputManager::Player[1].menuDown) {
+			highlighted = (selection)((int)highlighted + 1);
+			if (highlighted > buttons.size() - 1) {
+				highlighted = (selection)0;
+			}
+			HighlightSelected();
+		}
+		// Confirm selection
+		else if (InputManager::Player[0].confirm ||
+			InputManager::Player[1].confirm) {
+			InputManager::Player[0].confirm = false;
+			InputManager::Player[1].confirm = false;
+			// Perform functions
+			switch (highlighted) {
 				// Player 1
+			case P1_SOURCE:
+				SwapSource(0);
+				break;
 			case P1_FIRE:
-				if (InputManager::playerInput[0].source == -1) {
-					if (InputManager::getLastKeyPressed() != -1 &&
-						InputManager::getLastKeyPressed() != InputManager::playerInput[0].confirm) {
-						InputManager::playerInput[0].fire = InputManager::getLastKeyPressed();
-						controls.at(0)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[0].fire]);
-						changeControl = NONE;
-					}
-				}
-				else {
-					if (InputManager::getLastButtonPressed(InputManager::playerInput[0].source) != -1 &&
-						InputManager::getLastButtonPressed(InputManager::playerInput[0].source) != InputManager::playerInput[0].confirm) {
-						InputManager::playerInput[0].fire = InputManager::getLastButtonPressed(InputManager::playerInput[0].source);
-						controls.at(0)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[0].fire));
-						changeControl = NONE;
-					}
-				}
+				changeControl = highlighted;
 				break;
 			case P1_CHANGE_WEAPON:
-				if (InputManager::playerInput[0].source == -1) {
-					if (InputManager::getLastKeyPressed() != -1 &&
-						InputManager::getLastKeyPressed() != InputManager::playerInput[0].confirm) {
-						InputManager::playerInput[0].changeWeapon = InputManager::getLastKeyPressed();
-						controls.at(1)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[0].changeWeapon]);
-						changeControl = NONE;
-					}
-				}
-				else {
-					if (InputManager::getLastButtonPressed(InputManager::playerInput[0].source) != -1 &&
-						InputManager::getLastButtonPressed(InputManager::playerInput[0].source) != InputManager::playerInput[0].confirm) {
-						InputManager::playerInput[0].changeWeapon = InputManager::getLastButtonPressed(InputManager::playerInput[0].source);
-						controls.at(1)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[0].changeWeapon));
-						changeControl = NONE;
-					}
-				}
+				changeControl = highlighted;
 				break;
 			case P1_FIRE_TURRET:
-				if (InputManager::playerInput[0].source == -1) {
-					if (InputManager::getLastKeyPressed() != -1 &&
-						InputManager::getLastKeyPressed() != InputManager::playerInput[0].confirm) {
-						InputManager::playerInput[0].fireTurret = InputManager::getLastKeyPressed();
-						controls.at(2)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[0].fireTurret]);
-						changeControl = NONE;
-					}
-				}
-				else {
-					if (InputManager::getLastButtonPressed(InputManager::playerInput[0].source) != -1 &&
-						InputManager::getLastButtonPressed(InputManager::playerInput[0].source) != InputManager::playerInput[0].confirm) {
-						InputManager::playerInput[0].fireTurret = InputManager::getLastButtonPressed(InputManager::playerInput[0].source);
-						controls.at(2)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[0].fireTurret));
-						changeControl = NONE;
-					}
-				}
+				changeControl = highlighted;
 				break;
 			case P1_CHARGE_JUMP:
-				if (InputManager::playerInput[0].source == -1) {
-					if (InputManager::getLastKeyPressed() != -1 &&
-						InputManager::getLastKeyPressed() != InputManager::playerInput[0].confirm) {
-						InputManager::playerInput[0].jumpCharging = InputManager::getLastKeyPressed();
-						controls.at(3)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[0].jumpCharging]);
-						changeControl = NONE;
-					}
-				}
-				else {
-					if (InputManager::getLastButtonPressed(InputManager::playerInput[0].source) != -1 &&
-						InputManager::getLastButtonPressed(InputManager::playerInput[0].source) != InputManager::playerInput[0].confirm) {
-						InputManager::playerInput[0].jumpCharging = InputManager::getLastButtonPressed(InputManager::playerInput[0].source);
-						controls.at(3)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[0].jumpCharging));
-						changeControl = NONE;
-					}
-				}
+				changeControl = highlighted;
 				break;
 				// Player 2
+			case P2_SOURCE:
+				SwapSource(1);
+				break;
 			case P2_FIRE:
-				if (InputManager::playerInput[1].source == -1) {
-					if (InputManager::getLastKeyPressed() != -1 &&
-						InputManager::getLastKeyPressed() != InputManager::playerInput[1].confirm) {
-						InputManager::playerInput[1].fire = InputManager::getLastKeyPressed();
-						controls.at(4)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[1].fire]);
-						changeControl = NONE;
-					}
-				}
-				else {
-					if (InputManager::getLastButtonPressed(InputManager::playerInput[1].source) != -1 &&
-						InputManager::getLastButtonPressed(InputManager::playerInput[1].source) != InputManager::playerInput[1].confirm) {
-						InputManager::playerInput[1].fire = InputManager::getLastButtonPressed(InputManager::playerInput[1].source);
-						controls.at(4)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[1].fire));
-						changeControl = NONE;
-					}
-				}
+				changeControl = highlighted;
 				break;
 			case P2_CHANGE_WEAPON:
-				if (InputManager::playerInput[1].source == -1) {
-					if (InputManager::getLastKeyPressed() != -1 &&
-						InputManager::getLastKeyPressed() != InputManager::playerInput[1].confirm) {
-						InputManager::playerInput[1].changeWeapon = InputManager::getLastKeyPressed();
-						controls.at(5)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[1].changeWeapon]);
-						changeControl = NONE;
-					}
-				}
-				else {
-					if (InputManager::getLastButtonPressed(InputManager::playerInput[1].source) != -1 &&
-						InputManager::getLastButtonPressed(InputManager::playerInput[1].source) != InputManager::playerInput[1].confirm) {
-						InputManager::playerInput[1].changeWeapon = InputManager::getLastButtonPressed(InputManager::playerInput[1].source);
-						controls.at(5)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[1].changeWeapon));
-						changeControl = NONE;
-					}
-				}
+				changeControl = highlighted;
 				break;
 			case P2_FIRE_TURRET:
-				if (InputManager::playerInput[1].source == -1) {
-					if (InputManager::getLastKeyPressed() != -1 &&
-						InputManager::getLastKeyPressed() != InputManager::playerInput[1].confirm) {
-						InputManager::playerInput[1].fireTurret = InputManager::getLastKeyPressed();
-						controls.at(6)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[1].fireTurret]);
-						changeControl = NONE;
-					}
-				}
-				else {
-					if (InputManager::getLastButtonPressed(InputManager::playerInput[1].source) != -1 &&
-						InputManager::getLastButtonPressed(InputManager::playerInput[1].source) != InputManager::playerInput[1].confirm) {
-						InputManager::playerInput[1].fireTurret = InputManager::getLastButtonPressed(InputManager::playerInput[1].source);
-						controls.at(6)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[1].fireTurret));
-						changeControl = NONE;
-					}
-				}
+				changeControl = highlighted;
 				break;
 			case P2_CHARGE_JUMP:
-				if (InputManager::playerInput[1].source == -1) {
-					if (InputManager::getLastKeyPressed() != -1 &&
-						InputManager::getLastKeyPressed() != InputManager::playerInput[1].confirm) {
-						InputManager::playerInput[1].jumpCharging = InputManager::getLastKeyPressed();
-						controls.at(7)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[1].jumpCharging]);
-						changeControl = NONE;
-					}
-				}
-				else {
-					if (InputManager::getLastButtonPressed(InputManager::playerInput[1].source) != -1 &&
-						InputManager::getLastButtonPressed(InputManager::playerInput[1].source) != InputManager::playerInput[1].confirm) {
-						InputManager::playerInput[1].jumpCharging = InputManager::getLastButtonPressed(InputManager::playerInput[1].source);
-						controls.at(7)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[1].jumpCharging));
-						changeControl = NONE;
-					}
-				}
+				changeControl = highlighted;
+				break;
+			case BACK:
+				Engine::ChangeScene(&options);
 				break;
 			default:
 				break;
 			}
-
 		}
+	}
+	else {
+		switch (changeControl) {
+			// Player 1
+		case P1_FIRE:
+			if (InputManager::playerInput[0].source == -1) {
+				if (InputManager::getLastKeyPressed() != -1 &&
+					InputManager::getLastKeyPressed() != InputManager::playerInput[0].confirm) {
+					InputManager::playerInput[0].fire = InputManager::getLastKeyPressed();
+					controls.at(0)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[0].fire]);
+					changeControl = NONE;
+				}
+			}
+			else {
+				if (InputManager::getLastButtonPressed(InputManager::playerInput[0].source) != -1 &&
+					InputManager::getLastButtonPressed(InputManager::playerInput[0].source) != InputManager::playerInput[0].confirm) {
+					InputManager::playerInput[0].fire = InputManager::getLastButtonPressed(InputManager::playerInput[0].source);
+					controls.at(0)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[0].fire));
+					changeControl = NONE;
+				}
+			}
+			break;
+		case P1_CHANGE_WEAPON:
+			if (InputManager::playerInput[0].source == -1) {
+				if (InputManager::getLastKeyPressed() != -1 &&
+					InputManager::getLastKeyPressed() != InputManager::playerInput[0].confirm) {
+					InputManager::playerInput[0].changeWeapon = InputManager::getLastKeyPressed();
+					controls.at(1)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[0].changeWeapon]);
+					changeControl = NONE;
+				}
+			}
+			else {
+				if (InputManager::getLastButtonPressed(InputManager::playerInput[0].source) != -1 &&
+					InputManager::getLastButtonPressed(InputManager::playerInput[0].source) != InputManager::playerInput[0].confirm) {
+					InputManager::playerInput[0].changeWeapon = InputManager::getLastButtonPressed(InputManager::playerInput[0].source);
+					controls.at(1)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[0].changeWeapon));
+					changeControl = NONE;
+				}
+			}
+			break;
+		case P1_FIRE_TURRET:
+			if (InputManager::playerInput[0].source == -1) {
+				if (InputManager::getLastKeyPressed() != -1 &&
+					InputManager::getLastKeyPressed() != InputManager::playerInput[0].confirm) {
+					InputManager::playerInput[0].fireTurret = InputManager::getLastKeyPressed();
+					controls.at(2)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[0].fireTurret]);
+					changeControl = NONE;
+				}
+			}
+			else {
+				if (InputManager::getLastButtonPressed(InputManager::playerInput[0].source) != -1 &&
+					InputManager::getLastButtonPressed(InputManager::playerInput[0].source) != InputManager::playerInput[0].confirm) {
+					InputManager::playerInput[0].fireTurret = InputManager::getLastButtonPressed(InputManager::playerInput[0].source);
+					controls.at(2)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[0].fireTurret));
+					changeControl = NONE;
+				}
+			}
+			break;
+		case P1_CHARGE_JUMP:
+			if (InputManager::playerInput[0].source == -1) {
+				if (InputManager::getLastKeyPressed() != -1 &&
+					InputManager::getLastKeyPressed() != InputManager::playerInput[0].confirm) {
+					InputManager::playerInput[0].jumpCharging = InputManager::getLastKeyPressed();
+					controls.at(3)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[0].jumpCharging]);
+					changeControl = NONE;
+				}
+			}
+			else {
+				if (InputManager::getLastButtonPressed(InputManager::playerInput[0].source) != -1 &&
+					InputManager::getLastButtonPressed(InputManager::playerInput[0].source) != InputManager::playerInput[0].confirm) {
+					InputManager::playerInput[0].jumpCharging = InputManager::getLastButtonPressed(InputManager::playerInput[0].source);
+					controls.at(3)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[0].jumpCharging));
+					changeControl = NONE;
+				}
+			}
+			break;
+			// Player 2
+		case P2_FIRE:
+			if (InputManager::playerInput[1].source == -1) {
+				if (InputManager::getLastKeyPressed() != -1 &&
+					InputManager::getLastKeyPressed() != InputManager::playerInput[1].confirm) {
+					InputManager::playerInput[1].fire = InputManager::getLastKeyPressed();
+					controls.at(4)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[1].fire]);
+					changeControl = NONE;
+				}
+			}
+			else {
+				if (InputManager::getLastButtonPressed(InputManager::playerInput[1].source) != -1 &&
+					InputManager::getLastButtonPressed(InputManager::playerInput[1].source) != InputManager::playerInput[1].confirm) {
+					InputManager::playerInput[1].fire = InputManager::getLastButtonPressed(InputManager::playerInput[1].source);
+					controls.at(4)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[1].fire));
+					changeControl = NONE;
+				}
+			}
+			break;
+		case P2_CHANGE_WEAPON:
+			if (InputManager::playerInput[1].source == -1) {
+				if (InputManager::getLastKeyPressed() != -1 &&
+					InputManager::getLastKeyPressed() != InputManager::playerInput[1].confirm) {
+					InputManager::playerInput[1].changeWeapon = InputManager::getLastKeyPressed();
+					controls.at(5)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[1].changeWeapon]);
+					changeControl = NONE;
+				}
+			}
+			else {
+				if (InputManager::getLastButtonPressed(InputManager::playerInput[1].source) != -1 &&
+					InputManager::getLastButtonPressed(InputManager::playerInput[1].source) != InputManager::playerInput[1].confirm) {
+					InputManager::playerInput[1].changeWeapon = InputManager::getLastButtonPressed(InputManager::playerInput[1].source);
+					controls.at(5)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[1].changeWeapon));
+					changeControl = NONE;
+				}
+			}
+			break;
+		case P2_FIRE_TURRET:
+			if (InputManager::playerInput[1].source == -1) {
+				if (InputManager::getLastKeyPressed() != -1 &&
+					InputManager::getLastKeyPressed() != InputManager::playerInput[1].confirm) {
+					InputManager::playerInput[1].fireTurret = InputManager::getLastKeyPressed();
+					controls.at(6)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[1].fireTurret]);
+					changeControl = NONE;
+				}
+			}
+			else {
+				if (InputManager::getLastButtonPressed(InputManager::playerInput[1].source) != -1 &&
+					InputManager::getLastButtonPressed(InputManager::playerInput[1].source) != InputManager::playerInput[1].confirm) {
+					InputManager::playerInput[1].fireTurret = InputManager::getLastButtonPressed(InputManager::playerInput[1].source);
+					controls.at(6)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[1].fireTurret));
+					changeControl = NONE;
+				}
+			}
+			break;
+		case P2_CHARGE_JUMP:
+			if (InputManager::playerInput[1].source == -1) {
+				if (InputManager::getLastKeyPressed() != -1 &&
+					InputManager::getLastKeyPressed() != InputManager::playerInput[1].confirm) {
+					InputManager::playerInput[1].jumpCharging = InputManager::getLastKeyPressed();
+					controls.at(7)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[1].jumpCharging]);
+					changeControl = NONE;
+				}
+			}
+			else {
+				if (InputManager::getLastButtonPressed(InputManager::playerInput[1].source) != -1 &&
+					InputManager::getLastButtonPressed(InputManager::playerInput[1].source) != InputManager::playerInput[1].confirm) {
+					InputManager::playerInput[1].jumpCharging = InputManager::getLastButtonPressed(InputManager::playerInput[1].source);
+					controls.at(7)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[1].jumpCharging));
+					changeControl = NONE;
+				}
+			}
+			break;
+		default:
+			break;
+		}
+
 	}
 	Scene::Update(dt);
 }
@@ -593,6 +578,6 @@ void ControlsScene::readPrefs() {
 		}
 		prefs.close();
 	}
-	else 
+	else
 		cout << "Unable to open file\n";
 }

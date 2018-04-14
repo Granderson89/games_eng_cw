@@ -9,8 +9,6 @@ using namespace sf;
 // List of UI buttons
 vector<shared_ptr<Entity>> OptionsScene::buttons;
 
-// Timer stops highlighted from jumping to fast when user pushes up/down
-float OptionsScene::timer = 0;
 
 void OptionsScene::Load() {
 	cout << "Options Screen Load \n";
@@ -82,16 +80,28 @@ void OptionsScene::Load() {
 		t->SetScale(scale);
 		buttons.push_back(mainMenuBtn);
 	}
-	
+
 
 	HighlightSelected();
 	setLoaded(true);
 }
 
 void OptionsScene::Update(const double& dt) {
-	// Countdown timer
-	timer -= dt;
-	if (InputManager::Player[0].confirm) {
+	if (InputManager::Player[0].menuUp) {
+		highlighted--;
+		if (highlighted < 0) {
+			highlighted = buttons.size() - 1;
+		}
+		HighlightSelected();
+	}
+	else if (InputManager::Player[0].menuDown) {
+		highlighted++;
+		if (highlighted > buttons.size() - 1) {
+			highlighted = 0;
+		}
+		HighlightSelected();
+	}
+	else if (InputManager::Player[0].confirm) {
 		if (highlighted == 0) {
 			Engine::ChangeScene(&graphics);
 		}
@@ -99,27 +109,7 @@ void OptionsScene::Update(const double& dt) {
 			Engine::ChangeScene(&controls);
 		}
 		if (highlighted == 2) {
- 			Engine::ChangeScene(&menu);
-		}
-	}
-	// Only change selected if timer has run out
-	if (timer <= 0.0f) {
-		timer = 0.0f;
-		if (InputManager::Player[0].menuUp) {
-			timer += 0.5f;
-			highlighted--;
-			if (highlighted < 0) {
-				highlighted = buttons.size() - 1;
-			}
-			HighlightSelected();
-		}
-		else if (InputManager::Player[0].menuDown) {
-			timer += 0.5f;
-			highlighted++;
-			if (highlighted > buttons.size() - 1) {
-				highlighted = 0;
-			}
-			HighlightSelected();
+			Engine::ChangeScene(&menu);
 		}
 	}
 	Scene::Update(dt);

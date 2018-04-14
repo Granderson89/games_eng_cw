@@ -8,6 +8,7 @@
 #include <iostream>
 #include <stdexcept>
 #include "../coursework/game.h"
+#include "../coursework/resource_manager.h"
 
 using namespace sf;
 using namespace std;
@@ -90,6 +91,7 @@ void Engine::Start(unsigned int width, unsigned int height,
   _window = &window;
   Renderer::initialise(window);
   Physics::initialise();
+  ResourceManager::Load();
   ChangeScene(scn);
   while (window.isOpen()) {
     Event event;
@@ -100,16 +102,17 @@ void Engine::Start(unsigned int width, unsigned int height,
 
 	  if (event.type == Event::KeyPressed ||
 		  event.type == Event::KeyReleased) {
-		  InputManager::update(event.key.code);
+		  InputManager::storeKey(event.key.code);
 	  }
 
 	  if (event.type == Event::JoystickButtonPressed ||
 		  event.type == Event::JoystickButtonReleased ||
 		  event.type == Event::JoystickMoved) {
-		  InputManager::update(event.joystickButton.joystickId, event.joystickButton.button);
+		  InputManager::storeButton(event.joystickButton.joystickId, event.joystickButton.button);
 	  }
 
     }
+	InputManager::update();
     if (Keyboard::isKeyPressed(Keyboard::Escape)) {
       window.close();
     }

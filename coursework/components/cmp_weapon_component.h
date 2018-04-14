@@ -26,6 +26,7 @@ protected:
 
 	void fire(int target) const;
 
+	Entity* _target;
 	float _cooldown;
 	Vector2f _offset;
 	int _weapon_num;
@@ -34,7 +35,7 @@ protected:
 
 public:
 	WeaponComponent() = delete;
-	explicit WeaponComponent(Entity* p, Vector2f offset, const int weapon_num, type weapon_type);
+	explicit WeaponComponent(Entity* p, Entity* target, Vector2f offset, const int weapon_num, type weapon_type);
 	
 	static void changeP1Weapon();
 	static void changeP2Weapon();
