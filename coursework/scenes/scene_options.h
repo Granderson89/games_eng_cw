@@ -11,7 +11,6 @@ private:
 	// List of UI buttons
 	static vector<shared_ptr<Entity>> buttons;
 	int highlighted;
-	static float timer;
 public:
 	OptionsScene() = default;
 	~OptionsScene() override = default;

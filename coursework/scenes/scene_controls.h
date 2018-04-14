@@ -30,7 +30,7 @@ private:
 	static vector<shared_ptr<Entity>> controls;
 	static selection highlighted;
 	static selection changeControl;
-	static float timer;
+//	static float timer;
 public:
 	ControlsScene() = default;
 	~ControlsScene() override = default;

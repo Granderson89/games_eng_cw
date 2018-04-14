@@ -80,8 +80,8 @@ public:
 	static void initialize();
 	static void initializeKeyboard(int player);
 	static void initializeController(int player);
-	static void update(Keyboard::Key);
-	static void update(int, int);
+	static void storeKey(Keyboard::Key);
+	static void storeButton(int, int);
 	static void update();
 
 	static Keyboard::Key getLastKeyPressed();
