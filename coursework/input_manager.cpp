@@ -391,11 +391,6 @@ void InputManager::update()
 			else
 				for (int j = 0; j < 6; j++)
 					Player[i].thrusterOn[j] = false;
-			// Pause
-			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].pause))
-				Player[i].pause = true;
-			else
-				Player[i].pause = false;
 
 			// Pause
 			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].pause))
@@ -533,30 +528,52 @@ void InputManager::update()
 
 void InputManager::menuUpdate()
 {
-	Joystick::update();
-
 	for (int i = 0; i < 2; i++)
 	{
 		// Controller
 		if (playerInput[i].source >= 0)
 		{
 			// Menu
-			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].menuUp)) {
-				Player[i].menuUp = true;
+			static bool mup = false;
+			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].menuUp))
+			{
+				if (!mup)
+					Player[i].menuUp = true;
+				else
+					Player[i].menuUp = false;
+				mup = true;
 			}
-			else {
+			else
+			{
+				mup = false;
 				Player[i].menuUp = false;
 			}
-			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].menuDown)) {
-				Player[i].menuDown = true;
+			static bool mdown = false;
+			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].menuDown))
+			{
+				if (!mdown)
+					Player[i].menuDown = true;
+				else
+					Player[i].menuDown = false;
+				mdown = true;
 			}
-			else {
+			else
+			{
+				mdown = false;
 				Player[i].menuDown = false;
 			}
-			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].confirm)) {
-				Player[i].confirm = true;
+			static bool mconf;
+			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].confirm))
+			{
+				if (!mconf)
+					Player[i].confirm = true;
+				else
+					Player[i].confirm = false;
+				mconf = true;
 			}
-			else {
+			else
+			{
+				mconf = false;
 				Player[i].confirm = false;
 			}
 		}
