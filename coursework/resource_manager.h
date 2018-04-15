@@ -16,4 +16,8 @@ public:
 	static Texture Tex_background;
 	static Texture Tex_player1;
 	static Texture Tex_player2;
+	static Texture Tex_warp_blue;
+	static Texture Tex_warp_blue_exit;
+	static Texture Tex_warp_red;
+	static Texture Tex_warp_red_exit;
 };

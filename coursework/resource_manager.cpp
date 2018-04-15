@@ -4,6 +4,7 @@ Texture ResourceManager::tex_test = Texture();
 Texture ResourceManager::Tex_background = Texture();
 Texture ResourceManager::Tex_player1 = Texture();
 Texture ResourceManager::Tex_player2 = Texture();
+Texture ResourceManager::Tex_warp_blue = Texture();
 
 
 
@@ -29,6 +30,30 @@ bool ResourceManager::Load()
 			Tex_background = tex_test;
 	}
 	if (!Tex_player2.loadFromFile("res/img/Player2.png"))
+	{
+		good = false;
+		if (test)
+			Tex_background = tex_test;
+	}
+	if (!Tex_warp_blue.loadFromFile("res/img/Warp_jump_blue.png"))
+	{
+		good = false;
+		if (test)
+			Tex_background = tex_test;
+	}
+	if (!Tex_warp_blue_exit.loadFromFile("res/img/Warp_jump_blue_exit.png"))
+	{
+		good = false;
+		if (test)
+			Tex_background = tex_test;
+	}
+	if (!Tex_warp_red.loadFromFile("res/img/Warp_jump_red.png"))
+	{
+		good = false;
+		if (test)
+			Tex_background = tex_test;
+	}
+	if (!Tex_warp_red_exit.loadFromFile("res/img/Warp_jump_red_exit.png"))
 	{
 		good = false;
 		if (test)
