@@ -8,7 +8,9 @@ Texture ResourceManager::Tex_cannon_mount = Texture();
 Texture ResourceManager::Tex_torpedo_mount = Texture();
 Texture ResourceManager::Tex_missile_mount = Texture();
 Texture ResourceManager::Tex_turret = Texture();
-
+Texture ResourceManager::Tex_plasma = Texture();
+Texture ResourceManager::Tex_torpedo = Texture();
+Texture ResourceManager::Tex_missile = Texture();
 
 bool ResourceManager::Load()
 {
@@ -56,6 +58,24 @@ bool ResourceManager::Load()
 			Tex_background = tex_test;
 	}
 	if (!Tex_turret.loadFromFile("res/img/turret.png"))
+	{
+		good = false;
+		if (test)
+			Tex_background = tex_test;
+	}
+	if (!Tex_plasma.loadFromFile("res/img/plasma.png"))
+	{
+		good = false;
+		if (test)
+			Tex_background = tex_test;
+	}
+	if (!Tex_torpedo.loadFromFile("res/img/torpedo.png"))
+	{
+		good = false;
+		if (test)
+			Tex_background = tex_test;
+	}
+	if (!Tex_missile.loadFromFile("res/img/missile.png"))
 	{
 		good = false;
 		if (test)

@@ -1,3 +1,5 @@
+#define _USE_MATH_DEFINES
+
 #include "cmp_weapon_component.h"
 #include "cmp_plasma_logic.h"
 #include "cmp_torpedo_logic.h"
@@ -8,6 +10,8 @@
 #include "../resource_manager.h"
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Window/Keyboard.hpp>
+
+#include <math.h>
 
 using namespace std;
 using namespace sf;
@@ -313,37 +317,41 @@ void WeaponComponent::fire(int target) const {
 	// Create a projectile and set it's position relative to ship
 	auto projectile = _parent->scene->makeEntity();
 	projectile->setPosition(_parent->getPosition() + rotate(Vector2f(position), _parent->getRotation()));
-	auto s = projectile->addComponent<ShapeComponent>();
+	auto spr = projectile->addComponent<SpriteComponent>();
 	if (_type == CANNONS) {
-		s->setShape<sf::CircleShape>(8.0f);
-		s->getShape().setFillColor(Color::Red);
-		s->getShape().setOrigin(4.0f, 4.0f);
+		spr->getSprite().setTexture(ResourceManager::Tex_plasma);
+		spr->getSprite().setOrigin(ResourceManager::Tex_plasma.getSize().x / 2.0f, ResourceManager::Tex_plasma.getSize().y / 2.0f);
+		spr->getSprite().setScale(0.25f, 0.25f);
 		if (target == 0) {
+			spr->setRotationOffset(_parent->getRotation() - 90.0f);
 			auto l = projectile->addComponent<PlasmaComponent>(_target, direction);
 			projectile->addTag("p2_projectiles");
 		}
 		if (target == 1) {
+			spr->setRotationOffset(_parent->getRotation() + 90.0f);
 			auto l = projectile->addComponent<PlasmaComponent>(_target, direction);
 			projectile->addTag("p1_projectiles");
 		}
 	}
 	if (_type == TORPEDOS) {
-		s->setShape<sf::CircleShape>(4.0f);
-		s->getShape().setFillColor(Color::Yellow);
-		s->getShape().setOrigin(2.0f, 2.0f);
+		spr->getSprite().setTexture(ResourceManager::Tex_torpedo);
+		spr->getSprite().setOrigin(ResourceManager::Tex_torpedo.getSize().x / 2.0f, ResourceManager::Tex_torpedo.getSize().y / 2.0f);
+		spr->getSprite().setScale(0.25f, 0.25f);
 		if (target == 0) {
+			spr->setRotationOffset(_parent->getRotation() - 90.0f);
 			auto l = projectile->addComponent<TorpedoComponent>(player1, direction);
 			projectile->addTag("p2_projectiles");
 		}
 		if (target == 1) {
+			spr->setRotationOffset(_parent->getRotation() + 90.0f);
 			auto l = projectile->addComponent<TorpedoComponent>(player2, direction);
 			projectile->addTag("p1_projectiles");
 		}
 	}
 	if (_type == MISSILES) {
-		s->setShape<sf::CircleShape>(2.0f);
-		s->getShape().setFillColor(Color::Cyan);
-		s->getShape().setOrigin(1.0f, 1.0f);
+		spr->getSprite().setTexture(ResourceManager::Tex_missile);
+		spr->getSprite().setOrigin(ResourceManager::Tex_missile.getSize().x / 2.0f, ResourceManager::Tex_missile.getSize().y / 2.0f);
+		spr->getSprite().setScale(0.25f, 0.25f);
 		if (target == 0) {
 			auto m = projectile->addComponent<MissileComponent>(player1);
 			// Attach a steering component

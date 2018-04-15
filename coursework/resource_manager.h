@@ -20,5 +20,7 @@ public:
 	static Texture Tex_torpedo_mount;
 	static Texture Tex_missile_mount;
 	static Texture Tex_turret;
-
+	static Texture Tex_plasma;
+	static Texture Tex_torpedo;
+	static Texture Tex_missile;
 };
