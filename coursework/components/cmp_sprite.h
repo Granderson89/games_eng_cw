@@ -7,15 +7,30 @@
 class SpriteComponent : public Component {
 protected:
   std::shared_ptr<sf::Sprite> _sprite;
+  sf::Vector2f _offset;
+  float _rotationOffset;
+  bool _visible = true;
+  bool _rotationIndependent = false;
 
 public:
   SpriteComponent() = delete;
 
   explicit SpriteComponent(Entity* p);
+  explicit SpriteComponent(Entity* p, float rotation);
+  explicit SpriteComponent(Entity* p, float rotation, bool rotationIndependent);
+
   void update(double dt) override;
   void render() override;
 
   sf::Sprite& getSprite() const;
+  void toPort();
+  void toStarboard();
+  void rotateOffset(float);
+  float getRotationOffset();
+
+  void setOffset(sf::Vector2f);
+  void setRotationOffset(float);
+  void setVisible(bool);
 
   template <typename... Targs> void setSprite(Targs... params) {
     _sprite.reset(new sf::Sprite(params...));

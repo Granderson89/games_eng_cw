@@ -16,4 +16,9 @@ public:
 	static Texture Tex_background;
 	static Texture Tex_player1;
 	static Texture Tex_player2;
+	static Texture Tex_cannon_mount;
+	static Texture Tex_torpedo_mount;
+	static Texture Tex_missile_mount;
+	static Texture Tex_turret;
+
 };

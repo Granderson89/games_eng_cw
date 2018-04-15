@@ -58,17 +58,17 @@ void Level1Scene::Load() {
 	// Weapon mount positions relative to centre of ship
 	vector<Vector2f> cannon_offsets;
 	for (int i = 0; i < 8; i++) {
-		auto mount_pos = Vector2f(width / 2.0f + mount_width + 50.0f, -length / 2.0f + mount_height + i * 25.0f + 5.0f);
+		auto mount_pos = Vector2f(width / 2.0f, -length / 2.0f + mount_height + i * 25.0f + 5.0f);
 		cannon_offsets.push_back(mount_pos);
 	}
 	vector<Vector2f> torpedo_offsets;
 	for (int i = 1; i < 6; i++) {
-		auto mount_pos = Vector2f(width / 2.0f + mount_width, -length / 2.0f + mount_height + i * 25.0f + 5.0f);
+		auto mount_pos = Vector2f(width / 2.0f, -length / 2.0f + mount_height + i * 25.0f + 5.0f);
 		torpedo_offsets.push_back(mount_pos);
 	}
 	vector<Vector2f> missile_offsets;
 	for (int i = 3; i < 5; i++) {
-		auto mount_pos = Vector2f(width / 2.0f + mount_width, -length / 2.0f + mount_height + i * 25.0f + 5.0f);
+		auto mount_pos = Vector2f(0.0f, -length / 2.0f + mount_height + i * 25.0f + 5.0f);
 		missile_offsets.push_back(mount_pos);
 	}
 	Vector2f p2_start_position(800.0f, 250.0f);
@@ -97,24 +97,37 @@ void Level1Scene::Load() {
 		p->setMass(5.0f);
 		// Add weapons
 		int weapon_num = 0;
+
 		// CANNONS
 		for (int i = 0; i < 8; i++) {
+			auto cannonSpr = player1->addComponent<SpriteComponent>(90.0f);
+			cannonSpr->setOffset(cannon_offsets.at(i));
 			player1->addComponent<WeaponComponent>(player2.get(), cannon_offsets.at(i), weapon_num, CANNONS);
 			weapon_num++;
 		}
 		// TORPEDOS
 		for (int i = 0; i < 5; i++) {
+			auto cannonSpr = player1->addComponent<SpriteComponent>(90.0f);
+			cannonSpr->setOffset(torpedo_offsets.at(i));
 			player1->addComponent<WeaponComponent>(player2.get(), torpedo_offsets.at(i), weapon_num, TORPEDOS);
 			weapon_num++;
 		}
 		// MISSILES
 		for (int i = 0; i < 2; i++) {
+			auto cannonSpr = player1->addComponent<SpriteComponent>(90.0f);
+			cannonSpr->setOffset(missile_offsets.at(i));
 			player1->addComponent<WeaponComponent>(player2.get(), missile_offsets.at(i), weapon_num, MISSILES);
 			weapon_num++;
 		}
+		// Defensive turret
+		auto turret = player1->addComponent<SpriteComponent>(0.0f, true);
+		turret->getSprite().setTexture(ResourceManager::Tex_turret);
+		turret->getSprite().setOrigin(ResourceManager::Tex_turret.getSize().x / 2, ResourceManager::Tex_turret.getSize().y / 2);
+		turret->getSprite().setScale(Vector2f(0.25f, 0.25f));
 		player1->addComponent<TurretComponent>(0);
 		player1->addComponent<ThrustersComponent>(Vector2f(width, length), 3.0f);
 		player1->addComponent<PlayerStateComponent>();
+
 	}
 	// Create player 2
 	{
@@ -141,21 +154,32 @@ void Level1Scene::Load() {
 		int weapon_num = 15;
 		// CANNONS
 		for (int i = 0; i < 8; i++) {
+			auto cannonSpr = player2->addComponent<SpriteComponent>(0.0f);
+			cannonSpr->setOffset(cannon_offsets.at(i));
 			player2->addComponent<WeaponComponent>(player1.get(), cannon_offsets.at(i), weapon_num, CANNONS);
 			weapon_num++;
 		}
 		// TORPEDOS
 		for (int i = 0; i < 5; i++) {
+			auto cannonSpr = player2->addComponent<SpriteComponent>(20.0f);
+			cannonSpr->setOffset(torpedo_offsets.at(i));
 			player2->addComponent<WeaponComponent>(player1.get(), torpedo_offsets.at(i), weapon_num, TORPEDOS);
 			weapon_num++;
 		}
 		// MISSILES
 		for (int i = 0; i < 2; i++) {
+			auto cannonSpr = player2->addComponent<SpriteComponent>(90.0f);
+			cannonSpr->setOffset(missile_offsets.at(i));
 			player2->addComponent<WeaponComponent>(player1.get(), missile_offsets.at(i), weapon_num, MISSILES);
 			weapon_num++;
 		}
 		player2->addComponent<TurretComponent>(1);
 		player2->addComponent<PlayerStateComponent>();
+		// Defensive turret
+		auto turret = player2->addComponent<SpriteComponent>(0.0f, true);
+		turret->getSprite().setTexture(ResourceManager::Tex_turret);
+		turret->getSprite().setOrigin(ResourceManager::Tex_turret.getSize().x / 2, ResourceManager::Tex_turret.getSize().y / 2);
+		turret->getSprite().setScale(Vector2f(0.25f, 0.25f));
 	}
 
 	ce->addTag("camera");
@@ -192,8 +216,6 @@ void Level1Scene::Load() {
 		healthText->SetScale(0.5f);
 		// Selected weapon type
 		auto weaponType = p1wt->addComponent<SpriteComponent>();
-		weaponType->getSprite().setTexture(ResourceManager::tex_test);
-		weaponType->getSprite().setOrigin(ResourceManager::tex_test.getSize().x / 2, ResourceManager::tex_test.getSize().y / 2);
 		// Cooldowns
 		for (int i = 0; i < 8; i++) {
 			auto cooldown = p1cds.at(i)->addComponent<SpriteComponent>();
@@ -235,8 +257,6 @@ void Level1Scene::Load() {
 		healthText->SetScale(0.5f);
 		// Selected weapon type
 		auto weaponType = p2wt->addComponent<SpriteComponent>();
-		weaponType->getSprite().setTexture(ResourceManager::tex_test);
-		weaponType->getSprite().setOrigin(ResourceManager::tex_test.getSize().x / 2, ResourceManager::tex_test.getSize().y / 2);
 		// Cooldowns
 		for (int i = 0; i < 8; i++) {
 			auto cooldown = p2cds.at(i)->addComponent<SpriteComponent>();

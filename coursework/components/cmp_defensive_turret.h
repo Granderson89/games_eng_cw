@@ -16,7 +16,7 @@ protected:
 	static float p2_firetime;
 	static float p2_base_cooldown;
 	static float p2_turret_rotation;
-
+	
 	void fire(int target) const;
 
 	float _cooldown;

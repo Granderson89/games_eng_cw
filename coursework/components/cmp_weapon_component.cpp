@@ -5,6 +5,7 @@
 #include "cmp_ai_steering.h"
 #include "engine.h"
 #include "../game.h"
+#include "../resource_manager.h"
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
@@ -42,6 +43,150 @@ void WeaponComponent::update(double dt) {
 	if (_cooldown <= 0.0f) {
 		_cooldown = 0.0f;
 	}
+	float mount_width = 20.0f;
+	float mount_height = 20.0f;
+
+	// Get rotation of ship and the port and starboard
+	// vectors
+	float ship_rotation = _parent->getRotation();
+	Vector2f starboard = Vector2f(1.0f, 0.0f);
+	starboard = rotate(starboard, ship_rotation);
+	Vector2f port = Vector2f(-1.0f, 0.0f);
+	port = rotate(port, ship_rotation);
+	// Get the vector to the enemy and normalize
+	Vector2f enemy = _target->getPosition() - _parent->getPosition();
+	enemy = normalize(enemy);
+	// Get the dot product
+	Vector2f multiply = starboard * enemy;
+	float dot = multiply.x + multiply.y;
+	// If dot < 0, place mounts on the port side
+	Vector2f position;
+	Vector2f direction;
+	if (dot < 0.0f) {
+		position.x = _offset.x * -1.0f;
+		position.y = _offset.y;
+		direction = port;
+	}
+	// If dot >= 0, place mounts on the starboard side
+	else {
+		position.x = _offset.x;
+		position.y = _offset.y;
+		direction = starboard;
+	}
+
+	std::shared_ptr<SpriteComponent> spr;
+	// Player 1
+	if (_weapon_num < 15) {
+		// Get sprite for this weapon
+		spr = _parent->GetCompatibleComponent<SpriteComponent>().at(_weapon_num + 1);
+		if (direction == port) {
+			spr->toPort();
+		}
+		else {
+			spr->toStarboard();
+		}
+		if (p1_active_type == CANNONS) {
+			// Set other weapons to invisible
+			if (_weapon_num > 7) {
+				spr->setVisible(false);
+			}
+			else {
+				// Update the cannon sprites
+				spr->setVisible(true);
+				spr->getSprite().setTexture(ResourceManager::Tex_cannon_mount);
+				spr->getSprite().setOrigin(ResourceManager::Tex_cannon_mount.getSize().x / 2.0f,
+					ResourceManager::Tex_cannon_mount.getSize().y / 2.0f);
+				spr->getSprite().setScale(mount_width / (float)ResourceManager::Tex_cannon_mount.getSize().x,
+					mount_height / (float)ResourceManager::Tex_cannon_mount.getSize().y);
+			}
+		}
+		else if (p1_active_type == TORPEDOS) {
+			// Set other weapons to invisible
+			if (_weapon_num < 8 || _weapon_num > 12) {
+				spr->setVisible(false);
+			}
+			else {
+				// Update the torpedo sprites
+				spr->setVisible(true);
+				spr->getSprite().setTexture(ResourceManager::Tex_torpedo_mount);
+				spr->getSprite().setOrigin(ResourceManager::Tex_torpedo_mount.getSize().x / 2.0f,
+					ResourceManager::Tex_torpedo_mount.getSize().y / 2.0f);
+				spr->getSprite().setScale(mount_width / (float)ResourceManager::Tex_torpedo_mount.getSize().x,
+					mount_height / (float)ResourceManager::Tex_torpedo_mount.getSize().y);
+			}
+		}
+		else if (p1_active_type == MISSILES) {
+			// Set other weapons to invisible
+			if (_weapon_num < 13) {
+				spr->setVisible(false);
+			}
+			else {
+				// Update the missile sprites
+				spr->setVisible(true);
+				spr->getSprite().setTexture(ResourceManager::Tex_missile_mount);
+				spr->getSprite().setOrigin(ResourceManager::Tex_missile_mount.getSize().x / 2.0f,
+					ResourceManager::Tex_missile_mount.getSize().y / 2.0f);
+				spr->getSprite().setScale(mount_width / (float)ResourceManager::Tex_missile_mount.getSize().x,
+					mount_height / (float)ResourceManager::Tex_missile_mount.getSize().y);
+			}
+		}
+	}
+	else {
+		// Get sprite for this weapon
+		spr = _parent->GetCompatibleComponent<SpriteComponent>().at(_weapon_num - 15 + 1);
+		if (direction == port) {
+			spr->toPort();
+		}
+		else {
+			spr->toStarboard();
+		}
+		if (p2_active_type == CANNONS) {
+			// Set other weapons to invisible
+			if (_weapon_num > 22) {
+				spr->setVisible(false);
+			}
+			else {
+				// Update the cannon sprites
+				spr->setVisible(true);
+				spr->getSprite().setTexture(ResourceManager::Tex_cannon_mount);
+				spr->getSprite().setOrigin(ResourceManager::Tex_cannon_mount.getSize().x / 2.0f,
+					ResourceManager::Tex_cannon_mount.getSize().y / 2.0f);
+				spr->getSprite().setScale(mount_width / (float)ResourceManager::Tex_cannon_mount.getSize().x,
+					mount_height / (float)ResourceManager::Tex_cannon_mount.getSize().y);
+			}
+		}
+		else if (p2_active_type == TORPEDOS) {
+			// Set other weapons to invisible
+			if (_weapon_num < 22 || _weapon_num > 27) {
+				spr->setVisible(false);
+			}
+			else {
+				// Update the torpedo sprites
+				spr->setVisible(true);
+				spr->getSprite().setTexture(ResourceManager::Tex_torpedo_mount);
+				spr->getSprite().setOrigin(ResourceManager::Tex_torpedo_mount.getSize().x / 2.0f,
+					ResourceManager::Tex_torpedo_mount.getSize().y / 2.0f);
+				spr->getSprite().setScale(mount_width / (float)ResourceManager::Tex_torpedo_mount.getSize().x,
+					mount_height / (float)ResourceManager::Tex_torpedo_mount.getSize().y);
+			}
+		}
+		else if (p2_active_type == MISSILES) {
+			// Set other weapons to invisible
+			if (_weapon_num < 28) {
+				spr->setVisible(false);
+			}
+			else {
+				// Update the missile sprites
+				spr->setVisible(true);
+				spr->getSprite().setTexture(ResourceManager::Tex_missile_mount);
+				spr->getSprite().setOrigin(ResourceManager::Tex_missile_mount.getSize().x / 2.0f,
+					ResourceManager::Tex_missile_mount.getSize().y / 2.0f);
+				spr->getSprite().setScale(mount_width / (float)ResourceManager::Tex_missile_mount.getSize().x,
+					mount_height / (float)ResourceManager::Tex_missile_mount.getSize().y);
+			}
+		}
+	}
+	
 	// If fire button is pushed, this weapon is next,
 	// weapon has cooled down and firetime delay has run down
 	// fire, reset timers and increment next_weapon
@@ -215,6 +360,7 @@ void WeaponComponent::fire(int target) const {
 }
 
 void WeaponComponent::changeP1Weapon() {
+
 	switch (p1_active_type) {
 	case CANNONS:
 		p1_active_type = TORPEDOS;

@@ -6,9 +6,6 @@
 #include "../game.h"
 #include "../resource_manager.h"
 
-
-
-
 HudComponent::HudComponent(Entity* p, std::shared_ptr<Entity> player, std::shared_ptr<Entity> weaponType, std::vector<std::shared_ptr<Entity>> cooldowns, std::shared_ptr<Entity> camera)
 	: Component(p), _player(player), _weaponType(weaponType), _cooldowns(cooldowns), _camera(camera),
 	_healthBarZero(Vector2f(90.0f, 10.0f)),
@@ -48,6 +45,7 @@ void HudComponent::update(double dt) {
 	healthBar->getShape().setScale(healthBarScale * view_scale);
 
 	// Update weapon selection
+	auto weaponTypeSpr = _weaponType->GetCompatibleComponent<SpriteComponent>().at(0);
 	string activeType;
 	if (_player == player1) {
 		activeType = weapons.at(0)->getP1ActiveType();
@@ -56,18 +54,27 @@ void HudComponent::update(double dt) {
 		activeType = weapons.at(0)->getP2ActiveType();
 	}
 	if (activeType == "CANNONS") {
-		_weaponType->setRotation(0.0f);
+		// Scale weapon type sprite
+		weaponTypeSpr->getSprite().setTexture(ResourceManager::Tex_cannon_mount);
+		weaponTypeSpr->getSprite().setOrigin(ResourceManager::Tex_cannon_mount.getSize().x / 2, ResourceManager::Tex_cannon_mount.getSize().y / 2);
+		weaponTypeSpr->getSprite().setScale(_weaponTypeScale  * view_scale / (float)ResourceManager::Tex_cannon_mount.getSize().x,
+			_weaponTypeScale  * view_scale / (float)ResourceManager::Tex_cannon_mount.getSize().y);
 	}
 	else if (activeType == "TORPEDOS") {
-		_weaponType->setRotation(90.0f);
+		// Scale weapon type sprite
+		weaponTypeSpr->getSprite().setTexture(ResourceManager::Tex_torpedo_mount);
+		weaponTypeSpr->getSprite().setOrigin(ResourceManager::Tex_torpedo_mount.getSize().x / 2, ResourceManager::Tex_torpedo_mount.getSize().y / 2);
+		weaponTypeSpr->getSprite().setScale(_weaponTypeScale  * view_scale / (float)ResourceManager::Tex_torpedo_mount.getSize().x,
+			_weaponTypeScale  * view_scale / (float)ResourceManager::Tex_torpedo_mount.getSize().y);
 	}
 	else if (activeType == "MISSILES") {
-		_weaponType->setRotation(180.0f);
+		// Scale weapon type sprite
+		weaponTypeSpr->getSprite().setTexture(ResourceManager::Tex_missile_mount);
+		weaponTypeSpr->getSprite().setOrigin(ResourceManager::Tex_missile_mount.getSize().x / 2, ResourceManager::Tex_missile_mount.getSize().y / 2);
+		weaponTypeSpr->getSprite().setScale(_weaponTypeScale  * view_scale / (float)ResourceManager::Tex_missile_mount.getSize().x,
+			_weaponTypeScale  * view_scale / (float)ResourceManager::Tex_missile_mount.getSize().y);
 	}
-	// Scale weapon type sprite
-	auto weaponTypeSpr = _weaponType->GetCompatibleComponent<SpriteComponent>().at(0);
-	weaponTypeSpr->getSprite().setScale(_weaponTypeScale  * view_scale / (float)ResourceManager::tex_test.getSize().x,
-		_weaponTypeScale  * view_scale / (float)ResourceManager::tex_test.getSize().y);
+
 
 	// Get all current weapon cooldowns
 	std::vector<float> cannonCools;
@@ -93,17 +100,18 @@ void HudComponent::update(double dt) {
 	}
 	// Update weapon cooldown sprites
 	for (int i = 0; i < 8; i++) {
-		// Scale cooldown sprite
 		auto cooldownSpr = _cooldowns.at(i)->GetCompatibleComponent<SpriteComponent>().at(0);
-		cooldownSpr->getSprite().setScale(_cooldownScale  * view_scale / (float)ResourceManager::tex_test.getSize().x,
-			_cooldownScale  * view_scale / (float)ResourceManager::tex_test.getSize().y);
 		// Get transparent timer sprite
 		auto timerSpr = _cooldowns.at(i)->GetCompatibleComponent<ShapeComponent>().at(0);
 		// Set scale of transparent sprite, update it's visibility and type
 		if (activeType == "CANNONS") {
+			// Scale cooldown sprite
+			cooldownSpr->getSprite().setScale(_cooldownScale  * view_scale / (float)ResourceManager::Tex_cannon_mount.getSize().x,
+				_cooldownScale  * view_scale / (float)ResourceManager::Tex_cannon_mount.getSize().y);
+			cooldownSpr->getSprite().setTexture(ResourceManager::Tex_cannon_mount);
+			cooldownSpr->getSprite().setOrigin(ResourceManager::Tex_cannon_mount.getSize().x / 2, ResourceManager::Tex_cannon_mount.getSize().y / 2);
 			float scale = cannonCools.at(i) * _timerScale * view_scale;
 			_cooldowns.at(i)->setVisible(true);
-			_cooldowns.at(i)->setRotation(0.0f);
 			timerSpr->getShape().setScale(1.0f * _timerScale * view_scale, scale);
 		}
 		else if (activeType == "TORPEDOS") {
@@ -111,9 +119,13 @@ void HudComponent::update(double dt) {
 				_cooldowns.at(i)->setVisible(false);
 			}
 			else {
+				// Scale cooldown sprite
+				cooldownSpr->getSprite().setScale(_cooldownScale  * view_scale / (float)ResourceManager::Tex_torpedo_mount.getSize().x,
+					_cooldownScale  * view_scale / (float)ResourceManager::Tex_torpedo_mount.getSize().y);
+				cooldownSpr->getSprite().setTexture(ResourceManager::Tex_torpedo_mount);
+				cooldownSpr->getSprite().setOrigin(ResourceManager::Tex_torpedo_mount.getSize().x / 2, ResourceManager::Tex_torpedo_mount.getSize().y / 2);
 				float scale = torpedoCools.at(i - 1) / 2.0f * _timerScale * view_scale;
 				_cooldowns.at(i)->setVisible(true);
-				_cooldowns.at(i)->setRotation(90.0f);
 				timerSpr->getShape().setScale(1.0f * _timerScale * view_scale, scale);
 			}
 		}
@@ -122,9 +134,13 @@ void HudComponent::update(double dt) {
 				_cooldowns.at(i)->setVisible(false);
 			}
 			else {
+				// Scale cooldown sprite
+				cooldownSpr->getSprite().setScale(_cooldownScale  * view_scale / (float)ResourceManager::Tex_missile_mount.getSize().x,
+					_cooldownScale  * view_scale / (float)ResourceManager::Tex_missile_mount.getSize().y);
+				cooldownSpr->getSprite().setTexture(ResourceManager::Tex_missile_mount);
+				cooldownSpr->getSprite().setOrigin(ResourceManager::Tex_missile_mount.getSize().x / 2, ResourceManager::Tex_missile_mount.getSize().y / 2);
 				float scale = missileCools.at(i - 3) / 3.0f * _timerScale * view_scale;
 				_cooldowns.at(i)->setVisible(true);
-				_cooldowns.at(i)->setRotation(180.0f);
 				timerSpr->getShape().setScale(1.0f * _timerScale * view_scale, scale);
 			}
 		}
@@ -134,10 +150,11 @@ void HudComponent::update(double dt) {
 	if (_player == player1) {
 		// Top left
 		position -= Vector2f(view_dims.x / 2.0f, view_dims.y / 2.0f);
+		
 	}
 	else {
 		// Top centre
-		position -= Vector2f(0.0f, view_dims.y / 2.0f);
+		position += Vector2f(0.0f, -view_dims.y / 2.0f);
 	}
 	_parent->setPosition(position + _healthBarZero * view_scale);
 	healthText->SetPosition(position + _healthTextZero * view_scale);
@@ -145,6 +162,7 @@ void HudComponent::update(double dt) {
 	for (int i = 0; i < 8; i++) {
 		_cooldowns.at(i)->setPosition(position + (_cooldownZero + Vector2f(_cooldownGap * i, 0.0f))  * view_scale);
 	}
+	
 }
 
 void HudComponent::render() {
