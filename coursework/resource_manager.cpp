@@ -8,6 +8,10 @@ Texture ResourceManager::Tex_warp_blue = Texture();
 Texture ResourceManager::Tex_warp_blue_exit = Texture();
 Texture ResourceManager::Tex_warp_red = Texture();
 Texture ResourceManager::Tex_warp_red_exit = Texture();
+Texture ResourceManager::Tex_thruster1_on = Texture();
+Texture ResourceManager::Tex_thruster2_on = Texture();
+Texture ResourceManager::Tex_thruster1_off = Texture();
+Texture ResourceManager::Tex_thruster2_off = Texture();
 
 
 
@@ -57,6 +61,30 @@ bool ResourceManager::Load()
 			Tex_background = tex_test;
 	}
 	if (!Tex_warp_red_exit.loadFromFile("res/img/Warp_jump_red_exit.png"))
+	{
+		good = false;
+		if (test)
+			Tex_background = tex_test;
+	}
+	if (!Tex_thruster1_on.loadFromFile("res/img/Thruster1_on.png"))
+	{
+		good = false;
+		if (test)
+			Tex_background = tex_test;
+	}
+	if (!Tex_thruster2_on.loadFromFile("res/img/Thruster2_on.png"))
+	{
+		good = false;
+		if (test)
+			Tex_background = tex_test;
+	}
+	if (!Tex_thruster1_off.loadFromFile("res/img/Thruster1_off.png"))
+	{
+		good = false;
+		if (test)
+			Tex_background = tex_test;
+	}
+	if (!Tex_thruster2_off.loadFromFile("res/img/Thruster2_off.png"))
 	{
 		good = false;
 		if (test)

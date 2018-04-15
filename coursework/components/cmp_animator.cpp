@@ -43,7 +43,7 @@ void AnimatorComponent::update(double dt)
 		while (elapsed > length / (float)frames)
 		{
 			elapsed -= length / (float)frames;
-			if (currentFrame >= frames)
+			if (currentFrame >= frames - 1)
 				if (repeating)
 					currentFrame = 0;
 				else
