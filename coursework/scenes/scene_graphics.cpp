@@ -107,7 +107,7 @@ void GraphicsScene::Load() {
 		t->SetScale(scale);
 		buttons.push_back(exitFullScreenBtn);
 	}
-	// Back button
+	// Save & close button
 	{
 		shared_ptr<Entity> backBtn = makeEntity();
 		auto s = backBtn->addComponent<SpriteComponent>();
@@ -115,7 +115,7 @@ void GraphicsScene::Load() {
 		s->getSprite().setTextureRect(buttonRect);
 		s->getSprite().setScale(Vector2f(scale, scale));
 		backBtn->setPosition(Vector2f((Engine::getWindowSize().x + buttonRect.width * scale) / 2.0f, buttonRect.height * scale * 3.5f));
-		auto t = backBtn->addComponent<TextComponent>("\n   Back");
+		auto t = backBtn->addComponent<TextComponent>("\n   Save & close");
 		t->SetScale(scale);
 		buttons.push_back(backBtn);
 	}

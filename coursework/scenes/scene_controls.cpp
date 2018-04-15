@@ -52,8 +52,8 @@ void ControlsScene::Load() {
 	// Player 2
 	createPlayerButtons(1, scale, buttonRect);
 
-	// Back button
-	MakeButton(Vector2f(Engine::getWindowSize().x - buttonRect.width* scale, Engine::getWindowSize().y - buttonRect.height), scale, buttonRect, "\n   Back");
+	// Save & close button
+	MakeButton(Vector2f(Engine::getWindowSize().x - buttonRect.width* scale, Engine::getWindowSize().y - buttonRect.height), scale, buttonRect, "\n   Save & close");
 	HighlightSelected();
 
 	setLoaded(true);
