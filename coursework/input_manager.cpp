@@ -391,25 +391,6 @@ void InputManager::update()
 			else
 				for (int j = 0; j < 6; j++)
 					Player[i].thrusterOn[j] = false;
-			// Menu
-			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].menuUp)) {
-				Player[i].menuUp = true;
-			}
-			else {
-				Player[i].menuUp = false;
-			}
-			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].menuDown)) {
-				Player[i].menuDown = true;
-			}
-			else {
-				Player[i].menuDown = false;
-			}
-			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].confirm)) {
-				Player[i].confirm = true;
-			}
-			else {
-				Player[i].confirm = false;
-			}
 			// Pause
 			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].pause))
 				Player[i].pause = true;
@@ -541,7 +522,47 @@ void InputManager::update()
 			else
 				for (int j = 0; j < 6; j++)
 					Player[i].thrusterOn[j] = false;
-			
+			// Pause
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].pause))
+				Player[i].pause = true;
+			else
+				Player[i].pause = false;
+		}
+	}
+}
+
+void InputManager::menuUpdate()
+{
+	Joystick::update();
+
+	for (int i = 0; i < 2; i++)
+	{
+		// Controller
+		if (playerInput[i].source >= 0)
+		{
+			// Menu
+			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].menuUp)) {
+				Player[i].menuUp = true;
+			}
+			else {
+				Player[i].menuUp = false;
+			}
+			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].menuDown)) {
+				Player[i].menuDown = true;
+			}
+			else {
+				Player[i].menuDown = false;
+			}
+			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].confirm)) {
+				Player[i].confirm = true;
+			}
+			else {
+				Player[i].confirm = false;
+			}
+		}
+		// Keyboard
+		else if (playerInput[i].source == -1)
+		{
 			// Menu
 			static bool mup = false;
 			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].menuUp))
@@ -585,11 +606,6 @@ void InputManager::update()
 				mconf = false;
 				Player[i].confirm = false;
 			}
-			// Pause
-			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].pause))
-				Player[i].pause = true;
-			else
-				Player[i].pause = false;
 		}
 	}
 }

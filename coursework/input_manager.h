@@ -83,6 +83,7 @@ public:
 	static void storeKey(Keyboard::Key);
 	static void storeButton(int, int);
 	static void update();
+	static void menuUpdate();
 
 	static Keyboard::Key getLastKeyPressed();
 	static void clearLastPressed();

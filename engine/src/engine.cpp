@@ -103,16 +103,18 @@ void Engine::Start(unsigned int width, unsigned int height,
 	  if (event.type == Event::KeyPressed ||
 		  event.type == Event::KeyReleased) {
 		  InputManager::storeKey(event.key.code);
+		  InputManager::update();
 	  }
 
 	  if (event.type == Event::JoystickButtonPressed ||
 		  event.type == Event::JoystickButtonReleased ||
 		  event.type == Event::JoystickMoved) {
 		  InputManager::storeButton(event.joystickButton.joystickId, event.joystickButton.button);
+		  InputManager::update();
 	  }
+	}
+	InputManager::menuUpdate();
 
-    }
-	InputManager::update();
     if (Keyboard::isKeyPressed(Keyboard::Escape)) {
       window.close();
     }
