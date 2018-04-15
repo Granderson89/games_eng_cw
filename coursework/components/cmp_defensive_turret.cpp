@@ -27,7 +27,7 @@ float TurretComponent::p2_firetime = 0.0f;
 // Base cooldown of weapons
 float TurretComponent::p2_base_cooldown = 0.1f;
 // Rotation of turret
-float TurretComponent::p2_turret_rotation = M_PI;
+float TurretComponent::p2_turret_rotation = 0.0f;
 
 void TurretComponent::update(double dt) {
 	// Countdown timers
@@ -59,24 +59,28 @@ void TurretComponent::update(double dt) {
 	}
 
 	// Rotate turret
-	auto turret = _parent->GetCompatibleComponent<SpriteComponent>().at(16);
-	if (InputManager::Player[0].turretClockwise) {
-		p1_turret_rotation += dt;
-		turret->rotateOffset(dt * 180.0f / M_PI);
-	}
-	if (InputManager::Player[0].turretCounterClockwise) {
-		p1_turret_rotation -= dt;
-		turret->rotateOffset(-dt * 180.0f / M_PI);
-	}
-	if (InputManager::Player[1].turretClockwise) {
-		p2_turret_rotation += dt;
-		turret->rotateOffset(dt * 180.0f / M_PI);
-	}
-	if (InputManager::Player[1].turretCounterClockwise) {
-		p2_turret_rotation -= dt;
-		turret->rotateOffset(-dt * 180.0f / M_PI);
-	}
 
+	auto turret = _parent->GetCompatibleComponent<SpriteComponent>().at(16);
+	if (_parent == player1.get()) {
+		if (InputManager::Player[0].turretClockwise) {
+			p1_turret_rotation += dt;
+			turret->setRotationOffset(180.0f + p1_turret_rotation * 180.0f / M_PI);
+		}
+		if (InputManager::Player[0].turretCounterClockwise) {
+			p1_turret_rotation -= dt;
+			turret->setRotationOffset(180.0f + p1_turret_rotation * 180.0f / M_PI);
+		}
+	}
+	else {
+		if (InputManager::Player[1].turretClockwise) {
+			p2_turret_rotation += dt;
+			turret->setRotationOffset(p2_turret_rotation * 180.0f / M_PI);
+		}
+		if (InputManager::Player[1].turretCounterClockwise) {
+			p2_turret_rotation -= dt;
+			turret->setRotationOffset(p2_turret_rotation * 180.0f / M_PI);
+		}
+	}
 }
 
 void TurretComponent::fire(int target) const {
