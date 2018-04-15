@@ -83,6 +83,7 @@ void TurretComponent::update(double dt) {
 	}
 }
 
+
 void TurretComponent::fire(int target) const {
 	// Rotate turret
 	auto turret = _parent->GetCompatibleComponent<SpriteComponent>().at(16);
