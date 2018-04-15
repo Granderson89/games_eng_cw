@@ -4,9 +4,10 @@ using namespace sf;
 using namespace std;
 
 
-AnimatorComponent::AnimatorComponent(Entity* p, Texture& spriteSheet, Vector2u size, float& length, int& frames) : Component(p)
+AnimatorComponent::AnimatorComponent(Entity* p, shared_ptr<SpriteComponent> sc
+	, Texture& spriteSheet, Vector2u size, float& length, int& frames) : Component(p)
 {
-	spr = p->GetCompatibleComponent<SpriteComponent>()[0];
+	spr = sc;
 	ir = IntRect(0, 0, size.x, size.y);
 	tex = spriteSheet;
 	this->length = length;
@@ -37,8 +38,9 @@ void AnimatorComponent::update(double dt)
 		ir = IntRect(ir.width * currentFrame, 0, ir.width, ir.height);
 		spr->getSprite().setTexture(tex);
 		spr->getSprite().setTextureRect(ir);
+
 		// Only switch to next animation frame if enough time has elapsed
-		if (elapsed > length / (float)frames)
+		while (elapsed > length / (float)frames)
 		{
 			elapsed -= length / (float)frames;
 			if (currentFrame >= frames)

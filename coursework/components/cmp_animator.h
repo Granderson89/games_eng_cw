@@ -19,7 +19,8 @@ private:
 	sf::Texture originalTexture;			// Non-animated texture of the entity
 	bool repeating;							// Whether or not to repeat the animation after a full loop
 public:
-	explicit AnimatorComponent(Entity* p, sf::Texture& spriteSheet, sf::Vector2u size, float& length, int& frames);
+	explicit AnimatorComponent(Entity* p, std::shared_ptr<SpriteComponent> sc
+		, sf::Texture& spriteSheet, sf::Vector2u size, float& length, int& frames);
 	AnimatorComponent() = delete;
 	~AnimatorComponent();
 
