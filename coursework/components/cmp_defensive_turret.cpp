@@ -71,7 +71,7 @@ void TurretComponent::update(double dt) {
 
 void TurretComponent::fire(int target) const {
 	auto projectile = _parent->scene->makeEntity();
-	projectile->setPosition(_parent->getPosition() + Vector2f(20.0f, 20.0f));
+	projectile->setPosition(_parent->getPosition());
 	auto s = projectile->addComponent<ShapeComponent>();
 	s->setShape<sf::CircleShape>(4.0f);
 	s->getShape().setFillColor(Color::Green);
