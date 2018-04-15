@@ -5,6 +5,9 @@ Texture ResourceManager::Tex_background = Texture();
 Texture ResourceManager::Tex_player1 = Texture();
 Texture ResourceManager::Tex_player2 = Texture();
 Texture ResourceManager::Tex_warp_blue = Texture();
+Texture ResourceManager::Tex_warp_blue_exit = Texture();
+Texture ResourceManager::Tex_warp_red = Texture();
+Texture ResourceManager::Tex_warp_red_exit = Texture();
 
 
 

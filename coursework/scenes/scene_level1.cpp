@@ -14,6 +14,7 @@
 #include "../steering_states.h"
 #include "../resource_manager.h"
 #include "../components/cmp_background.h"
+#include "../components/cmp_animator.h"
 #include <LevelSystem.h>
 #include <iostream>
 #include <thread>
