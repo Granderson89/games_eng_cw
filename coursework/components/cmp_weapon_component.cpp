@@ -8,6 +8,7 @@
 #include "engine.h"
 #include "../game.h"
 #include "../resource_manager.h"
+#include <SFML/Audio.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Window/Keyboard.hpp>
 
@@ -36,6 +37,13 @@ float WeaponComponent::p2_base_cooldown = 1.0f;
 
 float p1_change_timer = 0.0f;
 float p2_change_timer = 0.0f;
+// Sounds
+sf::SoundBuffer WeaponComponent::plasmaBuffer;
+sf::SoundBuffer WeaponComponent::torpedoBuffer;
+sf::SoundBuffer WeaponComponent::missileBuffer;
+sf::Sound WeaponComponent::plasmaSound;
+sf::Sound WeaponComponent::torpedoSound;
+sf::Sound WeaponComponent::missileSound;
 
 void WeaponComponent::update(double dt) {
 	// Countdown timers
@@ -332,6 +340,7 @@ void WeaponComponent::fire(int target) const {
 			auto l = projectile->addComponent<PlasmaComponent>(_target, direction);
 			projectile->addTag("p1_projectiles");
 		}
+		plasmaSound.play();
 	}
 	if (_type == TORPEDOS) {
 		spr->getSprite().setTexture(ResourceManager::Tex_torpedo);
@@ -347,6 +356,7 @@ void WeaponComponent::fire(int target) const {
 			auto l = projectile->addComponent<TorpedoComponent>(player2, direction);
 			projectile->addTag("p1_projectiles");
 		}
+		torpedoSound.play();
 	}
 	if (_type == MISSILES) {
 		spr->getSprite().setTexture(ResourceManager::Tex_missile);
@@ -364,6 +374,7 @@ void WeaponComponent::fire(int target) const {
 			projectile->addComponent<SteeringComponent>(player2.get(), m->getSpeed());
 			projectile->addTag("p1_projectiles");
 		}
+		missileSound.play();
 	}
 }
 
@@ -449,6 +460,17 @@ string WeaponComponent::getP2ActiveType()
 		return "CANNONS";
 		break;
 	}
+}
+void WeaponComponent::loadSounds()
+{
+	plasmaBuffer.loadFromFile("res/sounds/plasma.wav");
+	plasmaSound.setBuffer(plasmaBuffer);
+
+	torpedoBuffer.loadFromFile("res/sounds/torpedo.wav");
+	torpedoSound.setBuffer(torpedoBuffer);
+
+	missileBuffer.loadFromFile("res/sounds/missile.wav");
+	missileSound.setBuffer(missileBuffer);
 }
 float WeaponComponent::getCooldown()
 {

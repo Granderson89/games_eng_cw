@@ -1,6 +1,7 @@
 #pragma once
 #include "cmp_physics.h"
 #include "ecm.h"
+#include <SFML/Audio.hpp>
 
 using namespace sf;
 
@@ -24,6 +25,14 @@ protected:
 	static float p2_base_cooldown;
 	static type p2_active_type;
 
+	// Weapon sounds
+	static sf::SoundBuffer plasmaBuffer;
+	static sf::SoundBuffer torpedoBuffer;
+	static sf::SoundBuffer missileBuffer;
+	static sf::Sound plasmaSound;
+	static sf::Sound torpedoSound;
+	static sf::Sound missileSound;
+
 	void fire(int target) const;
 
 	Entity* _target;
@@ -41,6 +50,7 @@ public:
 	static void changeP2Weapon();
 	static string getP1ActiveType();
 	static string getP2ActiveType();
+	static void loadSounds();
 
 	float getCooldown();
 	string getType();

@@ -47,6 +47,10 @@ float ship_length = 200.0f;
 // Weapon mount dimensions
 float mount_height = 4.0f;
 
+// Sounds
+sf::SoundBuffer Level1Scene::bgBuffer;
+sf::Sound Level1Scene::bgSound;
+
 void Level1Scene::Load() {
 	cout << " Scene 1 Load" << endl;
 
@@ -98,6 +102,8 @@ void Level1Scene::Load() {
 	
 	//Simulate long loading times
 	//std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+	bgSound.setLoop(true);
+	bgSound.play();
 	cout << " Scene 1 Load Done" << endl;
 	setLoaded(true);
 }
@@ -106,6 +112,7 @@ void Level1Scene::UnLoad() {
 	cout << "Scene 1 Unload" << endl;
 	player1.reset();
 	player2.reset();
+	bgSound.stop();
 	sf::View view;
 	view.reset(FloatRect(0.0f, 0.0f, resolution.x, resolution.y));
 	Renderer::getWindow().setView(view);
@@ -251,4 +258,10 @@ void Level1Scene::createHud(std::shared_ptr<Entity> player) {
 		timerColor.a = 128.0f;
 		timer->getShape().setFillColor(timerColor);
 	}
+}
+
+void Level1Scene::loadSounds()
+{
+	bgBuffer.loadFromFile("res/sounds/bg.ogg");
+	bgSound.setBuffer(bgBuffer);
 }

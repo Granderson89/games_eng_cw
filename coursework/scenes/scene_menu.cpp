@@ -1,6 +1,11 @@
 #include "scene_menu.h"
 #include "../components/cmp_text.h"
 #include "../components/cmp_sprite.h"
+#include "../components/cmp_weapon_component.h"
+#include "../components/cmp_plasma_logic.h"
+#include "../components/cmp_torpedo_logic.h"
+#include "../components/cmp_missile_logic.h"
+#include "../components/cmp_thrusters.h"
 #include "../game.h"
 #include <SFML/Window/Keyboard.hpp>
 #include <iostream>
@@ -18,6 +23,9 @@ bool controller = false;
 
 // Number of human players
 int players;
+// Sounds
+sf::SoundBuffer MenuScene::menubgBuffer;
+sf::Sound MenuScene::menubgSound;
 
 void MenuScene::Load() {
 	cout << "Menu Load \n";
@@ -103,14 +111,20 @@ void MenuScene::Load() {
 	// Check for a controller
 	controller = ControllerConnected(0);
 
-	HighlightSelected();
-	setLoaded(true);
-	cout << "Menu Load Done\n";
+
+  HighlightSelected();
+  menubgSound.setLoop(true);
+  setLoaded(true);
+  cout << "Menu Load Done\n";
 
 }
 
 void MenuScene::Update(const double& dt) {
 	// Check for a controller
+	if (menubgSound.getStatus() != SoundSource::Status::Playing) {
+		menubgSound.play();
+	}
+  // Check for a controller
 	if (sf::Joystick::isConnected(0)) {
 		controller = true;
 	}
@@ -155,6 +169,7 @@ void MenuScene::Update(const double& dt) {
 		HighlightSelected();
 	}
 	Scene::Update(dt);
+  
 }
 
 void MenuScene::HighlightSelected() {
@@ -185,4 +200,10 @@ bool MenuScene::ControllerConnected(int id)
 	else {
 		return false;
 	}
+}
+
+void MenuScene::loadSounds()
+{
+	menubgBuffer.loadFromFile("res/sounds/menubg.ogg");
+	menubgSound.setBuffer(menubgBuffer);
 }
