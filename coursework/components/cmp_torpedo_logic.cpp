@@ -51,6 +51,7 @@ void TorpedoComponent::loadSounds()
 {
    	explosionBuffer.loadFromFile("res/sounds/explosion.wav");
 	explosionSound.setBuffer(explosionBuffer);
+	explosionSound.setVolume(20.0f);
 }
 
 void TorpedoComponent::explode() {
