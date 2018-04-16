@@ -9,7 +9,7 @@ InputManager::actions InputManager::Player[2];
 
 Keyboard::Key InputManager::_lastKeyPressed;
 
-const char* InputManager::keyNames[] = 
+const char* InputManager::keyNames[] =
 {
 	stringify(A),        ///< The A key
 	stringify(B),            ///< The B key
@@ -148,14 +148,14 @@ void InputManager::initialize()
 	playerInput[0].thrusterWheelUp = Keyboard::Q;
 
 	// Thruster selecting
-	playerInput[0].selectorAxis[0] = Keyboard::Num8;
-	playerInput[0].selectorAxis[0] = Keyboard::Num9;
-	playerInput[0].selectorAxis[0] = Keyboard::Num6;
-	playerInput[0].selectorAxis[0] = Keyboard::Num3;
-	playerInput[0].selectorAxis[0] = Keyboard::Num2;
-	playerInput[0].selectorAxis[0] = Keyboard::Num1;
-	playerInput[0].selectorAxis[0] = Keyboard::Num4;
-	playerInput[0].selectorAxis[0] = Keyboard::Num7;
+	playerInput[0].selectorAxis[0] = Keyboard::Numpad8;
+	playerInput[0].selectorAxis[1] = Keyboard::Numpad9;
+	playerInput[0].selectorAxis[2] = Keyboard::Numpad6;
+	playerInput[0].selectorAxis[3] = Keyboard::Numpad3;
+	playerInput[0].selectorAxis[4] = Keyboard::Numpad2;
+	playerInput[0].selectorAxis[5] = Keyboard::Numpad1;
+	playerInput[0].selectorAxis[6] = Keyboard::Numpad4;
+	playerInput[0].selectorAxis[7] = Keyboard::Numpad7;
 
 	playerInput[0].boostMovement = Keyboard::Num5;
 
@@ -165,8 +165,8 @@ void InputManager::initialize()
 	playerInput[0].confirm = Keyboard::Space;
 	playerInput[0].pause = Keyboard::P;
 
-	
-	
+
+
 	playerInput[1].source = 0;
 	playerInput[1].moveForward = Joystick::Y;
 	playerInput[1].moveBackwards = Joystick::Y;
@@ -208,14 +208,14 @@ void InputManager::initializeKeyboard(int player)
 	playerInput[player].thrusterWheelUp = Keyboard::Q;
 
 	// Thruster selecting
-	playerInput[player].selectorAxis[0] = Keyboard::Num8;
-	playerInput[player].selectorAxis[0] = Keyboard::Num9;
-	playerInput[player].selectorAxis[0] = Keyboard::Num6;
-	playerInput[player].selectorAxis[0] = Keyboard::Num3;
-	playerInput[player].selectorAxis[0] = Keyboard::Num2;
-	playerInput[player].selectorAxis[0] = Keyboard::Num1;
-	playerInput[player].selectorAxis[0] = Keyboard::Num4;
-	playerInput[player].selectorAxis[0] = Keyboard::Num7;
+	playerInput[player].selectorAxis[0] = Keyboard::Numpad8;
+	playerInput[player].selectorAxis[1] = Keyboard::Numpad9;
+	playerInput[player].selectorAxis[2] = Keyboard::Numpad6;
+	playerInput[player].selectorAxis[3] = Keyboard::Numpad3;
+	playerInput[player].selectorAxis[4] = Keyboard::Numpad2;
+	playerInput[player].selectorAxis[5] = Keyboard::Numpad1;
+	playerInput[player].selectorAxis[6] = Keyboard::Numpad4;
+	playerInput[player].selectorAxis[7] = Keyboard::Numpad7;
 
 	playerInput[player].boostMovement = Keyboard::Num5;
 
@@ -459,64 +459,84 @@ void InputManager::update()
 				Player[i].jumpExecute = true;
 			}
 
-			// Thruster wheel
-			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].thrusterWheelUp))
-			{
-				if (Player[i].thrusterWheelUp == false)
-					for (int j = 0; j < 6; j++)
-						Player[i].thrusterOn[j] = false;
-				Player[i].thrusterWheelUp = true;
-			}
-			else
-				Player[i].thrusterWheelUp = false;
+			//// Thruster wheel
+			//if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].thrusterWheelUp))
+			//{
+			//	if (Player[i].thrusterWheelUp == false)
+			//		for (int j = 0; j < 6; j++)
+			//			Player[i].thrusterOn[j] = false;
+			//	Player[i].thrusterWheelUp = true;
+			//}
+			//else
+			//	Player[i].thrusterWheelUp = false;
 
-			if (Player[i].thrusterWheelUp)
-			{
-				if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[0]))
-					Player[i].thrusterOn[0] = true;
-				if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[1]))
-					Player[i].thrusterOn[1] = true;
-				if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[2]))
-				{
-					Player[i].thrusterOn[1] = true;
-					Player[i].thrusterOn[2] = true;
-				}
-				if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[3]))
-					Player[i].thrusterOn[2] = true;
-				if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[4]))
-					Player[i].thrusterOn[3] = true;
-				if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[5]))
-					Player[i].thrusterOn[4] = true;
-				if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[6]))
-				{
-					Player[i].thrusterOn[4] = true;
-					Player[i].thrusterOn[5] = true;
-				}
-				if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[7]))
-					Player[i].thrusterOn[5] = true;
-			}
-
-			// Boost
-			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].boostMovement))
-			{
-				if (Player[i].moveForward)
-					Player[i].thrusterOn[3] = true;
-				if (Player[i].moveBackwards)
-					Player[i].thrusterOn[0] = true;
-				if (Player[i].turnLeft)
-				{
-					Player[i].thrusterOn[1] = true;
-					Player[i].thrusterOn[4] = true;
-				}
-				if (Player[i].turnRight)
-				{
-					Player[i].thrusterOn[5] = true;
-					Player[i].thrusterOn[2] = true;
-				}
-			}
+			// Thrusters
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[0]))
+				Player[i].thrusterOn[0] = true;
 			else
-				for (int j = 0; j < 6; j++)
-					Player[i].thrusterOn[j] = false;
+				Player[i].thrusterOn[0] = false;
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[1]))
+				Player[i].thrusterOn[1] = true;
+			else
+				Player[i].thrusterOn[1] = false;
+			//if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[2]))
+			//{
+			//	Player[i].thrusterOn[1] = true;
+			//	Player[i].thrusterOn[2] = true;
+			//}
+			//else
+			//{
+			//	Player[i].thrusterOn[1] = false;
+			//	Player[i].thrusterOn[2] = false;
+			//}
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[3]))
+				Player[i].thrusterOn[2] = true;
+			else
+				Player[i].thrusterOn[2] = false;
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[4]))
+				Player[i].thrusterOn[3] = true;
+			else
+				Player[i].thrusterOn[3] = false;
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[5]))
+				Player[i].thrusterOn[4] = true;
+			else
+				Player[i].thrusterOn[4] = false;
+			//if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[6]))
+			//{
+			//	Player[i].thrusterOn[4] = true;
+			//	Player[i].thrusterOn[5] = true;
+			//}
+			//else
+			//{
+			//	Player[i].thrusterOn[4] = false;
+			//	Player[i].thrusterOn[5] = false;
+			//}
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[7]))
+				Player[i].thrusterOn[5] = true;
+			else
+				Player[i].thrusterOn[5] = false;
+
+			//// Boost
+			//if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].boostMovement))
+			//{
+			//	if (Player[i].moveForward)
+			//		Player[i].thrusterOn[3] = true;
+			//	if (Player[i].moveBackwards)
+			//		Player[i].thrusterOn[0] = true;
+			//	if (Player[i].turnLeft)
+			//	{
+			//		Player[i].thrusterOn[1] = true;
+			//		Player[i].thrusterOn[4] = true;
+			//	}
+			//	if (Player[i].turnRight)
+			//	{
+			//		Player[i].thrusterOn[5] = true;
+			//		Player[i].thrusterOn[2] = true;
+			//	}
+			//}
+			//else
+			//	for (int j = 0; j < 6; j++)
+			//		Player[i].thrusterOn[j] = false;
 			// Pause
 			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].pause))
 				Player[i].pause = true;
@@ -642,7 +662,7 @@ Keyboard::Key InputManager::getLastKeyPressed()
 }
 
 void InputManager::clearLastPressed() {
-	_lastKeyPressed = (Keyboard::Key)-1;
+	_lastKeyPressed = (Keyboard::Key) - 1;
 }
 
 int InputManager::getLastButtonPressed(int source)

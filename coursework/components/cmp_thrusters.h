@@ -22,7 +22,4 @@ public:
 
 	void update(double dt) override;
 	void render() override {}
-
-	// Fires a thruster (index start at 0 = N and continues clockwise)
-	void fireThruster(const int& index);
 };
