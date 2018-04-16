@@ -1,6 +1,8 @@
 #pragma once
 #include <ecm.h>
 #include <SFML/Graphics.hpp>
+#include "cmp_animator.h"
+#include "cmp_physics.h"
 
 
 class ThrustersComponent : public Component
@@ -13,6 +15,10 @@ private:
 	bool _firing[6];	// Whether the thruster is firing or not
 	float _power;
 	Entity* _parent;
+
+	std::shared_ptr<PhysicsComponent> phc;
+	std::vector<std::shared_ptr<AnimatorComponent>> anims;
+	int pl = 1;
 
 public:
 	// Assumes the spaceship is pointing north

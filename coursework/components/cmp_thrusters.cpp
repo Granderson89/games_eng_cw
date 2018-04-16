@@ -1,16 +1,11 @@
 #include "cmp_thrusters.h"
-#include "cmp_physics.h"
 #include <maths.h>
-#include "cmp_animator.h"
 #include "../input_manager.h"
 
 
 using namespace std;
 using namespace sf;
 
-shared_ptr<PhysicsComponent> phc;
-vector<shared_ptr<AnimatorComponent>> anims;
-int pl = 1;
 
 
 ThrustersComponent::ThrustersComponent(Entity* p, const Vector2f& dim, const float& power) : Component(p)
@@ -53,6 +48,7 @@ ThrustersComponent::~ThrustersComponent()
 	phc.~shared_ptr();
 	for (auto &a : anims)
 		a.~shared_ptr();
+	anims.clear();
 }
 
 
