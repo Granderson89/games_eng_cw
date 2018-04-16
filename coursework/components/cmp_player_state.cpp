@@ -18,7 +18,7 @@ void PlayerStateComponent::update(double dt)
 	if (health <= 0.0f)
 	{
 		// Death resolution here ///////////////////////////////////////////////////////
-		_parent->setForDelete();
+		//_parent->setForDelete();
 		if (_parent == player1.get()) {
 			winner = 2;
 		}
