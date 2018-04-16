@@ -41,3 +41,7 @@ void TextComponent::SetScale(const float scale)
 {
 	_text.setScale(sf::Vector2f(scale, scale));
 }
+
+void TextComponent::SetColor(sf::Color color) {
+	_text.setColor(color);
+}

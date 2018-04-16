@@ -20,7 +20,7 @@ public:
   void Highlight();
   void NoHighlight();
   void SetScale(const float scale);
-
+  void SetColor(sf::Color color);
 
 protected:
   std::shared_ptr<sf::Font> _font;

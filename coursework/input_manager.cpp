@@ -391,30 +391,6 @@ void InputManager::update()
 			else
 				for (int j = 0; j < 6; j++)
 					Player[i].thrusterOn[j] = false;
-			// Menu
-			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].menuUp)) {
-				Player[i].menuUp = true;
-			}
-			else {
-				Player[i].menuUp = false;
-			}
-			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].menuDown)) {
-				Player[i].menuDown = true;
-			}
-			else {
-				Player[i].menuDown = false;
-			}
-			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].confirm)) {
-				Player[i].confirm = true;
-			}
-			else {
-				Player[i].confirm = false;
-			}
-			// Pause
-			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].pause))
-				Player[i].pause = true;
-			else
-				Player[i].pause = false;
 
 			// Pause
 			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].pause))
@@ -541,7 +517,69 @@ void InputManager::update()
 			else
 				for (int j = 0; j < 6; j++)
 					Player[i].thrusterOn[j] = false;
-			
+			// Pause
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].pause))
+				Player[i].pause = true;
+			else
+				Player[i].pause = false;
+		}
+	}
+}
+
+void InputManager::menuUpdate()
+{
+	for (int i = 0; i < 2; i++)
+	{
+		// Controller
+		if (playerInput[i].source >= 0)
+		{
+			// Menu
+			static bool mup = false;
+			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].menuUp))
+			{
+				if (!mup)
+					Player[i].menuUp = true;
+				else
+					Player[i].menuUp = false;
+				mup = true;
+			}
+			else
+			{
+				mup = false;
+				Player[i].menuUp = false;
+			}
+			static bool mdown = false;
+			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].menuDown))
+			{
+				if (!mdown)
+					Player[i].menuDown = true;
+				else
+					Player[i].menuDown = false;
+				mdown = true;
+			}
+			else
+			{
+				mdown = false;
+				Player[i].menuDown = false;
+			}
+			static bool mconf;
+			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].confirm))
+			{
+				if (!mconf)
+					Player[i].confirm = true;
+				else
+					Player[i].confirm = false;
+				mconf = true;
+			}
+			else
+			{
+				mconf = false;
+				Player[i].confirm = false;
+			}
+		}
+		// Keyboard
+		else if (playerInput[i].source == -1)
+		{
 			// Menu
 			static bool mup = false;
 			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].menuUp))
@@ -585,11 +623,6 @@ void InputManager::update()
 				mconf = false;
 				Player[i].confirm = false;
 			}
-			// Pause
-			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].pause))
-				Player[i].pause = true;
-			else
-				Player[i].pause = false;
 		}
 	}
 }

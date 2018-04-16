@@ -52,8 +52,8 @@ void ControlsScene::Load() {
 	// Player 2
 	createPlayerButtons(1, scale, buttonRect);
 
-	// Back button
-	MakeButton(Vector2f(Engine::getWindowSize().x - buttonRect.width* scale, Engine::getWindowSize().y - buttonRect.height), scale, buttonRect, "\n   Back");
+	// Save & close button
+	MakeButton(Vector2f(Engine::getWindowSize().x - buttonRect.width* scale, Engine::getWindowSize().y - buttonRect.height), scale, buttonRect, "\n   Save & close");
 	HighlightSelected();
 
 	setLoaded(true);
@@ -148,15 +148,19 @@ void ControlsScene::Update(const double& dt) {
 		}
 	}
 	else {
+		std::shared_ptr<TextComponent> text;
 		switch (changeControl) {
 			// Player 1
 		case P1_FIRE:
+			text = controls.at(0)->GetCompatibleComponent<TextComponent>().at(0);
+			text->Highlight();
 			if (InputManager::playerInput[0].source == -1) {
 				if (InputManager::getLastKeyPressed() != -1 &&
 					InputManager::getLastKeyPressed() != InputManager::playerInput[0].confirm) {
 					InputManager::playerInput[0].fire = InputManager::getLastKeyPressed();
 					controls.at(0)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[0].fire]);
 					changeControl = NONE;
+					text->NoHighlight();
 				}
 			}
 			else {
@@ -165,16 +169,20 @@ void ControlsScene::Update(const double& dt) {
 					InputManager::playerInput[0].fire = InputManager::getLastButtonPressed(InputManager::playerInput[0].source);
 					controls.at(0)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[0].fire));
 					changeControl = NONE;
+					text->NoHighlight();
 				}
 			}
 			break;
 		case P1_CHANGE_WEAPON:
+			text = controls.at(1)->GetCompatibleComponent<TextComponent>().at(0);
+			text->Highlight();
 			if (InputManager::playerInput[0].source == -1) {
 				if (InputManager::getLastKeyPressed() != -1 &&
 					InputManager::getLastKeyPressed() != InputManager::playerInput[0].confirm) {
 					InputManager::playerInput[0].changeWeapon = InputManager::getLastKeyPressed();
 					controls.at(1)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[0].changeWeapon]);
 					changeControl = NONE;
+					text->NoHighlight();
 				}
 			}
 			else {
@@ -183,16 +191,20 @@ void ControlsScene::Update(const double& dt) {
 					InputManager::playerInput[0].changeWeapon = InputManager::getLastButtonPressed(InputManager::playerInput[0].source);
 					controls.at(1)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[0].changeWeapon));
 					changeControl = NONE;
+					text->NoHighlight();
 				}
 			}
 			break;
 		case P1_FIRE_TURRET:
+			text = controls.at(2)->GetCompatibleComponent<TextComponent>().at(0);
+			text->Highlight();
 			if (InputManager::playerInput[0].source == -1) {
 				if (InputManager::getLastKeyPressed() != -1 &&
 					InputManager::getLastKeyPressed() != InputManager::playerInput[0].confirm) {
 					InputManager::playerInput[0].fireTurret = InputManager::getLastKeyPressed();
 					controls.at(2)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[0].fireTurret]);
 					changeControl = NONE;
+					text->NoHighlight();
 				}
 			}
 			else {
@@ -201,16 +213,20 @@ void ControlsScene::Update(const double& dt) {
 					InputManager::playerInput[0].fireTurret = InputManager::getLastButtonPressed(InputManager::playerInput[0].source);
 					controls.at(2)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[0].fireTurret));
 					changeControl = NONE;
+					text->NoHighlight();
 				}
 			}
 			break;
 		case P1_CHARGE_JUMP:
+			text = controls.at(3)->GetCompatibleComponent<TextComponent>().at(0);
+			text->Highlight();
 			if (InputManager::playerInput[0].source == -1) {
 				if (InputManager::getLastKeyPressed() != -1 &&
 					InputManager::getLastKeyPressed() != InputManager::playerInput[0].confirm) {
 					InputManager::playerInput[0].jumpCharging = InputManager::getLastKeyPressed();
 					controls.at(3)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[0].jumpCharging]);
 					changeControl = NONE;
+					text->NoHighlight();
 				}
 			}
 			else {
@@ -219,17 +235,21 @@ void ControlsScene::Update(const double& dt) {
 					InputManager::playerInput[0].jumpCharging = InputManager::getLastButtonPressed(InputManager::playerInput[0].source);
 					controls.at(3)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[0].jumpCharging));
 					changeControl = NONE;
+					text->NoHighlight();
 				}
 			}
 			break;
 			// Player 2
 		case P2_FIRE:
+			text = controls.at(4)->GetCompatibleComponent<TextComponent>().at(0);
+			text->Highlight();
 			if (InputManager::playerInput[1].source == -1) {
 				if (InputManager::getLastKeyPressed() != -1 &&
 					InputManager::getLastKeyPressed() != InputManager::playerInput[1].confirm) {
 					InputManager::playerInput[1].fire = InputManager::getLastKeyPressed();
 					controls.at(4)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[1].fire]);
 					changeControl = NONE;
+					text->NoHighlight();
 				}
 			}
 			else {
@@ -238,16 +258,20 @@ void ControlsScene::Update(const double& dt) {
 					InputManager::playerInput[1].fire = InputManager::getLastButtonPressed(InputManager::playerInput[1].source);
 					controls.at(4)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[1].fire));
 					changeControl = NONE;
+					text->NoHighlight();
 				}
 			}
 			break;
 		case P2_CHANGE_WEAPON:
+			text = controls.at(5)->GetCompatibleComponent<TextComponent>().at(0);
+			text->Highlight();
 			if (InputManager::playerInput[1].source == -1) {
 				if (InputManager::getLastKeyPressed() != -1 &&
 					InputManager::getLastKeyPressed() != InputManager::playerInput[1].confirm) {
 					InputManager::playerInput[1].changeWeapon = InputManager::getLastKeyPressed();
 					controls.at(5)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[1].changeWeapon]);
 					changeControl = NONE;
+					text->NoHighlight();
 				}
 			}
 			else {
@@ -256,16 +280,20 @@ void ControlsScene::Update(const double& dt) {
 					InputManager::playerInput[1].changeWeapon = InputManager::getLastButtonPressed(InputManager::playerInput[1].source);
 					controls.at(5)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[1].changeWeapon));
 					changeControl = NONE;
+					text->NoHighlight();
 				}
 			}
 			break;
 		case P2_FIRE_TURRET:
+			text = controls.at(6)->GetCompatibleComponent<TextComponent>().at(0);
+			text->Highlight();
 			if (InputManager::playerInput[1].source == -1) {
 				if (InputManager::getLastKeyPressed() != -1 &&
 					InputManager::getLastKeyPressed() != InputManager::playerInput[1].confirm) {
 					InputManager::playerInput[1].fireTurret = InputManager::getLastKeyPressed();
 					controls.at(6)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[1].fireTurret]);
 					changeControl = NONE;
+					text->NoHighlight();
 				}
 			}
 			else {
@@ -274,16 +302,20 @@ void ControlsScene::Update(const double& dt) {
 					InputManager::playerInput[1].fireTurret = InputManager::getLastButtonPressed(InputManager::playerInput[1].source);
 					controls.at(6)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[1].fireTurret));
 					changeControl = NONE;
+					text->NoHighlight();
 				}
 			}
 			break;
 		case P2_CHARGE_JUMP:
+			text = controls.at(7)->GetCompatibleComponent<TextComponent>().at(0);
+			text->Highlight();
 			if (InputManager::playerInput[1].source == -1) {
 				if (InputManager::getLastKeyPressed() != -1 &&
 					InputManager::getLastKeyPressed() != InputManager::playerInput[1].confirm) {
 					InputManager::playerInput[1].jumpCharging = InputManager::getLastKeyPressed();
 					controls.at(7)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::keyNames[InputManager::playerInput[1].jumpCharging]);
 					changeControl = NONE;
+					text->NoHighlight();
 				}
 			}
 			else {
@@ -292,6 +324,7 @@ void ControlsScene::Update(const double& dt) {
 					InputManager::playerInput[1].jumpCharging = InputManager::getLastButtonPressed(InputManager::playerInput[1].source);
 					controls.at(7)->GetCompatibleComponent<TextComponent>().at(0)->SetText(InputManager::buttonNames.at(InputManager::playerInput[1].jumpCharging));
 					changeControl = NONE;
+					text->NoHighlight();
 				}
 			}
 			break;

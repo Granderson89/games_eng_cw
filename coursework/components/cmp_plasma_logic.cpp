@@ -10,7 +10,7 @@ using namespace std;
 using namespace sf;
 
 // Lifespan of projectile
-float PlasmaComponent::max_lifespan = 3.0f;
+float PlasmaComponent::max_lifespan = 2.0f;
 // Full strength of projectile
 float PlasmaComponent::max_strength = 1.0f;
 // Speed of projectile
