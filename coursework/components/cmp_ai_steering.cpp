@@ -1,5 +1,8 @@
+#define _USE_MATH_DEFINES
+
 #include "cmp_ai_steering.h"
 #include "cmp_physics.h"
+#include <math.h>
 
 using namespace sf;
 using namespace std;
@@ -8,6 +11,8 @@ void SteeringComponent::update(double dt) {
 	auto output = _seek.getSteering();
 	output.direction.y *= -1.0f;
 	_parent->GetCompatibleComponent<PhysicsComponent>().at(0)->setVelocity(output.direction);
+	_parent->setRotation(output.rotation * 180.0f / M_PI);
+
 }
 
 SteeringComponent::SteeringComponent(Entity* p, Entity* target, float speed)

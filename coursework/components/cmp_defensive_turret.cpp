@@ -1,7 +1,11 @@
+#define _USE_MATH_DEFINES
+
 #include "cmp_defensive_turret.h"
 #include "cmp_turret_projectile.h"
 #include "cmp_sprite.h"
 #include "../game.h"
+
+#include <math.h>
 
 using namespace std;
 using namespace sf;
@@ -14,7 +18,7 @@ float TurretComponent::p1_firetime = 0.0f;
 // Base cooldown of weapons
 float TurretComponent::p1_base_cooldown = 0.1f;
 // Rotation of turret
-float TurretComponent::p1_turret_rotation = 0.0f;
+float TurretComponent::p1_turret_rotation = M_PI;
 
 // Keeps track of which weapon to fire next
 int TurretComponent::p2_next_weapon = 1;
@@ -55,21 +59,34 @@ void TurretComponent::update(double dt) {
 	}
 
 	// Rotate turret
-	if (InputManager::Player[0].turretClockwise) {
-		p1_turret_rotation += dt;
+
+	auto turret = _parent->GetCompatibleComponent<SpriteComponent>().at(16);
+	if (_parent == player1.get()) {
+		if (InputManager::Player[0].turretClockwise) {
+			p1_turret_rotation += dt;
+			turret->setRotationOffset(180.0f + p1_turret_rotation * 180.0f / M_PI);
+		}
+		if (InputManager::Player[0].turretCounterClockwise) {
+			p1_turret_rotation -= dt;
+			turret->setRotationOffset(180.0f + p1_turret_rotation * 180.0f / M_PI);
+		}
 	}
-	if (InputManager::Player[0].turretCounterClockwise) {
-		p1_turret_rotation -= dt;
-	}
-	if (InputManager::Player[1].turretClockwise) {
-		p2_turret_rotation += dt;
-	}
-	if (InputManager::Player[1].turretCounterClockwise) {
-		p2_turret_rotation -= dt;
+	else {
+		if (InputManager::Player[1].turretClockwise) {
+			p2_turret_rotation += dt;
+			turret->setRotationOffset(p2_turret_rotation * 180.0f / M_PI);
+		}
+		if (InputManager::Player[1].turretCounterClockwise) {
+			p2_turret_rotation -= dt;
+			turret->setRotationOffset(p2_turret_rotation * 180.0f / M_PI);
+		}
 	}
 }
 
+
 void TurretComponent::fire(int target) const {
+	// Rotate turret
+	auto turret = _parent->GetCompatibleComponent<SpriteComponent>().at(16);
 	auto projectile = _parent->scene->makeEntity();
 	projectile->setPosition(_parent->getPosition());
 	auto s = projectile->addComponent<ShapeComponent>();

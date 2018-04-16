@@ -24,4 +24,11 @@ public:
 	static Texture Tex_thruster2_on;
 	static Texture Tex_thruster1_off;
 	static Texture Tex_thruster2_off;
+	static Texture Tex_cannon_mount;
+	static Texture Tex_torpedo_mount;
+	static Texture Tex_missile_mount;
+	static Texture Tex_turret;
+	static Texture Tex_plasma;
+	static Texture Tex_torpedo;
+	static Texture Tex_missile;
 };
