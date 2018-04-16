@@ -2,6 +2,8 @@
 #include <ecm.h>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include "cmp_animator.h"
+#include "cmp_physics.h"
 
 
 class ThrustersComponent : public Component
@@ -18,6 +20,10 @@ private:
 	static sf::Sound thrustSound;
 
 
+	std::shared_ptr<PhysicsComponent> phc;
+	std::vector<std::shared_ptr<AnimatorComponent>> anims;
+	int pl = 1;
+
 public:
 	// Assumes the spaceship is pointing north
 	explicit ThrustersComponent(Entity* p, const sf::Vector2f& dim, const float& power);
@@ -28,7 +34,7 @@ public:
 	void render() override {}
 
 	// Fires a thruster (index start at 0 = N and continues clockwise)
-	void fireThruster(const int& index);
+//	void fireThruster(const int& index);
 
 	static void loadSounds();
 };

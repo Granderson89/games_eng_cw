@@ -1,3 +1,4 @@
+#pragma once
 #define _USE_MATH_DEFINES
 
 #include "cmp_defensive_turret.h"
@@ -16,7 +17,7 @@ int TurretComponent::p1_next_weapon = 0;
 // Stops all weapons firing at once when fire button is pushed
 float TurretComponent::p1_firetime = 0.0f;
 // Base cooldown of weapons
-float TurretComponent::p1_base_cooldown = 0.1f;
+float TurretComponent::p1_base_cooldown = 0.01f;
 // Rotation of turret
 float TurretComponent::p1_turret_rotation = M_PI;
 
@@ -25,7 +26,7 @@ int TurretComponent::p2_next_weapon = 1;
 // Stops all weapons firing at once when fire button is pushed
 float TurretComponent::p2_firetime = 0.0f;
 // Base cooldown of weapons
-float TurretComponent::p2_base_cooldown = 0.1f;
+float TurretComponent::p2_base_cooldown = 0.01f;
 // Rotation of turret
 float TurretComponent::p2_turret_rotation = 0.0f;
 
@@ -84,7 +85,10 @@ void TurretComponent::update(double dt) {
 }
 
 
-void TurretComponent::fire(int target) const {
+void TurretComponent::fire(int target) const
+{
+	normal_distribution<float> dist(-0.2f, 0.2f);
+	float rnum = dist(ran);
 	// Rotate turret
 	auto turret = _parent->GetCompatibleComponent<SpriteComponent>().at(16);
 	auto projectile = _parent->scene->makeEntity();
@@ -94,12 +98,14 @@ void TurretComponent::fire(int target) const {
 	s->getShape().setFillColor(Color::Green);
 	s->getShape().setOrigin(2.0f, 2.0f);
 	if (target == 0) {
-		auto l = projectile->addComponent<TurretProjComponent>(player1, p2_turret_rotation);
+		auto l = projectile->addComponent<TurretProjComponent>(player1, p2_turret_rotation + rnum);
 	}
 	if (target == 1) {
-		auto l = projectile->addComponent<TurretProjComponent>(player2, p1_turret_rotation);
+		auto l = projectile->addComponent<TurretProjComponent>(player2, p1_turret_rotation + rnum);
 	}
 }
 
 TurretComponent::TurretComponent(Entity* p, const int weapon_num)
-	: Component(p), _cooldown(0.1f), _weapon_num(weapon_num) {}
+	: Component(p), _cooldown(0.1f), _weapon_num(weapon_num)
+{
+}
