@@ -54,7 +54,7 @@ void MenuScene::Load() {
 	// Title
 	{
 		auto title = makeEntity();
-		auto t = title->addComponent<TextComponent>("Some Spaceship Game\nSpacebar to select");
+		auto t = title->addComponent<TextComponent>("Newton's Bounty\nSpacebar to select");
 		t->SetScale(scale);
 	}
 
@@ -135,10 +135,12 @@ void MenuScene::Update(const double& dt) {
 	if (InputManager::Player[0].confirm) {
 		if (highlighted == 0) {
 			players = 1;
+			menubgSound.stop();
 			Engine::ChangeScene(&level1);
 		}
 		else if (highlighted == 1) {
 			players = 2;
+			menubgSound.stop();
 			Engine::ChangeScene(&level1);
 		}
 		else if (highlighted == 2) {

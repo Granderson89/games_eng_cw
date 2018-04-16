@@ -32,5 +32,5 @@ int main() {
 	ThrustersComponent::loadSounds();
 	Level1Scene::loadSounds();
 	MenuScene::loadSounds();
-	Engine::Start(resolution.x, resolution.y, "Some Spaceship Game", window_style, &menu);
+	Engine::Start(resolution.x, resolution.y, "Newton's Bounty", window_style, &menu);
 }
