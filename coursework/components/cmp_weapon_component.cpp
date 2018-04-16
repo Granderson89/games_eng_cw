@@ -465,17 +465,22 @@ void WeaponComponent::loadSounds()
 {
 	plasmaBuffer.loadFromFile("res/sounds/plasma.wav");
 	plasmaSound.setBuffer(plasmaBuffer);
+	plasmaSound.setVolume(20.0f);
 
 	torpedoBuffer.loadFromFile("res/sounds/torpedo.wav");
 	torpedoSound.setBuffer(torpedoBuffer);
+	torpedoSound.setVolume(20.0f);
 
 	missileBuffer.loadFromFile("res/sounds/missile.wav");
 	missileSound.setBuffer(missileBuffer);
+	missileSound.setVolume(20.0f);
 }
+
 float WeaponComponent::getCooldown()
 {
 	return _cooldown;
 }
+
 string WeaponComponent::getType()
 {
 	switch (_type) {
