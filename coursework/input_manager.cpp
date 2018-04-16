@@ -1,6 +1,8 @@
 #include "input_manager.h"
+#include "maths.h"
 #define stringify( name ) # name
-
+#define _USE_MATH_DEFINES
+#include <math.h>
 using namespace sf;
 
 InputManager::inputs InputManager::playerInput[2];
@@ -286,25 +288,41 @@ void InputManager::update()
 				Player[i].turnRight = false;
 
 			// Analog movement
-			if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::Y) < -30.0f)
-				Player[i].moveForward = true;
-			else
-				Player[i].moveForward = false;
-
-			if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::Y) > 30.0f)
-				Player[i].moveBackwards = true;
-			else
-				Player[i].moveBackwards = false;
-
-			if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::X) > 30.0f)
-				Player[i].turnRight = true;
-			else
-				Player[i].turnRight = false;
-
-			if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::X) < -30.0f)
-				Player[i].turnLeft = true;
-			else
-				Player[i].turnLeft = false;
+			for (auto &thruster : Player[i].thrusterOn) {
+				thruster = false;
+			}
+			Vector2f direction(Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::X),
+				Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::Y));
+			float angle = atan2(direction.y, direction.x) * 180.0f / M_PI;
+			float mag = length(direction);
+			if (mag > 30.0f) {
+				if (angle <= -77.5 && angle > -122.5f) {
+					Player[i].thrusterOn[0] = true;
+				}
+				else if (angle <= -22.5f && angle > -77.5f) {
+					Player[i].thrusterOn[1] = true;
+				}
+				else if (angle <= 22.5f && angle > -22.5f) {
+					Player[i].thrusterOn[1] = true;
+					Player[i].thrusterOn[2] = true;
+				}
+				else if (angle <= 77.5f && angle > 22.5f) {
+					Player[i].thrusterOn[2] = true;
+				}
+				else if (angle <= 112.5f && angle > 77.5f) {
+					Player[i].thrusterOn[3] = true;
+				}
+				else if (angle <= 155.0f && angle > 112.5f) {
+					Player[i].thrusterOn[4] = true;
+				}
+				else if (angle <= -155.0f || angle > 155.0f) {
+					Player[i].thrusterOn[4] = true;
+					Player[i].thrusterOn[5] = true;
+				}
+				else if (angle <= -112.5f && angle > -155.0f) {
+					Player[i].thrusterOn[5] = true;
+				}
+			}
 
 			// Fire
 			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].fire))
@@ -346,59 +364,59 @@ void InputManager::update()
 			}
 
 			// Thruster wheel
-			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].thrusterWheelUp))
-			{
-				if (Player[i].thrusterWheelUp == false)
-					for (int j = 0; j < 6; j++)
-						Player[i].thrusterOn[j] = false;
-				Player[i].thrusterWheelUp = true;
-			}
-			else
-				Player[i].thrusterWheelUp = false;
+			//if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].thrusterWheelUp))
+			//{
+			//	if (Player[i].thrusterWheelUp == false)
+			//		for (int j = 0; j < 6; j++)
+			//			Player[i].thrusterOn[j] = false;
+			//	Player[i].thrusterWheelUp = true;
+			//}
+			//else
+			//	Player[i].thrusterWheelUp = false;
 
-			if (Player[i].thrusterWheelUp) //////////////////////////// Needs testing to find good values ///////////////////////
-			{
-				if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::U) > 0)
-				{
-					if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::R) > 50)
-						Player[i].thrusterOn[1] = true;
-					else if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::R) < -50)
-						Player[i].thrusterOn[5] = true;
-					else if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::U) > 50)
-						Player[i].thrusterOn[0] = true;
-				}
-				else if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::U) < 0)
-				{
-					if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::R) > 50)
-						Player[i].thrusterOn[2] = true;
-					else if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::R) < -50)
-						Player[i].thrusterOn[4] = true;
-					else if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::U) < -50)
-						Player[i].thrusterOn[3] = true;
-				}
-			}
+			//if (Player[i].thrusterWheelUp) //////////////////////////// Needs testing to find good values ///////////////////////
+			//{
+			//	if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::U) > 0)
+			//	{
+			//		if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::R) > 50)
+			//			Player[i].thrusterOn[1] = true;
+			//		else if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::R) < -50)
+			//			Player[i].thrusterOn[5] = true;
+			//		else if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::U) > 50)
+			//			Player[i].thrusterOn[0] = true;
+			//	}
+			//	else if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::U) < 0)
+			//	{
+			//		if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::R) > 50)
+			//			Player[i].thrusterOn[2] = true;
+			//		else if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::R) < -50)
+			//			Player[i].thrusterOn[4] = true;
+			//		else if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::U) < -50)
+			//			Player[i].thrusterOn[3] = true;
+			//	}
+			//}
 
-			// Boost
-			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].boostMovement))
-			{
-				if (Player[i].moveForward)
-					Player[i].thrusterOn[3] = true;
-				if (Player[i].moveBackwards)
-					Player[i].thrusterOn[0] = true;
-				if (Player[i].turnLeft)
-				{
-					Player[i].thrusterOn[1] = true;
-					Player[i].thrusterOn[4] = true;
-				}
-				if (Player[i].turnRight)
-				{
-					Player[i].thrusterOn[5] = true;
-					Player[i].thrusterOn[2] = true;
-				}
-			}
-			else
-				for (int j = 0; j < 6; j++)
-					Player[i].thrusterOn[j] = false;
+			//// Boost
+			//if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].boostMovement))
+			//{
+			//	if (Player[i].moveForward)
+			//		Player[i].thrusterOn[3] = true;
+			//	if (Player[i].moveBackwards)
+			//		Player[i].thrusterOn[0] = true;
+			//	if (Player[i].turnLeft)
+			//	{
+			//		Player[i].thrusterOn[1] = true;
+			//		Player[i].thrusterOn[4] = true;
+			//	}
+			//	if (Player[i].turnRight)
+			//	{
+			//		Player[i].thrusterOn[5] = true;
+			//		Player[i].thrusterOn[2] = true;
+			//	}
+			//}
+			//else
+			//	for (int j = 0; j < 6; j++)
+			//		Player[i].thrusterOn[j] = false;
 
 			// Pause
 			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].pause))
@@ -562,46 +580,46 @@ void InputManager::menuUpdate()
 		if (playerInput[i].source >= 0)
 		{
 			// Menu
-			static bool mup = false;
+			static bool mup[2] = { false, false };
 			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].menuUp))
 			{
-				if (!mup)
+				if (!mup[i])
 					Player[i].menuUp = true;
 				else
 					Player[i].menuUp = false;
-				mup = true;
+				mup[i] = true;
 			}
 			else
 			{
-				mup = false;
+				mup[i] = false;
 				Player[i].menuUp = false;
 			}
-			static bool mdown = false;
+			static bool mdown[2] = { false, false };
 			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].menuDown))
 			{
-				if (!mdown)
+				if (!mdown[i])
 					Player[i].menuDown = true;
 				else
 					Player[i].menuDown = false;
-				mdown = true;
+				mdown[i] = true;
 			}
 			else
 			{
-				mdown = false;
+				mdown[i] = false;
 				Player[i].menuDown = false;
 			}
-			static bool mconf;
+			static bool mconf[2] = { false, false };
 			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].confirm))
 			{
-				if (!mconf)
+				if (!mconf[i])
 					Player[i].confirm = true;
 				else
 					Player[i].confirm = false;
-				mconf = true;
+				mconf[i] = true;
 			}
 			else
 			{
-				mconf = false;
+				mconf[i] = false;
 				Player[i].confirm = false;
 			}
 		}
