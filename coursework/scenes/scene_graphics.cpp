@@ -4,8 +4,11 @@
 #include "../components/cmp_sprite.h"
 #include "../components/cmp_camera.h"
 #include "../game.h"
+#include <Shlobj.h>
+#include <windows.h>
 #include <iostream>
 #include <fstream>
+#include <direct.h>
 
 using namespace std;
 using namespace sf;
@@ -125,8 +128,18 @@ void GraphicsScene::Load() {
 }
 
 void GraphicsScene::UnLoad() {
+	char saveLocation[MAX_PATH] = { 0 };
+
+	SHGetSpecialFolderPath(NULL, saveLocation, CSIDL_MYDOCUMENTS, FALSE);
+
+	//Now saveLocation contains the path to the desktop
+	//Append your file name to it
+	strcat(saveLocation, "\\NewtonsBounty");
+	mkdir(saveLocation);
+	strcat(saveLocation, "\\graphicsPref.txt");
+
 	ofstream saveFile;
-	saveFile.open("graphicsPrefs.txt");
+	saveFile.open(saveLocation);
 	saveFile << resolution.x << "\n";
 	saveFile << resolution.y << "\n";
 	saveFile << window_style << "\n";
@@ -199,8 +212,12 @@ void GraphicsScene::HighlightSelected() {
 
 void GraphicsScene::readPrefs()
 {
+	char saveLocation[MAX_PATH] = { 0 };
+	SHGetSpecialFolderPath(NULL, saveLocation, CSIDL_MYDOCUMENTS, FALSE);
+	strcat(saveLocation, "\\NewtonsBounty");
+	strcat(saveLocation, "\\graphicsPref.txt");
 	string line;
-	ifstream prefs("graphicsPrefs.txt");
+	ifstream prefs(saveLocation);
 	if (prefs.is_open()) {
 		// Resolution
 		getline(prefs, line);
