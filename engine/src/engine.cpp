@@ -116,6 +116,9 @@ void Engine::Start(unsigned int width, unsigned int height,
 	InputManager::menuUpdate();
 
     if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+		_activeScene->UnLoad();
+		if (_pausedScene != nullptr)
+			_pausedScene->UnLoad();
       window.close();
     }
 

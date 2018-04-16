@@ -3,6 +3,7 @@
 #include "../components/cmp_text.h"
 #include "../components/cmp_sprite.h"
 #include "../game.h"
+#include "../engine/src/engine.h"
 #include <SFML/Window/Keyboard.hpp>
 #include <iostream>
 
@@ -105,6 +106,7 @@ void PauseScene::Update(const double& dt) {
 	}
 	Scene::Update(dt);
 }
+
 
 void PauseScene::HighlightSelected() {
 	std::cout << "Pause highlighted: " << highlighted << std::endl;
