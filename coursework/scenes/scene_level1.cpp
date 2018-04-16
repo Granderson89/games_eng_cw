@@ -90,8 +90,9 @@ void Level1Scene::Load() {
 	createPlayer(player1.get(), player2.get(), ResourceManager::Tex_player1, ship_width, ship_length);
 	createPlayer(player2.get(), player1.get(), ResourceManager::Tex_player2, ship_width, ship_length);
 
-	// Add the thrusters component (manages both players)
-	player1->addComponent<ThrustersComponent>(Vector2f(ship_width, ship_length), 3.0f);
+	// Add the thrusters component
+	player1->addComponent<ThrustersComponent>(Vector2f(ship_width, ship_length), 8.0f);
+	player2->addComponent<ThrustersComponent>(Vector2f(ship_width, ship_length), 8.0f);
 
 	// Add the players as targets to the camera
 	cc->addTarget(player1);
