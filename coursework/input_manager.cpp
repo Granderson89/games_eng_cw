@@ -148,14 +148,14 @@ void InputManager::initialize()
 	playerInput[0].thrusterWheelUp = Keyboard::Q;
 
 	// Thruster selecting
-	playerInput[0].selectorAxis[0] = Keyboard::Numpad8;
-	playerInput[0].selectorAxis[1] = Keyboard::Numpad9;
-	playerInput[0].selectorAxis[2] = Keyboard::Numpad6;
-	playerInput[0].selectorAxis[3] = Keyboard::Numpad3;
-	playerInput[0].selectorAxis[4] = Keyboard::Numpad2;
-	playerInput[0].selectorAxis[5] = Keyboard::Numpad1;
-	playerInput[0].selectorAxis[6] = Keyboard::Numpad4;
-	playerInput[0].selectorAxis[7] = Keyboard::Numpad7;
+	playerInput[0].selectorAxis[0] = Keyboard::W;
+	playerInput[0].selectorAxis[1] = Keyboard::E;
+//	playerInput[0].selectorAxis[2] = Keyboard::Numpad6;
+	playerInput[0].selectorAxis[3] = Keyboard::D;
+	playerInput[0].selectorAxis[4] = Keyboard::S;
+	playerInput[0].selectorAxis[5] = Keyboard::A;
+	//playerInput[0].selectorAxis[6] = Keyboard::Numpad4;
+	playerInput[0].selectorAxis[7] = Keyboard::Q;
 
 	playerInput[0].boostMovement = Keyboard::Num5;
 
@@ -208,14 +208,22 @@ void InputManager::initializeKeyboard(int player)
 	playerInput[player].thrusterWheelUp = Keyboard::Q;
 
 	// Thruster selecting
-	playerInput[player].selectorAxis[0] = Keyboard::Numpad8;
-	playerInput[player].selectorAxis[1] = Keyboard::Numpad9;
-	playerInput[player].selectorAxis[2] = Keyboard::Numpad6;
-	playerInput[player].selectorAxis[3] = Keyboard::Numpad3;
-	playerInput[player].selectorAxis[4] = Keyboard::Numpad2;
-	playerInput[player].selectorAxis[5] = Keyboard::Numpad1;
-	playerInput[player].selectorAxis[6] = Keyboard::Numpad4;
-	playerInput[player].selectorAxis[7] = Keyboard::Numpad7;
+	//playerInput[player].selectorAxis[0] = Keyboard::Numpad8;
+	//playerInput[player].selectorAxis[1] = Keyboard::Numpad9;
+	//playerInput[player].selectorAxis[2] = Keyboard::Numpad6;
+	//playerInput[player].selectorAxis[3] = Keyboard::Numpad3;
+	//playerInput[player].selectorAxis[4] = Keyboard::Numpad2;
+	//playerInput[player].selectorAxis[5] = Keyboard::Numpad1;
+	//playerInput[player].selectorAxis[6] = Keyboard::Numpad4;
+	//playerInput[player].selectorAxis[7] = Keyboard::Numpad7;
+	playerInput[player].selectorAxis[0] = Keyboard::W;
+	playerInput[player].selectorAxis[1] = Keyboard::E;
+	//playerInput[player].selectorAxis[2] = Keyboard::Numpad6;
+	playerInput[player].selectorAxis[3] = Keyboard::D;
+	playerInput[player].selectorAxis[4] = Keyboard::S;
+	playerInput[player].selectorAxis[5] = Keyboard::A;
+	//playerInput[player].selectorAxis[6] = Keyboard::Numpad4;
+	playerInput[player].selectorAxis[7] = Keyboard::Q;
 
 	playerInput[player].boostMovement = Keyboard::Num5;
 

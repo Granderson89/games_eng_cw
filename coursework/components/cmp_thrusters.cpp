@@ -48,7 +48,7 @@ ThrustersComponent::ThrustersComponent(Entity* p, const Vector2f& dim, const flo
 
 ThrustersComponent::~ThrustersComponent()
 {
-	phc.~shared_ptr();
+//	phc.~shared_ptr();
 	for (auto &a : anims)
 		a.~shared_ptr();
 	anims.clear();
@@ -68,7 +68,10 @@ void ThrustersComponent::update(double dt)
 	{
 		if (InputManager::Player[pl].thrusterOn[i])
 		{
-			phc->impulse(_normals[i] * _power * (float)dt, _parent->getPosition() + _offsets[i]);
+			if (i == 0 || i == 3)
+				phc->impulse(_normals[i] * _power * (float)dt, _parent->getPosition() + _offsets[i]);
+			else
+				phc->impulse(_normals[i] * _power * 2.0f * (float)dt, _parent->getPosition() + _offsets[i]);
 			if (!_firing[i])
 			{
 				anims[i]->start(true);

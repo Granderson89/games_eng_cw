@@ -110,6 +110,7 @@ void Engine::Start(unsigned int width, unsigned int height,
 		  event.type == Event::JoystickButtonReleased ||
 		  event.type == Event::JoystickMoved) {
 		  InputManager::storeButton(event.joystickButton.joystickId, event.joystickButton.button);
+		  cout << event.joystickButton.button << endl;
 		  InputManager::update();
 	  }
 	}
