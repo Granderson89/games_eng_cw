@@ -1,6 +1,7 @@
 #pragma once
 #include <ecm.h>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 
 
 class ThrustersComponent : public Component
@@ -13,6 +14,9 @@ private:
 	bool _firing[6];	// Whether the thruster is firing or not
 	float _power;
 	Entity* _parent;
+	static sf::SoundBuffer thrustBuffer;
+	static sf::Sound thrustSound;
+
 
 public:
 	// Assumes the spaceship is pointing north
@@ -25,4 +29,6 @@ public:
 
 	// Fires a thruster (index start at 0 = N and continues clockwise)
 	void fireThruster(const int& index);
+
+	static void loadSounds();
 };

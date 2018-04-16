@@ -17,6 +17,10 @@ float TorpedoComponent::speed = 1.0f;
 // Range of explosion
 float TorpedoComponent::damage_range = 5.0f;
 
+// Sounds
+sf::SoundBuffer TorpedoComponent::explosionBuffer;
+sf::Sound TorpedoComponent::explosionSound;
+
 // Update - count lifespan
 void TorpedoComponent::update(double dt) {
 	_current_lifespan -= dt;
@@ -43,9 +47,15 @@ void TorpedoComponent::render() {
 
 }
 
-void TorpedoComponent::explode() {
-	_parent->setForDelete();
+void TorpedoComponent::loadSounds()
+{
+   	explosionBuffer.loadFromFile("res/sounds/explosion.wav");
+	explosionSound.setBuffer(explosionBuffer);
+}
 
+void TorpedoComponent::explode() {
+	explosionSound.play();
+	_parent->setForDelete();
 }
 
 TorpedoComponent::TorpedoComponent(Entity* p, shared_ptr<Entity> target, Vector2f direction)
