@@ -97,10 +97,3 @@ void ThrustersComponent::loadSounds()
 	thrustBuffer.loadFromFile("res/sounds/thrust.wav");
 	thrustSound.setBuffer(thrustBuffer);
 }
-
-//void ThrustersComponent::fireThruster(const int& index)
-//{
-//	_firing[index] = true;
-//	if (thrustSound.getStatus() != SoundSource::Status::Playing)
-//		thrustSound.play();
-//}
