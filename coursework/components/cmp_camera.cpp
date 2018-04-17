@@ -33,7 +33,7 @@ sf::View CameraControllerComponent::getView()
 }
 
 
-void CameraControllerComponent::update(double dt)
+void CameraControllerComponent::update(const double &dt)
 {
 	midpoint = Vector2f(0.0f, 0.0f);
 	float aspectRatio = (float)Renderer::getWindow().getSize().x / (float)Renderer::getWindow().getSize().y;

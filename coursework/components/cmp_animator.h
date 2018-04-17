@@ -24,7 +24,7 @@ public:
 	AnimatorComponent() = delete;
 	~AnimatorComponent();
 
-	void update(double dt) override;
+	void update(const double &dt) override;
 	void render() override {}
 
 	// Starts the animation. Animation stops after reaching the end if repeating is false

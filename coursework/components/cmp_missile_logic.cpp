@@ -19,7 +19,7 @@ sf::SoundBuffer MissileComponent::explosionBuffer;
 sf::Sound MissileComponent::explosionSound;
 
 // Update - count lifespan and reduce strength of projectile
-void MissileComponent::update(double dt) {
+void MissileComponent::update(const double &dt) {
 	auto enemy = _target->GetCompatibleComponent<PlayerPhysicsComponent>().at(0);
 	auto enemy_fix = enemy->getFixture();
 	auto contacts = _parent->GetCompatibleComponent<PhysicsComponent>().at(0)->getTouching();

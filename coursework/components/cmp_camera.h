@@ -20,7 +20,7 @@ public:
 	explicit CameraControllerComponent(Entity* p);
 	CameraControllerComponent() = delete;
 
-	void update(double dt) override;
+	void update(const double &dt) override;
 	void render() override {}
 
 	// Adds an entity to the list of fallowed targets

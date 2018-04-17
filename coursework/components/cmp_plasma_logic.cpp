@@ -21,7 +21,7 @@ sf::SoundBuffer PlasmaComponent::explosionBuffer;
 sf::Sound PlasmaComponent::explosionSound;
 
 // Update - count lifespan and reduce strength of projectile
-void PlasmaComponent::update(double dt) {
+void PlasmaComponent::update(const double &dt) {
 	_current_lifespan += dt;
 	reduceStrength();
 	if (_current_lifespan >= max_lifespan) {

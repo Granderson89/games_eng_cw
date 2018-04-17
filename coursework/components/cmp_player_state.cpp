@@ -9,7 +9,7 @@ PlayerStateComponent::PlayerStateComponent(Entity* p) :Component(p)
 }
 
 
-void PlayerStateComponent::update(double dt)
+void PlayerStateComponent::update(const double &dt)
 {
 	// Energy regeneration
 	if (energy < maxEnergy)
@@ -17,8 +17,6 @@ void PlayerStateComponent::update(double dt)
 
 	if (health <= 0.0f)
 	{
-		// Death resolution here ///////////////////////////////////////////////////////
-		//_parent->setForDelete();
 		if (_parent == player1.get()) {
 			winner = 2;
 		}

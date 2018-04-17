@@ -18,6 +18,6 @@ public:
 	TurretProjComponent() = delete;
 	explicit TurretProjComponent(Entity* p, shared_ptr<Entity> target, float turret_rotation);
 
-	void update(double dt) override;
+	void update(const double &dt) override;
 	void render() override;
 };

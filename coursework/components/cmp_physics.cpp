@@ -6,7 +6,7 @@ using namespace sf;
 
 using namespace Physics;
 
-void PhysicsComponent::update(double dt) {
+void PhysicsComponent::update(const double &dt) {
   _parent->setPosition(invert_height(bv2_to_sv2(_body->GetPosition())));
   _parent->setRotation((180 / b2_pi) * -_body->GetAngle());
 }

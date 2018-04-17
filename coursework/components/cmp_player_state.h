@@ -17,7 +17,7 @@ public:
 	explicit PlayerStateComponent(Entity* p);
 	PlayerStateComponent() = delete;
 
-	void update(double dt) override;
+	void update(const double &dt) override;
 	void render() override;
 
 

@@ -30,7 +30,7 @@ float TurretComponent::p2_base_cooldown = 0.01f;
 // Rotation of turret
 float TurretComponent::p2_turret_rotation = 0.0f;
 
-void TurretComponent::update(double dt) {
+void TurretComponent::update(const double &dt) {
 	// Countdown timers
 	p1_firetime -= dt;
 	p2_firetime -= dt;

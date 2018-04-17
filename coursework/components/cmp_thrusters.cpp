@@ -54,7 +54,7 @@ ThrustersComponent::~ThrustersComponent()
 }
 
 
-void ThrustersComponent::update(double dt)
+void ThrustersComponent::update(const double &dt)
 {
 	// Rotates the thruster locations and normals
 	for (int i = 0; i < 6; i++)

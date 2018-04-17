@@ -273,8 +273,6 @@ void Level1Scene::createHud(std::shared_ptr<Entity> player) {
 		cool = makeEntity();
 		cooldowns.push_back(cool);
 	}
-	// Add the hud component
-	hud->addComponent<HudComponent>(player, weaponTypeEntity, cooldowns, ce);
 	// Health bar
 	auto healthBarBg = hud->addComponent<ShapeComponent>();
 	healthBarBg->setShape<sf::RectangleShape>(Vector2f(1.0f, 30.0f));
@@ -306,6 +304,8 @@ void Level1Scene::createHud(std::shared_ptr<Entity> player) {
 		timerColor.a = 128.0f;
 		timer->getShape().setFillColor(timerColor);
 	}
+	// Add the hud component
+	hud->addComponent<HudComponent>(player, weaponTypeEntity, cooldowns, ce);
 }
 
 void Level1Scene::loadSounds()

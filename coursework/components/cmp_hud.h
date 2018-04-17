@@ -1,6 +1,10 @@
 #pragma once
 
 #include "ecm.h"
+#include "cmp_player_state.h"
+#include "cmp_weapon_component.h"
+#include "cmp_camera.h"
+#include "cmp_text.h"
 
 class HudComponent : public Component {
 private:
@@ -22,6 +26,16 @@ private:
 	float _cooldownScale;
 	float _timerScale;
 
+	std::shared_ptr<CameraControllerComponent> cameraComp;
+	std::shared_ptr<PlayerStateComponent> state;
+	std::vector<std::shared_ptr<WeaponComponent>> weapons;
+	std::shared_ptr<TextComponent> healthText;
+	std::shared_ptr<ShapeComponent> healthBarBg;
+	std::shared_ptr<ShapeComponent> healthBar;
+	std::shared_ptr<SpriteComponent> weaponTypeSpr;
+	std::vector<std::shared_ptr<SpriteComponent>> cooldownSpr;
+	std::vector<std::shared_ptr<ShapeComponent>> timerSpr;
+
 
 public:
 	explicit HudComponent(Entity* p, std::shared_ptr<Entity> player, 
@@ -29,6 +43,6 @@ public:
 		std::shared_ptr<Entity> camera);
 	HudComponent() = delete;
 
-	void update(double dt) override;
+	void update(const double &dt) override;
 	void render() override;
 };
