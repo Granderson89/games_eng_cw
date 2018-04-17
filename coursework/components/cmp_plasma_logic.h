@@ -22,7 +22,7 @@ public:
 
 	void reduceStrength();
 
-	void update(double dt) override;
+	void update(const double &dt) override;
 	void render() override;
 
 	static void loadSounds();

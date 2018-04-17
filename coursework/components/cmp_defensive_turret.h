@@ -29,6 +29,6 @@ public:
 	TurretComponent() = delete;
 	explicit TurretComponent(Entity* p, const int weapon_num);
 
-	void update(double dt) override;
+	void update(const double &dt) override;
 	void render() override {};
 };

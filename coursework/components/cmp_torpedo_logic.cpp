@@ -22,7 +22,7 @@ sf::SoundBuffer TorpedoComponent::explosionBuffer;
 sf::Sound TorpedoComponent::explosionSound;
 
 // Update - count lifespan
-void TorpedoComponent::update(double dt) {
+void TorpedoComponent::update(const double &dt) {
 	_current_lifespan -= dt;
 	if (_current_lifespan <= 0.0f) {
 		explode();

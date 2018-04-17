@@ -5,7 +5,7 @@ using namespace std;
 StateMachineComponent::StateMachineComponent(Entity * p) 
 : _current_state(nullptr), Component(p) {}
 
-void StateMachineComponent::update(double dt) {
+void StateMachineComponent::update(const double &dt) {
 	if (_current_state != nullptr)
 		_current_state->execute(_parent, dt);
 }

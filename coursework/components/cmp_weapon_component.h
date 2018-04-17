@@ -55,6 +55,6 @@ public:
 	float getCooldown();
 	string getType();
 
-	void update(double dt) override;
+	void update(const double &dt) override;
 	void render() override {};
 };

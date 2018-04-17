@@ -16,7 +16,7 @@ float TurretProjComponent::strength = 10.0f;
 float TurretProjComponent::speed = 0.01f;
 
 // Update - count lifespan and reduce strength of projectile
-void TurretProjComponent::update(double dt) {
+void TurretProjComponent::update(const double &dt) {
 	_current_lifespan -= dt;
 	if (_current_lifespan <= 0.0f) {
 		_parent->setForDelete();

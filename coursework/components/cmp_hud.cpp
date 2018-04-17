@@ -19,7 +19,7 @@ HudComponent::HudComponent(Entity* p, std::shared_ptr<Entity> player, std::share
 	_cooldownGap(30.0f), 
 	_timerScale(0.2f) {}
 
-void HudComponent::update(double dt) {
+void HudComponent::update(const double &dt) {
 	// Get camera and view
 	auto cameraComp = _camera->GetCompatibleComponent<CameraControllerComponent>().at(0);
 	Vector2f position = cameraComp->getMidpoint();

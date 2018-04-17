@@ -26,7 +26,7 @@ public:
   void setRestitution(float r);
   void setFriction(float r);
   void setMass(float m);
-  void update(double dt) override;
+  void update(const double &dt) override;
   void render() override;
   void impulse(const sf::Vector2f& i);
   // Applies impulse to an object at a world position

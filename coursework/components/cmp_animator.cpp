@@ -30,7 +30,7 @@ void AnimatorComponent::start(bool repeating)
 }
 
 
-void AnimatorComponent::update(double dt)
+void AnimatorComponent::update(const double &dt)
 {
 	if (animate)
 	{

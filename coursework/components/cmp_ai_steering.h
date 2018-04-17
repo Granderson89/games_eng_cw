@@ -7,7 +7,7 @@ protected:
 	Seek _seek;
 	Entity* _target;
 public:
-	void update(double) override;
+	void update(const double &dt) override;
 	void move(const sf::Vector2f&);
 	void move(float x, float y);
 	void render() override {}

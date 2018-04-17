@@ -13,7 +13,7 @@ public:
   float _speed;
   float _turningSpeed;
 
-  void update(double dt) override;
+  void update(const double &dt) override;
 
   explicit PlayerPhysicsComponent(Entity* p, const sf::Vector2f& size, int categoryBits, vector<unsigned int> mask);
 

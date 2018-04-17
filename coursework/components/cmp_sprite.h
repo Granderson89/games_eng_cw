@@ -19,7 +19,7 @@ public:
 	explicit SpriteComponent(Entity* p, float rotation);
 	explicit SpriteComponent(Entity* p, float rotation, bool rotationIndependent);
 
-	void update(double dt) override;
+	void update(const double &dt) override;
 	void render() override;
 
 	sf::Sprite& getSprite() const;
@@ -46,7 +46,7 @@ public:
 
 	explicit ShapeComponent(Entity* p);
 
-	void update(double dt) override;
+	void update(const double &dt) override;
 	void render() override;
 	sf::Shape& getShape() const;
 	template <typename T, typename... Targs> void setShape(Targs... params) {

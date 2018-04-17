@@ -44,7 +44,7 @@ BackgroundBuilderComponent::~BackgroundBuilderComponent()
 }
 
 
-void BackgroundBuilderComponent::update(double dt)
+void BackgroundBuilderComponent::update(const double &dt)
 {
 	// Offset used to give the illusion of a stationary background
 	Vector2f offset = Vector2f(fmod(_cam->getMidpoint().x, bgSize.x * 2), fmod(_cam->getMidpoint().y, bgSize.y * 2));

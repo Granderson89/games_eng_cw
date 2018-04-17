@@ -29,6 +29,6 @@ public:
 		std::shared_ptr<Entity> camera);
 	HudComponent() = delete;
 
-	void update(double dt) override;
+	void update(const double &dt) override;
 	void render() override;
 };

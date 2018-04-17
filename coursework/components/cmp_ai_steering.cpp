@@ -7,7 +7,7 @@
 using namespace sf;
 using namespace std;
 
-void SteeringComponent::update(double dt) {
+void SteeringComponent::update(const double &dt) {
 	auto output = _seek.getSteering();
 	output.direction.y *= -1.0f;
 	_parent->GetCompatibleComponent<PhysicsComponent>().at(0)->setVelocity(output.direction);

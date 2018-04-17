@@ -13,7 +13,7 @@ SpriteComponent::SpriteComponent(Entity* p, float rotation)
 SpriteComponent::SpriteComponent(Entity* p, float rotation, bool rotationIndependent)
 	: Component(p), _rotationOffset(rotation), _rotationIndependent(rotationIndependent), _sprite(make_shared<sf::Sprite>()) {}
 
-void SpriteComponent::update(double dt) {
+void SpriteComponent::update(const double &dt) {
 	_sprite->setPosition(_parent->getPosition() + rotate(_offset, _parent->getRotation()));
 	if (!_rotationIndependent) {
 		_sprite->setRotation(_parent->getRotation() + _rotationOffset);
@@ -25,7 +25,7 @@ void SpriteComponent::update(double dt) {
 
 void SpriteComponent::render() { if (_visible) Renderer::queue(_sprite.get()); }
 
-void ShapeComponent::update(double dt) {
+void ShapeComponent::update(const double &dt) {
 	_shape->setPosition(_parent->getPosition());
 	_shape->setRotation(_parent->getRotation());
 }

@@ -45,7 +45,7 @@ sf::Sound WeaponComponent::plasmaSound;
 sf::Sound WeaponComponent::torpedoSound;
 sf::Sound WeaponComponent::missileSound;
 
-void WeaponComponent::update(double dt) {
+void WeaponComponent::update(const double &dt) {
 	// Countdown timers
 	p1_firetime -= dt / 15.0;
 	p2_firetime -= dt / 15.0;

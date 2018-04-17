@@ -16,7 +16,7 @@ private:
 	std::shared_ptr<State> _current_state;
 	std::string _current_state_name = "";
 public:
-	void update(double) override;
+	void update(const double &dt) override;
 	void render() override {}
 	explicit StateMachineComponent(Entity *p);
 	StateMachineComponent() = delete;

@@ -9,7 +9,7 @@ using namespace sf;
 using namespace Physics;
 
 
-void PlayerPhysicsComponent::update(double dt) {
+void PlayerPhysicsComponent::update(const double &dt) {
   const auto pos = _parent->getPosition();
   int player;
   if (_parent == player1.get()) {
