@@ -34,6 +34,7 @@ public:
   static void Start(unsigned int width, unsigned int height,
                     const std::string& gameName, unsigned int style, Scene* scn);
   static void ChangeScene(Scene*);
+  static void ChangeScene(Scene*, bool);
   static void PauseScene(Scene*);
   static void ResumeScene();
   static sf::RenderWindow& GetWindow();

@@ -11,6 +11,7 @@ public:
 
 	// Returns false if any resources did not load
 	static bool Load();
+	static bool done;
 
 	static Texture tex_test;
 	static Texture Tex_background;

@@ -69,9 +69,9 @@ void ThrustersComponent::update(double dt)
 		if (InputManager::Player[pl].thrusterOn[i])
 		{
 			if (i == 0 || i == 3)
-				phc->impulse(_normals[i] * _power * (float)dt, _parent->getPosition() + _offsets[i]);
-			else
 				phc->impulse(_normals[i] * _power * 2.0f * (float)dt, _parent->getPosition() + _offsets[i]);
+			else
+				phc->impulse(_normals[i] * _power * (float)dt, _parent->getPosition() + _offsets[i]);
 			if (!_firing[i])
 			{
 				anims[i]->start(true);

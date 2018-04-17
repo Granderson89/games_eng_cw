@@ -7,6 +7,7 @@
 #include "../components/cmp_missile_logic.h"
 #include "../components/cmp_thrusters.h"
 #include "../game.h"
+#include "../resource_manager.h"
 #include <SFML/Window/Keyboard.hpp>
 #include <iostream>
 
@@ -30,6 +31,11 @@ sf::Sound MenuScene::menubgSound;
 void MenuScene::Load() {
 	cout << "Menu Load \n";
 	buttons.clear();
+	static bool now = false;
+	if (now)
+		ResourceManager::Load();
+	else
+		now = true;
 	InputManager::Player[0].confirm = false;
 	if (!spritesheet.loadFromFile("res/img/futureui1.png")) {
 		cerr << "Failed to load spritesheet!" << endl;

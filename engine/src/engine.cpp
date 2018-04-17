@@ -91,11 +91,19 @@ void Engine::Start(unsigned int width, unsigned int height,
   _window = &window;
   Renderer::initialise(window);
   Physics::initialise();
-  ResourceManager::Load();
   ChangeScene(scn);
+  bool loaded = false;
+  ChangeScene(scn, true);
+ // ResourceManager::Load();
   while (window.isOpen()) {
     Event event;
     while (window.pollEvent(event)) {
+		//if (loading)
+		//{
+		//	loading = false;
+		//	ChangeScene(scn, true);
+		//	ResourceManager::Load();
+		//}
       if (event.type == Event::Closed) {
         window.close();
       }
@@ -110,7 +118,6 @@ void Engine::Start(unsigned int width, unsigned int height,
 		  event.type == Event::JoystickButtonReleased ||
 		  event.type == Event::JoystickMoved) {
 		  InputManager::storeButton(event.joystickButton.joystickId, event.joystickButton.button);
-		  cout << event.joystickButton.button << endl;
 		  InputManager::update();
 	  }
 	}
@@ -146,21 +153,39 @@ std::shared_ptr<Entity> Scene::makeEntity() {
 void Engine::setVsync(bool b) { _window->setVerticalSyncEnabled(b); }
 
 void Engine::ChangeScene(Scene* s) {
-//  cout << "Eng: changing scene: " << s << endl;
-  auto old = _activeScene;
-  _activeScene = s;
+	//  cout << "Eng: changing scene: " << s << endl;
+	auto old = _activeScene;
+	_activeScene = s;
 
-  if (old != nullptr) {
-    old->UnLoad(); // todo: Unload Async
-  }
+	if (old != nullptr) {
+		old->UnLoad(); // todo: Unload Async
+	}
 
-  if (!s->isLoaded()) {
-//    cout << "Eng: Entering Loading Screen\n";
-    loadingTime =0;
-    //_activeScene->LoadAsync();
-	_activeScene->Load();
-    loading = true;
-  }
+	if (!s->isLoaded()) {
+		//    cout << "Eng: Entering Loading Screen\n";
+		loadingTime = 0;
+		//_activeScene->LoadAsync();
+		_activeScene->Load();
+		loading = true;
+	}
+}
+
+void Engine::ChangeScene(Scene* s, bool async) {
+	//  cout << "Eng: changing scene: " << s << endl;
+	auto old = _activeScene;
+	_activeScene = s;
+
+	if (old != nullptr) {
+		old->UnLoad(); // todo: Unload Async
+	}
+
+	if (!s->isLoaded()) {
+		//    cout << "Eng: Entering Loading Screen\n";
+		loadingTime = 0;
+		_activeScene->LoadAsync();
+		//_activeScene->Load();
+		loading = true;
+	}
 }
 
 void Engine::PauseScene(Scene* s) {
