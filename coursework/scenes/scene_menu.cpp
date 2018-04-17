@@ -90,7 +90,7 @@ void MenuScene::Load() {
 		t->SetScale(scale);
 		buttons.push_back(twoPlayBtn);
 	}
-	// Two Player button
+	// Options button
 	{
 		shared_ptr<Entity> optionsBtn = makeEntity();
 		auto s = optionsBtn->addComponent<SpriteComponent>();
@@ -102,6 +102,18 @@ void MenuScene::Load() {
 		t->SetScale(scale);
 		buttons.push_back(optionsBtn);
 	}
+	// Help button
+	{
+		shared_ptr<Entity> helpBtn = makeEntity();
+		auto s = helpBtn->addComponent<SpriteComponent>();
+		s->getSprite().setTexture(spritesheet);
+		s->getSprite().setTextureRect(buttonRect);
+		s->getSprite().setScale(Vector2f(scale, scale));
+		helpBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width * scale) / 2.0f, buttonRect.height * scale* 5.0f));
+		auto t = helpBtn->addComponent<TextComponent>("\n   How to Play");
+		t->SetScale(scale);
+		buttons.push_back(helpBtn);
+	}
 	// Quit button
 	{
 		shared_ptr<Entity> quitBtn = makeEntity();
@@ -109,7 +121,7 @@ void MenuScene::Load() {
 		s->getSprite().setTexture(spritesheet);
 		s->getSprite().setTextureRect(buttonRect);
 		s->getSprite().setScale(Vector2f(scale, scale));
-		quitBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width * scale) / 2.0f, buttonRect.height * scale* 5.0f));
+		quitBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width * scale) / 2.0f, buttonRect.height * scale* 6.5f));
 		auto t = quitBtn->addComponent<TextComponent>("\n   Quit");
 		t->SetScale(scale);
 		buttons.push_back(quitBtn);
@@ -153,6 +165,9 @@ void MenuScene::Update(const double& dt) {
 			Engine::ChangeScene(&options);
 		}
 		else if (highlighted == 3) {
+			Engine::ChangeScene(&help);
+		}
+		else if (highlighted == 4) {
 			Engine::GetWindow().close();
 		}
 	}

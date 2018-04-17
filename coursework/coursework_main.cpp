@@ -13,6 +13,7 @@ OptionsScene options;
 ControlsScene controls;
 GraphicsScene graphics;
 PauseScene pause;
+HelpScene help;
 Level1Scene level1;
 GameOverScene gameOver;
 

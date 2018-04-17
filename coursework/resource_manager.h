@@ -32,4 +32,6 @@ public:
 	static Texture Tex_plasma;
 	static Texture Tex_torpedo;
 	static Texture Tex_missile;
+	static Texture Tex_help;
+
 };
