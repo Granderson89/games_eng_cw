@@ -21,6 +21,8 @@ Texture ResourceManager::Tex_turret = Texture();
 Texture ResourceManager::Tex_plasma = Texture();
 Texture ResourceManager::Tex_torpedo = Texture();
 Texture ResourceManager::Tex_missile = Texture();
+Texture ResourceManager::Tex_help = Texture();
+
 
 bool ResourceManager::Load()
 {
@@ -138,6 +140,12 @@ bool ResourceManager::Load()
 		good = false;
 		if (test)
 			Tex_missile = tex_test;
+	}
+	if (!Tex_help.loadFromFile("res/img/help.png"))
+	{
+		good = false;
+		if (test)
+			Tex_help = tex_test;
 	}
 	return good;
 }

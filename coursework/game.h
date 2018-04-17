@@ -7,6 +7,7 @@
 #include "scenes/scene_controls.h"
 #include "scenes/scene_pause.h"
 #include "scenes/scene_game_over.h"
+#include "scenes/scene_help.h"
 #include "input_manager.h"
 
 using namespace std;
@@ -17,6 +18,7 @@ extern MenuScene menu;
 extern OptionsScene options;
 extern ControlsScene controls;
 extern GraphicsScene graphics;
+extern HelpScene help;
 extern Level1Scene level1;
 extern PauseScene pause;
 extern GameOverScene gameOver;
