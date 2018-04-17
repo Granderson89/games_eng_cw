@@ -94,16 +94,9 @@ void Engine::Start(unsigned int width, unsigned int height,
   ChangeScene(scn);
   bool loaded = false;
   ChangeScene(scn, true);
- // ResourceManager::Load();
   while (window.isOpen()) {
     Event event;
     while (window.pollEvent(event)) {
-		//if (loading)
-		//{
-		//	loading = false;
-		//	ChangeScene(scn, true);
-		//	ResourceManager::Load();
-		//}
       if (event.type == Event::Closed) {
         window.close();
       }
@@ -141,7 +134,6 @@ void Engine::Start(unsigned int width, unsigned int height,
   }
   window.close();
   Physics::shutdown();
-  // Render::shutdown();
 }
 
 std::shared_ptr<Entity> Scene::makeEntity() {
@@ -153,37 +145,31 @@ std::shared_ptr<Entity> Scene::makeEntity() {
 void Engine::setVsync(bool b) { _window->setVerticalSyncEnabled(b); }
 
 void Engine::ChangeScene(Scene* s) {
-	//  cout << "Eng: changing scene: " << s << endl;
 	auto old = _activeScene;
 	_activeScene = s;
 
 	if (old != nullptr) {
-		old->UnLoad(); // todo: Unload Async
+		old->UnLoad();
 	}
 
 	if (!s->isLoaded()) {
-		//    cout << "Eng: Entering Loading Screen\n";
 		loadingTime = 0;
-		//_activeScene->LoadAsync();
 		_activeScene->Load();
 		loading = true;
 	}
 }
 
 void Engine::ChangeScene(Scene* s, bool async) {
-	//  cout << "Eng: changing scene: " << s << endl;
 	auto old = _activeScene;
 	_activeScene = s;
 
 	if (old != nullptr) {
-		old->UnLoad(); // todo: Unload Async
+		old->UnLoad();
 	}
 
 	if (!s->isLoaded()) {
-		//    cout << "Eng: Entering Loading Screen\n";
 		loadingTime = 0;
 		_activeScene->LoadAsync();
-		//_activeScene->Load();
 		loading = true;
 	}
 }
@@ -196,7 +182,6 @@ void Engine::PauseScene(Scene* s) {
 	if (!s->isLoaded()) {
 		cout << "Eng: Entering Loading Screen\n";
 		loadingTime = 0;
-		//_activeScene->LoadAsync();
 		_activeScene->Load();
 		loading = true;
 	}
@@ -208,7 +193,7 @@ void Engine::ResumeScene() {
 	_activeScene = _pausedScene;
 
 	if (old != nullptr) {
-		old->UnLoad(); // todo: Unload Async
+		old->UnLoad();
 	}
 }
 

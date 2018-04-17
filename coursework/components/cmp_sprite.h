@@ -40,7 +40,6 @@ public:
 class ShapeComponent : public Component {
 protected:
 	std::shared_ptr<sf::Shape> _shape;
-	// sf::Shape _shape;
 
 public:
 	ShapeComponent() = delete;

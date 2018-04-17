@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML\Graphics.hpp>
-#include "game.h"		//////////////////////////////////////////////// Included this to have Texture class ////////////////////////////////
+#include "game.h"
 
 class ResourceManager
 {

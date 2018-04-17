@@ -48,7 +48,6 @@ ThrustersComponent::ThrustersComponent(Entity* p, const Vector2f& dim, const flo
 
 ThrustersComponent::~ThrustersComponent()
 {
-//	phc.~shared_ptr();
 	for (auto &a : anims)
 		a.~shared_ptr();
 	anims.clear();
