@@ -16,6 +16,10 @@ float PlasmaComponent::max_strength = 1.0f;
 // Speed of projectile
 float PlasmaComponent::speed = 1.0f;
 
+// Sounds
+sf::SoundBuffer PlasmaComponent::explosionBuffer;
+sf::Sound PlasmaComponent::explosionSound;
+
 // Update - count lifespan and reduce strength of projectile
 void PlasmaComponent::update(double dt) {
 	_current_lifespan += dt;
@@ -30,6 +34,7 @@ void PlasmaComponent::update(double dt) {
 		auto fixtureA = contacts[i]->GetFixtureA();
 		auto fixtureB = contacts[i]->GetFixtureB();
 		if (fixtureA == enemy_fix || fixtureB == enemy_fix) {
+			explosionSound.play();
 			_parent->setForDelete();
 			auto enemyState = _target->GetCompatibleComponent<PlayerStateComponent>().at(0);
 			enemyState->takeDamage(_current_strength);
@@ -39,6 +44,13 @@ void PlasmaComponent::update(double dt) {
 
 void PlasmaComponent::render() {
 	
+}
+
+void PlasmaComponent::loadSounds()
+{
+	explosionBuffer.loadFromFile("res/sounds/explosion.wav");
+	explosionSound.setBuffer(explosionBuffer);
+	explosionSound.setVolume(20.0f);
 }
 
 void PlasmaComponent::reduceStrength() {

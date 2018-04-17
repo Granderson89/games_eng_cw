@@ -1,7 +1,13 @@
 #include "scene_menu.h"
 #include "../components/cmp_text.h"
 #include "../components/cmp_sprite.h"
+#include "../components/cmp_weapon_component.h"
+#include "../components/cmp_plasma_logic.h"
+#include "../components/cmp_torpedo_logic.h"
+#include "../components/cmp_missile_logic.h"
+#include "../components/cmp_thrusters.h"
 #include "../game.h"
+#include "../resource_manager.h"
 #include <SFML/Window/Keyboard.hpp>
 #include <iostream>
 
@@ -18,10 +24,18 @@ bool controller = false;
 
 // Number of human players
 int players;
+// Sounds
+sf::SoundBuffer MenuScene::menubgBuffer;
+sf::Sound MenuScene::menubgSound;
 
 void MenuScene::Load() {
 	cout << "Menu Load \n";
 	buttons.clear();
+	static bool now = false;
+	if (now)
+		ResourceManager::Load();
+	else
+		now = true;
 	InputManager::Player[0].confirm = false;
 	if (!spritesheet.loadFromFile("res/img/futureui1.png")) {
 		cerr << "Failed to load spritesheet!" << endl;
@@ -46,7 +60,7 @@ void MenuScene::Load() {
 	// Title
 	{
 		auto title = makeEntity();
-		auto t = title->addComponent<TextComponent>("Some Spaceship Game\nSpacebar to select");
+		auto t = title->addComponent<TextComponent>("Newton's Bounty\nSpacebar to select");
 		t->SetScale(scale);
 	}
 
@@ -76,7 +90,7 @@ void MenuScene::Load() {
 		t->SetScale(scale);
 		buttons.push_back(twoPlayBtn);
 	}
-	// Two Player button
+	// Options button
 	{
 		shared_ptr<Entity> optionsBtn = makeEntity();
 		auto s = optionsBtn->addComponent<SpriteComponent>();
@@ -88,6 +102,18 @@ void MenuScene::Load() {
 		t->SetScale(scale);
 		buttons.push_back(optionsBtn);
 	}
+	// Help button
+	{
+		shared_ptr<Entity> helpBtn = makeEntity();
+		auto s = helpBtn->addComponent<SpriteComponent>();
+		s->getSprite().setTexture(spritesheet);
+		s->getSprite().setTextureRect(buttonRect);
+		s->getSprite().setScale(Vector2f(scale, scale));
+		helpBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width * scale) / 2.0f, buttonRect.height * scale* 5.0f));
+		auto t = helpBtn->addComponent<TextComponent>("\n   How to Play");
+		t->SetScale(scale);
+		buttons.push_back(helpBtn);
+	}
 	// Quit button
 	{
 		shared_ptr<Entity> quitBtn = makeEntity();
@@ -95,7 +121,7 @@ void MenuScene::Load() {
 		s->getSprite().setTexture(spritesheet);
 		s->getSprite().setTextureRect(buttonRect);
 		s->getSprite().setScale(Vector2f(scale, scale));
-		quitBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width * scale) / 2.0f, buttonRect.height * scale* 5.0f));
+		quitBtn->setPosition(Vector2f((Engine::getWindowSize().x - buttonRect.width * scale) / 2.0f, buttonRect.height * scale* 6.5f));
 		auto t = quitBtn->addComponent<TextComponent>("\n   Quit");
 		t->SetScale(scale);
 		buttons.push_back(quitBtn);
@@ -103,14 +129,20 @@ void MenuScene::Load() {
 	// Check for a controller
 	controller = ControllerConnected(0);
 
-	HighlightSelected();
-	setLoaded(true);
-	cout << "Menu Load Done\n";
+
+  HighlightSelected();
+  menubgSound.setLoop(true);
+  setLoaded(true);
+  cout << "Menu Load Done\n";
 
 }
 
 void MenuScene::Update(const double& dt) {
 	// Check for a controller
+	if (menubgSound.getStatus() != SoundSource::Status::Playing) {
+		menubgSound.play();
+	}
+  // Check for a controller
 	if (sf::Joystick::isConnected(0)) {
 		controller = true;
 	}
@@ -121,16 +153,21 @@ void MenuScene::Update(const double& dt) {
 	if (InputManager::Player[0].confirm) {
 		if (highlighted == 0) {
 			players = 1;
+			menubgSound.stop();
 			Engine::ChangeScene(&level1);
 		}
 		else if (highlighted == 1) {
 			players = 2;
+			menubgSound.stop();
 			Engine::ChangeScene(&level1);
 		}
 		else if (highlighted == 2) {
 			Engine::ChangeScene(&options);
 		}
 		else if (highlighted == 3) {
+			Engine::ChangeScene(&help);
+		}
+		else if (highlighted == 4) {
 			Engine::GetWindow().close();
 		}
 	}
@@ -155,6 +192,7 @@ void MenuScene::Update(const double& dt) {
 		HighlightSelected();
 	}
 	Scene::Update(dt);
+  
 }
 
 void MenuScene::HighlightSelected() {
@@ -185,4 +223,10 @@ bool MenuScene::ControllerConnected(int id)
 	else {
 		return false;
 	}
+}
+
+void MenuScene::loadSounds()
+{
+	menubgBuffer.loadFromFile("res/sounds/menubg.ogg");
+	menubgSound.setBuffer(menubgBuffer);
 }

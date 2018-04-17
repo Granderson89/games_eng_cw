@@ -1,6 +1,8 @@
 #include "input_manager.h"
+#include "maths.h"
 #define stringify( name ) # name
-
+#define _USE_MATH_DEFINES
+#include <math.h>
 using namespace sf;
 
 InputManager::inputs InputManager::playerInput[2];
@@ -9,7 +11,7 @@ InputManager::actions InputManager::Player[2];
 
 Keyboard::Key InputManager::_lastKeyPressed;
 
-const char* InputManager::keyNames[] = 
+const char* InputManager::keyNames[] =
 {
 	stringify(A),        ///< The A key
 	stringify(B),            ///< The B key
@@ -148,14 +150,12 @@ void InputManager::initialize()
 	playerInput[0].thrusterWheelUp = Keyboard::Q;
 
 	// Thruster selecting
-	playerInput[0].selectorAxis[0] = Keyboard::Num8;
-	playerInput[0].selectorAxis[0] = Keyboard::Num9;
-	playerInput[0].selectorAxis[0] = Keyboard::Num6;
-	playerInput[0].selectorAxis[0] = Keyboard::Num3;
-	playerInput[0].selectorAxis[0] = Keyboard::Num2;
-	playerInput[0].selectorAxis[0] = Keyboard::Num1;
-	playerInput[0].selectorAxis[0] = Keyboard::Num4;
-	playerInput[0].selectorAxis[0] = Keyboard::Num7;
+	playerInput[0].selectorAxis[0] = Keyboard::W;
+	playerInput[0].selectorAxis[1] = Keyboard::E;
+	playerInput[0].selectorAxis[3] = Keyboard::D;
+	playerInput[0].selectorAxis[4] = Keyboard::S;
+	playerInput[0].selectorAxis[5] = Keyboard::A;
+	playerInput[0].selectorAxis[7] = Keyboard::Q;
 
 	playerInput[0].boostMovement = Keyboard::Num5;
 
@@ -165,8 +165,8 @@ void InputManager::initialize()
 	playerInput[0].confirm = Keyboard::Space;
 	playerInput[0].pause = Keyboard::P;
 
-	
-	
+
+
 	playerInput[1].source = 0;
 	playerInput[1].moveForward = Joystick::Y;
 	playerInput[1].moveBackwards = Joystick::Y;
@@ -208,14 +208,12 @@ void InputManager::initializeKeyboard(int player)
 	playerInput[player].thrusterWheelUp = Keyboard::Q;
 
 	// Thruster selecting
-	playerInput[player].selectorAxis[0] = Keyboard::Num8;
-	playerInput[player].selectorAxis[0] = Keyboard::Num9;
-	playerInput[player].selectorAxis[0] = Keyboard::Num6;
-	playerInput[player].selectorAxis[0] = Keyboard::Num3;
-	playerInput[player].selectorAxis[0] = Keyboard::Num2;
-	playerInput[player].selectorAxis[0] = Keyboard::Num1;
-	playerInput[player].selectorAxis[0] = Keyboard::Num4;
-	playerInput[player].selectorAxis[0] = Keyboard::Num7;
+	playerInput[player].selectorAxis[0] = Keyboard::W;
+	playerInput[player].selectorAxis[1] = Keyboard::E;
+	playerInput[player].selectorAxis[3] = Keyboard::D;
+	playerInput[player].selectorAxis[4] = Keyboard::S;
+	playerInput[player].selectorAxis[5] = Keyboard::A;
+	playerInput[player].selectorAxis[7] = Keyboard::Q;
 
 	playerInput[player].boostMovement = Keyboard::Num5;
 
@@ -240,8 +238,6 @@ void InputManager::initializeController(int player)
 	playerInput[player].jumpCharging = 3;
 	playerInput[player].thrusterWheelUp = 4;
 	// Thruster selecting
-	//playerInput[player].selectorAxis[0] = Joystick::U;
-	//playerInput[player].selectorAxis[0] = Joystick::V;
 	playerInput[player].boostMovement = Keyboard::Num5;
 	playerInput[player].pause = 7;
 	// Menu input
@@ -278,25 +274,41 @@ void InputManager::update()
 				Player[i].turnRight = false;
 
 			// Analog movement
-			if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::Y) < -30.0f)
-				Player[i].moveForward = true;
-			else
-				Player[i].moveForward = false;
-
-			if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::Y) > 30.0f)
-				Player[i].moveBackwards = true;
-			else
-				Player[i].moveBackwards = false;
-
-			if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::X) > 30.0f)
-				Player[i].turnRight = true;
-			else
-				Player[i].turnRight = false;
-
-			if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::X) < -30.0f)
-				Player[i].turnLeft = true;
-			else
-				Player[i].turnLeft = false;
+			for (auto &thruster : Player[i].thrusterOn) {
+				thruster = false;
+			}
+			Vector2f direction(Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::X),
+				Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::Y));
+			float angle = atan2(direction.y, direction.x) * 180.0f / M_PI;
+			float mag = length(direction);
+			if (mag > 30.0f) {
+				if (angle <= -77.5 && angle > -122.5f) {
+					Player[i].thrusterOn[0] = true;
+				}
+				else if (angle <= -22.5f && angle > -77.5f) {
+					Player[i].thrusterOn[1] = true;
+				}
+				else if (angle <= 22.5f && angle > -22.5f) {
+					Player[i].thrusterOn[1] = true;
+					Player[i].thrusterOn[2] = true;
+				}
+				else if (angle <= 77.5f && angle > 22.5f) {
+					Player[i].thrusterOn[2] = true;
+				}
+				else if (angle <= 112.5f && angle > 77.5f) {
+					Player[i].thrusterOn[3] = true;
+				}
+				else if (angle <= 155.0f && angle > 112.5f) {
+					Player[i].thrusterOn[4] = true;
+				}
+				else if (angle <= -155.0f || angle > 155.0f) {
+					Player[i].thrusterOn[4] = true;
+					Player[i].thrusterOn[5] = true;
+				}
+				else if (angle <= -112.5f && angle > -155.0f) {
+					Player[i].thrusterOn[5] = true;
+				}
+			}
 
 			// Fire
 			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].fire))
@@ -336,62 +348,6 @@ void InputManager::update()
 				Player[i].jumpCharging = false;
 				Player[i].jumpExecute = true;
 			}
-
-			// Thruster wheel
-			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].thrusterWheelUp))
-			{
-				if (Player[i].thrusterWheelUp == false)
-					for (int j = 0; j < 6; j++)
-						Player[i].thrusterOn[j] = false;
-				Player[i].thrusterWheelUp = true;
-			}
-			else
-				Player[i].thrusterWheelUp = false;
-
-			if (Player[i].thrusterWheelUp) //////////////////////////// Needs testing to find good values ///////////////////////
-			{
-				if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::U) > 0)
-				{
-					if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::R) > 50)
-						Player[i].thrusterOn[1] = true;
-					else if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::R) < -50)
-						Player[i].thrusterOn[5] = true;
-					else if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::U) > 50)
-						Player[i].thrusterOn[0] = true;
-				}
-				else if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::U) < 0)
-				{
-					if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::R) > 50)
-						Player[i].thrusterOn[2] = true;
-					else if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::R) < -50)
-						Player[i].thrusterOn[4] = true;
-					else if (Joystick::getAxisPosition(playerInput[i].source, Joystick::Axis::U) < -50)
-						Player[i].thrusterOn[3] = true;
-				}
-			}
-
-			// Boost
-			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].boostMovement))
-			{
-				if (Player[i].moveForward)
-					Player[i].thrusterOn[3] = true;
-				if (Player[i].moveBackwards)
-					Player[i].thrusterOn[0] = true;
-				if (Player[i].turnLeft)
-				{
-					Player[i].thrusterOn[1] = true;
-					Player[i].thrusterOn[4] = true;
-				}
-				if (Player[i].turnRight)
-				{
-					Player[i].thrusterOn[5] = true;
-					Player[i].thrusterOn[2] = true;
-				}
-			}
-			else
-				for (int j = 0; j < 6; j++)
-					Player[i].thrusterOn[j] = false;
-
 			// Pause
 			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].pause))
 				Player[i].pause = true;
@@ -459,64 +415,31 @@ void InputManager::update()
 				Player[i].jumpExecute = true;
 			}
 
-			// Thruster wheel
-			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].thrusterWheelUp))
-			{
-				if (Player[i].thrusterWheelUp == false)
-					for (int j = 0; j < 6; j++)
-						Player[i].thrusterOn[j] = false;
-				Player[i].thrusterWheelUp = true;
-			}
+			// Thrusters
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[0]))
+				Player[i].thrusterOn[0] = true;
 			else
-				Player[i].thrusterWheelUp = false;
-
-			if (Player[i].thrusterWheelUp)
-			{
-				if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[0]))
-					Player[i].thrusterOn[0] = true;
-				if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[1]))
-					Player[i].thrusterOn[1] = true;
-				if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[2]))
-				{
-					Player[i].thrusterOn[1] = true;
-					Player[i].thrusterOn[2] = true;
-				}
-				if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[3]))
-					Player[i].thrusterOn[2] = true;
-				if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[4]))
-					Player[i].thrusterOn[3] = true;
-				if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[5]))
-					Player[i].thrusterOn[4] = true;
-				if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[6]))
-				{
-					Player[i].thrusterOn[4] = true;
-					Player[i].thrusterOn[5] = true;
-				}
-				if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[7]))
-					Player[i].thrusterOn[5] = true;
-			}
-
-			// Boost
-			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].boostMovement))
-			{
-				if (Player[i].moveForward)
-					Player[i].thrusterOn[3] = true;
-				if (Player[i].moveBackwards)
-					Player[i].thrusterOn[0] = true;
-				if (Player[i].turnLeft)
-				{
-					Player[i].thrusterOn[1] = true;
-					Player[i].thrusterOn[4] = true;
-				}
-				if (Player[i].turnRight)
-				{
-					Player[i].thrusterOn[5] = true;
-					Player[i].thrusterOn[2] = true;
-				}
-			}
+				Player[i].thrusterOn[0] = false;
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[1]))
+				Player[i].thrusterOn[1] = true;
 			else
-				for (int j = 0; j < 6; j++)
-					Player[i].thrusterOn[j] = false;
+				Player[i].thrusterOn[1] = false;
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[3]))
+				Player[i].thrusterOn[2] = true;
+			else
+				Player[i].thrusterOn[2] = false;
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[4]))
+				Player[i].thrusterOn[3] = true;
+			else
+				Player[i].thrusterOn[3] = false;
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[5]))
+				Player[i].thrusterOn[4] = true;
+			else
+				Player[i].thrusterOn[4] = false;
+			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].selectorAxis[7]))
+				Player[i].thrusterOn[5] = true;
+			else
+				Player[i].thrusterOn[5] = false;
 			// Pause
 			if (Keyboard::isKeyPressed((Keyboard::Key)playerInput[i].pause))
 				Player[i].pause = true;
@@ -534,46 +457,46 @@ void InputManager::menuUpdate()
 		if (playerInput[i].source >= 0)
 		{
 			// Menu
-			static bool mup = false;
+			static bool mup[2] = { false, false };
 			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].menuUp))
 			{
-				if (!mup)
+				if (!mup[i])
 					Player[i].menuUp = true;
 				else
 					Player[i].menuUp = false;
-				mup = true;
+				mup[i] = true;
 			}
 			else
 			{
-				mup = false;
+				mup[i] = false;
 				Player[i].menuUp = false;
 			}
-			static bool mdown = false;
+			static bool mdown[2] = { false, false };
 			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].menuDown))
 			{
-				if (!mdown)
+				if (!mdown[i])
 					Player[i].menuDown = true;
 				else
 					Player[i].menuDown = false;
-				mdown = true;
+				mdown[i] = true;
 			}
 			else
 			{
-				mdown = false;
+				mdown[i] = false;
 				Player[i].menuDown = false;
 			}
-			static bool mconf;
+			static bool mconf[2] = { false, false };
 			if (Joystick::isButtonPressed(playerInput[i].source, playerInput[i].confirm))
 			{
-				if (!mconf)
+				if (!mconf[i])
 					Player[i].confirm = true;
 				else
 					Player[i].confirm = false;
-				mconf = true;
+				mconf[i] = true;
 			}
 			else
 			{
-				mconf = false;
+				mconf[i] = false;
 				Player[i].confirm = false;
 			}
 		}
@@ -642,7 +565,7 @@ Keyboard::Key InputManager::getLastKeyPressed()
 }
 
 void InputManager::clearLastPressed() {
-	_lastKeyPressed = (Keyboard::Key)-1;
+	_lastKeyPressed = (Keyboard::Key) - 1;
 }
 
 int InputManager::getLastButtonPressed(int source)

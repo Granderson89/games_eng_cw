@@ -1,7 +1,7 @@
 #pragma once
 
 #include <SFML\Graphics.hpp>
-#include "game.h"		//////////////////////////////////////////////// Included this to have Texture class ////////////////////////////////
+#include "game.h"
 
 class ResourceManager
 {
@@ -11,6 +11,7 @@ public:
 
 	// Returns false if any resources did not load
 	static bool Load();
+	static bool done;
 
 	static Texture tex_test;
 	static Texture Tex_background;
@@ -31,4 +32,6 @@ public:
 	static Texture Tex_plasma;
 	static Texture Tex_torpedo;
 	static Texture Tex_missile;
+	static Texture Tex_help;
+
 };

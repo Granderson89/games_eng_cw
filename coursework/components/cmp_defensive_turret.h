@@ -1,9 +1,12 @@
 #pragma once
 #include "ecm.h"
+#include <random>
 
 using namespace sf;
 
 class TurretComponent : public Component {
+private:
+	mutable std::default_random_engine ran;
 protected:
 	// Player 1
 	static int p1_next_weapon;

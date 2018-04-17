@@ -19,37 +19,6 @@ void PlayerPhysicsComponent::update(double dt) {
 	  player = 1;
   }
 
-  if (InputManager::Player[player].moveForward ||
-	  InputManager::Player[player].moveBackwards ||
-	  InputManager::Player[player].turnLeft ||
-	  InputManager::Player[player].turnRight) {
-    // Moving Either Left or Right
-    if (InputManager::Player[player].turnRight) {
-		if (_body->GetAngularVelocity() < _maxVelocity.x)
-			_body->ApplyAngularImpulse(-_turningSpeed * dt, true);
-	}
-	else if (InputManager::Player[player].turnLeft) {
-		if (_body->GetAngularVelocity() > -_maxVelocity.x)
-			_body->ApplyAngularImpulse(_turningSpeed * dt, true);
-		
-	}
-	else if (InputManager::Player[player].moveBackwards) {
-		if (getVelocity().y > -_maxVelocity.y) {
-			Vector2f heading = Vector2f(sinf(_body->GetAngle()), cosf(_body->GetAngle()));
-			impulse(heading * (float)(dt * _speed));
-		}
-	}
-	else {
-		if (getVelocity().y > -_maxVelocity.y) {
-			Vector2f heading = Vector2f(sinf(_body->GetAngle()), cosf(_body->GetAngle()));
-			impulse(heading * -(float)(dt * _speed));
-		}
-    }
-  } else {
-    // Dampen X axis movement
-    dampen({1.0f, 1.0f});
-  }
-
   // Clamp velocity.
   auto v = getVelocity();
   v.x = copysign(min(abs(v.x), _maxVelocity.x), v.x);

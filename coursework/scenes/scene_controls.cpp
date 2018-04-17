@@ -2,8 +2,12 @@
 #include "../components/cmp_text.h"
 #include "../components/cmp_sprite.h"
 #include "../game.h"
+#include <Shlobj.h>
+#include <windows.h>
 #include <iostream>
 #include <fstream>
+#include <direct.h>
+
 
 using namespace std;
 using namespace sf;
@@ -60,8 +64,13 @@ void ControlsScene::Load() {
 }
 
 void ControlsScene::UnLoad() {
+	char saveLocation[MAX_PATH] = { 0 };
+	SHGetSpecialFolderPath(NULL, saveLocation, CSIDL_MYDOCUMENTS, FALSE);
+	strcat(saveLocation, "\\NewtonsBounty");
+	mkdir(saveLocation);
+	strcat(saveLocation, "\\controlsPref.txt");
 	ofstream saveFile;
-	saveFile.open("controlsPrefs.txt");
+	saveFile.open(saveLocation);
 	saveFile << InputManager::playerInput[0].source << "\n";
 	saveFile << InputManager::playerInput[0].fire << "\n";
 	saveFile << InputManager::playerInput[0].changeWeapon << "\n";
@@ -543,8 +552,12 @@ void ControlsScene::createPlayerButtons(int player, float scale, IntRect buttonR
 }
 
 void ControlsScene::readPrefs() {
+	char saveLocation[MAX_PATH] = { 0 };
+	SHGetSpecialFolderPath(NULL, saveLocation, CSIDL_MYDOCUMENTS, FALSE);
+	strcat(saveLocation, "\\NewtonsBounty");
+	strcat(saveLocation, "\\controlsPref.txt");
 	string line;
-	ifstream prefs("controlsPrefs.txt");
+	ifstream prefs(saveLocation);
 	if (prefs.is_open()) {
 		// Player 1
 		{

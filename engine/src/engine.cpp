@@ -91,8 +91,9 @@ void Engine::Start(unsigned int width, unsigned int height,
   _window = &window;
   Renderer::initialise(window);
   Physics::initialise();
-  ResourceManager::Load();
   ChangeScene(scn);
+  bool loaded = false;
+  ChangeScene(scn, true);
   while (window.isOpen()) {
     Event event;
     while (window.pollEvent(event)) {
@@ -116,6 +117,9 @@ void Engine::Start(unsigned int width, unsigned int height,
 	InputManager::menuUpdate();
 
     if (Keyboard::isKeyPressed(Keyboard::Escape)) {
+		_activeScene->UnLoad();
+		if (_pausedScene != nullptr)
+			_pausedScene->UnLoad();
       window.close();
     }
 
@@ -130,7 +134,6 @@ void Engine::Start(unsigned int width, unsigned int height,
   }
   window.close();
   Physics::shutdown();
-  // Render::shutdown();
 }
 
 std::shared_ptr<Entity> Scene::makeEntity() {
@@ -142,21 +145,33 @@ std::shared_ptr<Entity> Scene::makeEntity() {
 void Engine::setVsync(bool b) { _window->setVerticalSyncEnabled(b); }
 
 void Engine::ChangeScene(Scene* s) {
-//  cout << "Eng: changing scene: " << s << endl;
-  auto old = _activeScene;
-  _activeScene = s;
+	auto old = _activeScene;
+	_activeScene = s;
 
-  if (old != nullptr) {
-    old->UnLoad(); // todo: Unload Async
-  }
+	if (old != nullptr) {
+		old->UnLoad();
+	}
 
-  if (!s->isLoaded()) {
-//    cout << "Eng: Entering Loading Screen\n";
-    loadingTime =0;
-    //_activeScene->LoadAsync();
-	_activeScene->Load();
-    loading = true;
-  }
+	if (!s->isLoaded()) {
+		loadingTime = 0;
+		_activeScene->Load();
+		loading = true;
+	}
+}
+
+void Engine::ChangeScene(Scene* s, bool async) {
+	auto old = _activeScene;
+	_activeScene = s;
+
+	if (old != nullptr) {
+		old->UnLoad();
+	}
+
+	if (!s->isLoaded()) {
+		loadingTime = 0;
+		_activeScene->LoadAsync();
+		loading = true;
+	}
 }
 
 void Engine::PauseScene(Scene* s) {
@@ -167,7 +182,6 @@ void Engine::PauseScene(Scene* s) {
 	if (!s->isLoaded()) {
 		cout << "Eng: Entering Loading Screen\n";
 		loadingTime = 0;
-		//_activeScene->LoadAsync();
 		_activeScene->Load();
 		loading = true;
 	}
@@ -179,7 +193,7 @@ void Engine::ResumeScene() {
 	_activeScene = _pausedScene;
 
 	if (old != nullptr) {
-		old->UnLoad(); // todo: Unload Async
+		old->UnLoad();
 	}
 }
 

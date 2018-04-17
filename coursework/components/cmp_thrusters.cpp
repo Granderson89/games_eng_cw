@@ -1,13 +1,15 @@
 #include "cmp_thrusters.h"
-#include "cmp_physics.h"
 #include <maths.h>
+#include "../input_manager.h"
 
 
 using namespace std;
 using namespace sf;
 
-shared_ptr<PhysicsComponent> phc;
 
+// Sounds
+sf::SoundBuffer ThrustersComponent::thrustBuffer;
+sf::Sound ThrustersComponent::thrustSound;
 
 ThrustersComponent::ThrustersComponent(Entity* p, const Vector2f& dim, const float& power) : Component(p)
 {
@@ -30,16 +32,25 @@ ThrustersComponent::ThrustersComponent(Entity* p, const Vector2f& dim, const flo
 	_power = power;
 
 	_parent = p;
+	for (set<string>::iterator it = p->getTags().begin(); it != p->getTags().end(); ++it)
+		if (*it == "p1")
+		{
+			pl = 0;
+		}
 	phc = p->GetCompatibleComponent<PhysicsComponent>()[0];
 
 	for (auto &f : _firing)
 		f = false;
+
+	anims = p->GetCompatibleComponent<AnimatorComponent>();
 }
 
 
 ThrustersComponent::~ThrustersComponent()
 {
-	phc.~shared_ptr();
+	for (auto &a : anims)
+		a.~shared_ptr();
+	anims.clear();
 }
 
 
@@ -54,42 +65,37 @@ void ThrustersComponent::update(double dt)
 
 	for (int i = 0; i < 6; i++)
 	{
-		if (_firing[i])
-			phc->impulse(_normals[i] * _power * (float)dt, _parent->getPosition() + _offsets[i]);
-		_firing[i] = false;
+		if (InputManager::Player[pl].thrusterOn[i])
+		{
+			if (i == 0 || i == 3)
+				phc->impulse(_normals[i] * _power * 2.0f * (float)dt, _parent->getPosition() + _offsets[i]);
+			else
+				phc->impulse(_normals[i] * _power * (float)dt, _parent->getPosition() + _offsets[i]);
+			if (!_firing[i])
+			{
+				anims[i]->start(true);
+				_firing[i] = true;
+			}
+		}
+		else
+		{
+			anims[i]->stop();
+			_firing[i] = false;
+		}
 	}
-
-
-	/////////////// to be removed later ///////////////////////////////////////////////////////////////////////////////
-	if (Keyboard::isKeyPressed(Keyboard::Numpad8))
+	for (auto f : _firing)
 	{
-		fireThruster(0);
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Numpad9))
-	{
-		fireThruster(1);
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Numpad3))
-	{
-		fireThruster(2);
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Numpad2))
-	{
-		fireThruster(3);
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Numpad1))
-	{
-		fireThruster(4);
-	}
-	if (Keyboard::isKeyPressed(Keyboard::Numpad7))
-	{
-		fireThruster(5);
+		if (f == true)
+		{
+			if (thrustSound.getStatus() != SoundSource::Status::Playing)
+				thrustSound.play();
+			break;
+		}
 	}
 }
 
-
-void ThrustersComponent::fireThruster(const int& index)
+void ThrustersComponent::loadSounds()
 {
-	//phc->impulse(_normals[index] * _power, _parent->getPosition() - _offsets[index]);
-	_firing[index] = true;
+	thrustBuffer.loadFromFile("res/sounds/thrust.wav");
+	thrustSound.setBuffer(thrustBuffer);
 }

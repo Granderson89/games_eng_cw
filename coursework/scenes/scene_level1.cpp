@@ -48,6 +48,10 @@ float ship_length = 200.0f;
 // Weapon mount dimensions
 float mount_height = 4.0f;
 
+// Sounds
+sf::SoundBuffer Level1Scene::bgBuffer;
+sf::Sound Level1Scene::bgSound;
+
 void Level1Scene::Load() {
 	cout << " Scene 1 Load" << endl;
 
@@ -86,8 +90,9 @@ void Level1Scene::Load() {
 	createPlayer(player1.get(), player2.get(), ResourceManager::Tex_player1, ship_width, ship_length);
 	createPlayer(player2.get(), player1.get(), ResourceManager::Tex_player2, ship_width, ship_length);
 
-	// Add the thrusters component (manages both players)
-	player1->addComponent<ThrustersComponent>(Vector2f(ship_width, ship_length), 3.0f);
+	// Add the thrusters component
+	player1->addComponent<ThrustersComponent>(Vector2f(ship_width, ship_length), 4.0f);
+	player2->addComponent<ThrustersComponent>(Vector2f(ship_width, ship_length), 4.0f);
 
 	// Add the players as targets to the camera
 	cc->addTarget(player1);
@@ -99,6 +104,8 @@ void Level1Scene::Load() {
 	
 	//Simulate long loading times
 	//std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+	bgSound.setLoop(true);
+	bgSound.play();
 	cout << " Scene 1 Load Done" << endl;
 	setLoaded(true);
 }
@@ -107,6 +114,7 @@ void Level1Scene::UnLoad() {
 	cout << "Scene 1 Unload" << endl;
 	player1.reset();
 	player2.reset();
+	bgSound.stop();
 	sf::View view;
 	view.reset(FloatRect(0.0f, 0.0f, resolution.x, resolution.y));
 	Renderer::getWindow().setView(view);
@@ -203,6 +211,52 @@ void Level1Scene::createPlayer(Entity* player, Entity* opponent, Texture& ship_t
 	}
 	// Add the player state component
 	player->addComponent<PlayerStateComponent>();
+
+
+
+	// Thrusters
+	// N
+	auto t2 = player->addComponent<SpriteComponent>();
+	t2->getSprite().setTexture(ResourceManager::Tex_thruster1_off);
+	t2->setOffset(Vector2f(0.0f, -100.0f));
+	t2->getSprite().setOrigin(ResourceManager::Tex_thruster1_off.getSize().x / 2, ResourceManager::Tex_thruster1_off.getSize().y / 2);
+	t2->getSprite().setScale(width / (float)ResourceManager::Tex_player1.getSize().x, length / (float)ResourceManager::Tex_player1.getSize().y * -1.0f);
+	player->addComponent<AnimatorComponent>(t2, ResourceManager::Tex_thruster1_on, ResourceManager::Tex_thruster1_off.getSize(), 0.3f, 5);
+	// NE
+	auto t6 = player->addComponent<SpriteComponent>();
+	t6->getSprite().setTexture(ResourceManager::Tex_thruster2_off);
+	t6->setOffset(Vector2f(24.0f, -76.0f));
+	t6->getSprite().setOrigin(ResourceManager::Tex_thruster2_off.getSize().x / 2, ResourceManager::Tex_thruster2_off.getSize().y / 2);
+	t6->getSprite().setScale(width / (float)ResourceManager::Tex_player1.getSize().x * -1.0f, length / (float)ResourceManager::Tex_player1.getSize().y);
+	player->addComponent<AnimatorComponent>(t6, ResourceManager::Tex_thruster2_on, ResourceManager::Tex_thruster2_off.getSize(), 0.3f, 5);
+	// SE
+	auto t5 = player->addComponent<SpriteComponent>();
+	t5->getSprite().setTexture(ResourceManager::Tex_thruster2_off);
+	t5->setOffset(Vector2f(24.0f, 77.0f));
+	t5->getSprite().setOrigin(ResourceManager::Tex_thruster2_off.getSize().x / 2, ResourceManager::Tex_thruster2_off.getSize().y / 2);
+	t5->getSprite().setScale(width / (float)ResourceManager::Tex_player1.getSize().x * -1.0f, length / (float)ResourceManager::Tex_player1.getSize().y);
+	player->addComponent<AnimatorComponent>(t5, ResourceManager::Tex_thruster2_on, ResourceManager::Tex_thruster2_off.getSize(), 0.3f, 5);
+	// S
+	auto t1 = player->addComponent<SpriteComponent>();
+	t1->getSprite().setTexture(ResourceManager::Tex_thruster1_off);
+	t1->setOffset(Vector2f(0.0f, 100.0f));
+	t1->getSprite().setOrigin(ResourceManager::Tex_thruster1_off.getSize().x / 2, ResourceManager::Tex_thruster1_off.getSize().y / 2);
+	t1->getSprite().setScale(width / (float)ResourceManager::Tex_player1.getSize().x, length / (float)ResourceManager::Tex_player1.getSize().y);
+	player->addComponent<AnimatorComponent>(t1, ResourceManager::Tex_thruster1_on, ResourceManager::Tex_thruster1_off.getSize(), 0.3f, 5);
+	// SW
+	auto t3 = player->addComponent<SpriteComponent>();
+	t3->getSprite().setTexture(ResourceManager::Tex_thruster2_off);
+	t3->setOffset(Vector2f(-26.0f, 77.0f));
+	t3->getSprite().setOrigin(ResourceManager::Tex_thruster2_off.getSize().x / 2, ResourceManager::Tex_thruster2_off.getSize().y / 2);
+	t3->getSprite().setScale(width / (float)ResourceManager::Tex_player1.getSize().x, length / (float)ResourceManager::Tex_player1.getSize().y);
+	player->addComponent<AnimatorComponent>(t3, ResourceManager::Tex_thruster2_on, ResourceManager::Tex_thruster2_off.getSize(), 0.3f, 5);
+	// NW
+	auto t4 = player->addComponent<SpriteComponent>();
+	t4->getSprite().setTexture(ResourceManager::Tex_thruster2_off);
+	t4->setOffset(Vector2f(-26.0f, -76.0f));
+	t4->getSprite().setOrigin(ResourceManager::Tex_thruster2_off.getSize().x / 2, ResourceManager::Tex_thruster2_off.getSize().y / 2);
+	t4->getSprite().setScale(width / (float)ResourceManager::Tex_player1.getSize().x, length / (float)ResourceManager::Tex_player1.getSize().y);
+	player->addComponent<AnimatorComponent>(t4, ResourceManager::Tex_thruster2_on, ResourceManager::Tex_thruster2_off.getSize(), 0.3f, 5);
 }
 
 void Level1Scene::createHud(std::shared_ptr<Entity> player) {
@@ -252,4 +306,10 @@ void Level1Scene::createHud(std::shared_ptr<Entity> player) {
 		timerColor.a = 128.0f;
 		timer->getShape().setFillColor(timerColor);
 	}
+}
+
+void Level1Scene::loadSounds()
+{
+	bgBuffer.loadFromFile("res/sounds/bg.ogg");
+	bgSound.setBuffer(bgBuffer);
 }

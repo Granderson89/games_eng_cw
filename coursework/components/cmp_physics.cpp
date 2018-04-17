@@ -105,7 +105,6 @@ PhysicsComponent::~PhysicsComponent() {
   auto a = Physics::GetWorld();
   _body->SetActive(false);
   Physics::GetWorld()->DestroyBody(_body);
-  // delete _body;
   _body = nullptr;
 }
 

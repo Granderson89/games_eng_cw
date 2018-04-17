@@ -18,7 +18,7 @@ AnimatorComponent::AnimatorComponent(Entity* p, shared_ptr<SpriteComponent> sc
 
 AnimatorComponent::~AnimatorComponent()
 {
-	spr.~shared_ptr();
+	//spr.~shared_ptr();
 }
 
 
