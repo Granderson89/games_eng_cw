@@ -9,7 +9,7 @@ endif()
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-project(Games_Engineering_CW)
+project(Newtons_Bounty)
 
 #### Setup Directories ####
 #Main output directory
