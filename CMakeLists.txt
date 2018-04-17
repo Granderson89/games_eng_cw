@@ -57,12 +57,12 @@ target_link_libraries(lib_ecm PRIVATE lib_maths)
 file(GLOB_RECURSE SOURCES coursework/*.cpp coursework/*.h)
 file(GLOB_RECURSE CMPNTS coursework/components/*.cpp coursework/components/*.h)
 file(GLOB_RECURSE SCENES coursework/scenes/*.cpp coursework/scenes/*.h)
-add_executable(COURSEWORK ${SOURCES} ${RESOURCE_FILES})
+add_executable(Newtons_Bounty ${SOURCES} ${RESOURCE_FILES})
 source_group("components" FILES ${CMPNTS})
 source_group("resources" FILES ${RESOURCE_FILES})
 #target_include_directories(COURSEWORK SYSTEM PRIVATE ${SFML_INCS} ${B2D_INCS})
-target_link_libraries(COURSEWORK lib_engine)
-set(EXECUTABLES ${EXECUTABLES} COURSEWORK)
+target_link_libraries(Newtons_Bounty lib_engine)
+set(EXECUTABLES ${EXECUTABLES} Newtons_Bounty)
 
 #### Target for copying resources to build dir####
 if(APPLE)
@@ -114,7 +114,7 @@ install(DIRECTORY "${PROJECT_SOURCE_DIR}/res" DESTINATION "bin/" CONFIGURATIONS 
 #We disabled SFML's INSTALL component as it brings along junk, so we gotta make one ourselves
 install(DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Release/" DESTINATION "bin" CONFIGURATIONS Release COMPONENT SFML_CMPT FILES_MATCHING PATTERN "*.dll" )
 #Main Install target
-install(TARGETS COURSEWORK DESTINATION "bin" CONFIGURATIONS Release COMPONENT COURSEWORK_CMPT)
+install(TARGETS Newtons_Bounty DESTINATION "bin" CONFIGURATIONS Release COMPONENT COURSEWORK_CMPT)
 
 #Tell CPack about the libs and resources install components
 set(CPACK_COMPONENTS_ALL ${CPACK_COMPONENTS_ALL} RESOURCES_CMPT SFML_CMPT SYSTEM_CMPT COURSEWORK_CMPT)
@@ -122,14 +122,13 @@ set(CPACK_COMPONENT_COURSEWORK_CMPT_DEPENDS RESOURCES_CMPT SFML_CMPT SYSTEM_CMPT
 set(CPACK_COMPONENT_RESOURCES_CMPT_REQUIRED TRUE)
 set(CPACK_COMPONENT_SFML_CMPT_REQUIRED TRUE)
 set(CPACK_COMPONENT_SYSTEM_CMPT_REQUIRED TRUE)
-set(CPACK_COMPONENT_COURSEWORK_CMPT_DISPLAY_NAME "COURSEWORK")
+set(CPACK_COMPONENT_COURSEWORK_CMPT_DISPLAY_NAME "Newtons_Bounty")
 
 IF(WIN32)
   set(CPACK_GENERATOR NSIS)
   set(CPACK_NSIS_COMPONENT_INSTALL ON)
-  set(CPACK_NSIS_HELP_LINK "https://github.com/dooglz/Astral_Insanity")
-  set(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/dooglz/Astral_Insanity")
-  set(CPACK_NSIS_CONTACT "https://github.com/dooglz/")
+  set(CPACK_NSIS_HELP_LINK "https://github.com/Granderson89/games_eng_cw")
+  set(CPACK_NSIS_URL_INFO_ABOUT "https://github.com/Granderson89/games_eng_cw")
 #  set(CPACK_NSIS_MUI_ICON "${PROJECT_SOURCE_DIR}/res/img/icon.ico")
 ELSE()
   set(CPACK_GENERATOR ZIP)
@@ -137,12 +136,12 @@ ENDIF(WIN32)
 
 
 set(CPACK_PACKAGE_FILE_NAME ${CMAKE_PROJECT_NAME})
-set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "COURSEWORK")
+set(CPACK_PACKAGE_DESCRIPTION_SUMMARY "Newtons Bounty")
 set(CPACK_PACKAGE_VENDOR "Team A")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 
-set(CPACK_PACKAGE_VERSION_MAJOR "0")
-set(CPACK_PACKAGE_VERSION_MINOR "1")
+set(CPACK_PACKAGE_VERSION_MAJOR "1")
+set(CPACK_PACKAGE_VERSION_MINOR "0")
 set(CPACK_PACKAGE_VERSION_PATCH "0")
 
 INCLUDE(CPack)
